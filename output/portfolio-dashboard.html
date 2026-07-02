@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bill 持仓追踪看板</title>
+<style>
+:root {
+    --primary: #4f46e5; --primary-light: #818cf8;
+    --success: #10b981; --danger: #ef4444;
+    --bg: #f8fafc; --card-bg: #ffffff;
+    --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0;
+    --cn: #f97316; --hk: #3b82f6; --us: #22c55e; --aw: #8b5cf6;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: var(--bg); padding: 24px; color: var(--text); line-height: 1.5;
+}
+.header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+    color: white; padding: 28px 32px; border-radius: 20px; margin-bottom: 24px;
+    box-shadow: var(--shadow-lg);
+}
+.header h1 { font-size: 26px; font-weight: 700; }
+.header .info { opacity: 0.9; font-size: 14px; margin-top: 4px; }
+.badge { padding: 6px 14px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+.badge-stale { background: rgba(255,255,255,0.25); color: #fff; }
+.badge-closed { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.8); }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; margin-bottom: 24px; background: var(--card-bg); border-radius: 14px; padding: 4px; box-shadow: var(--shadow); }
+.tab-btn {
+    flex: 1; padding: 12px 24px; border: none; background: transparent; border-radius: 11px;
+    font-size: 14px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+}
+.tab-btn.active { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(79,70,229,0.3); }
+.tab-btn:hover:not(.active) { background: #f1f5f9; }
+.tab-page { display: none; }
+.tab-page.active { display: block; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.card {
+    background: var(--card-bg); border-radius: 16px; padding: 20px;
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+.ct::before { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
+.ccn::before { background: var(--cn); }
+.chk::before { background: var(--hk); }
+.cus::before { background: var(--us); }
+.cpn::before { background: linear-gradient(90deg, #ef4444, #f97316); }
+.caw::before { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+.card-title { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.card-value { font-size: 22px; font-weight: 700; color: var(--text); }
+.card-sub { font-size: 13px; margin-top: 6px; font-weight: 500; }
+.card-sub-day { font-size: 15px; margin-top: 4px; font-weight: 700; padding: 4px 8px; border-radius: 8px; display: inline-block; }
+.card-sub-day.up { background: #fef2f2; color: #dc2626; }
+.card-sub-day.down { background: #ecfdf5; color: #059669; }
+
+.rate-bar {
+    background: linear-gradient(90deg, #dbeafe 0%, #e0e7ff 100%);
+    border: 1px solid #c7d2fe; border-radius: 12px;
+    padding: 12px 20px; margin-bottom: 20px; font-size: 13px; color: #4338ca;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; font-weight: 500;
+}
+.rate-bar span.hl { color: #6366f1; font-weight: 600; }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+@media(max-width: 900px) { .row2 { grid-template-columns: 1fr; } }
+.box { background: var(--card-bg); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); }
+.box h3 { font-size: 15px; color: var(--text); margin-bottom: 20px; font-weight: 600; }
+
+.pie-container { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+.pie-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 140px; }
+.legend-item { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.legend-val { margin-left: auto; font-weight: 600; font-size: 12px; }
+.legend-pct { font-weight: 600; }
+
+.top5-list { display: flex; flex-direction: column; gap: 12px; }
+.top5-item { display: flex; align-items: center; gap: 12px; }
+.top5-rank { width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; flex-shrink: 0; }
+.top5-name { width: 90px; font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top5-bar-wrap { flex: 1; height: 28px; background: var(--bg); border-radius: 8px; overflow: hidden; position: relative; }
+.top5-bar { height: 100%; border-radius: 8px; display: flex; align-items: center; padding-left: 12px; font-size: 12px; font-weight: 600; color: white; transition: width 0.5s ease; }
+.top5-bar-val { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+.section { background: var(--card-bg); border-radius: 16px; margin-bottom: 20px; overflow: hidden; box-shadow: var(--shadow); }
+.section-header { background: var(--bg); padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.section-title { font-size: 15px; font-weight: 600; }
+.mkt-tag { padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 600; }
+.tcn { background: #fff7ed; color: #c2410c; }
+.thk { background: #eff6ff; color: #1d4ed8; }
+.tus { background: #f0fdf4; color: #15803d; }
+.taw { background: #f5f3ff; color: #7c3aed; }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--bg); padding: 12px 16px; text-align: left; font-size: 12px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+tr:hover { background: #f8fafc; }
+tr.tot { background: #eef2ff !important; font-weight: 600; }
+.stock-name { font-weight: 600; color: var(--text); }
+.stock-code { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.mono { font-family: 'SF Mono', ui-monospace, monospace; font-weight: 500; }
+.up { color: var(--danger); }
+.down { color: var(--success); }
+.pnl-up { color: var(--danger); font-weight: 600; }
+.pnl-down { color: var(--success); font-weight: 600; }
+.footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 12px; }
+#liveIndicator { animation: pulse-live 2s infinite; }
+@keyframes pulse-live { 0%,100%{opacity:1} 50%{opacity:0.6} }
+.refresh-bar { background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:8px 16px;margin-bottom:16px;font-size:12px;color:#16a34a;display:none;align-items:center;gap:12px }
+.refresh-bar button { background:#16a34a;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;font-weight:600 }
+.refresh-bar button:disabled { opacity:0.5;cursor:default }
+.refresh-bar.error { background:#fef2f2;border-color:#fecaca;color:#dc2626 }
+
+/* Tooltip */
+.chart-tooltip {
+    position: fixed; pointer-events: none; z-index: 9999;
+    background: rgba(30,41,59,0.92); color: #fff; padding: 8px 14px;
+    border-radius: 10px; font-size: 13px; font-weight: 600;
+    white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: opacity 0.15s;
+}
+.chart-tooltip .tt-date { font-size: 11px; color: #94a3b8; font-weight: 400; margin-bottom: 2px; }
+.chart-tooltip .tt-val { font-size: 14px; }
+.chart-tooltip .tt-val.up { color: #f87171; }
+.chart-tooltip .tt-val.down { color: #4ade80; }
+
+/* Hover area on SVG charts */
+.chart-hover-area { cursor: pointer; }
+
+/* Time filter */
+.time-filter { display: flex; gap: 4px; background: #f1f5f9; border-radius: 8px; padding: 3px; }
+.time-filter button {
+    border: none; background: transparent; padding: 5px 12px;
+    border-radius: 6px; font-size: 12px; font-weight: 500;
+    color: var(--text-muted); cursor: pointer; transition: all 0.15s;
+}
+.time-filter button.active { background: #fff; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-weight: 600; }
+.time-filter button:hover:not(.active) { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div id="chartTooltip" class="chart-tooltip" style="display:none"></div>
+
+<div class="header">
+    <div style="display:flex;align-items:center;gap:24px">
+        <div>
+            <h1>&#x1F4C8; Bill 持仓追踪看板</h1>
+            <div class="info"><span id="dataDate">--</span> · 数据来源：腾讯自选股</div>
+        </div>
+        <span class="badge badge-stale" id="marketStatus">--</span>
+        <span id="liveIndicator" style="display:none;margin-left:auto;padding:4px 12px;border-radius:9999px;font-size:11px;font-weight:600;background:#dcfce7;color:#16a34a">&#x1F534; 实时</span>
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('main')">&#x1F4CA; 主账户</button>
+    <button class="tab-btn" onclick="switchTab('allweather')">&#x2600;&#xFE0F; 全天候策略</button>
+    <button class="tab-btn" onclick="switchTab('trades')">&#x1F4CB; 操作记录(主账户)</button>
+</div>
+
+<!-- Shared rate bar -->
+<div id="rateBar" class="rate-bar" style="display:none">
+    &#x1F4B1; 参考汇率 <span class="hl">USD/CNY = <span id="rateUS">--</span></span> <span class="hl">HKD/CNY = <span id="rateHK">--</span></span>
+</div>
+
+<!-- Live refresh bar -->
+<div id="refreshBar" class="refresh-bar">
+    <span>&#x1F504; 实时模式</span>
+    <span id="lastRefreshText">--</span>
+    <button id="manualRefreshBtn" onclick="manualRefresh()">立即刷新</button>
+    <span id="nextRefreshText" style="margin-left:auto;color:#94a3b8"></span>
+</div>
+
+<!-- ========== Main Account Page ========== -->
+<div class="tab-page active" id="page-main">
+    <div class="cards">
+        <div class="card ct">
+            <div class="card-title">&#x1F4B0; 总资产（含现金）</div>
+            <div class="card-value" id="m-totalValue">--</div>
+            <div class="card-sub" id="m-totalPnl">--</div>
+        </div>
+        <div class="card cpn">
+            <div class="card-title">&#x1F4C8; 今日盈亏</div>
+            <div class="card-value" id="m-dayPnl">--</div>
+            <div class="card-sub" id="m-dayPnlPct">--</div>
+        </div>
+        <div class="card ccn"><div class="card-title">&#x1F1E8;&#x1F1F3; A股</div><div class="card-value" id="m-cnTotal">--</div><div class="card-sub" id="m-cnPnl">--</div><div class="card-sub-day" id="m-cnDayChange">--</div></div>
+        <div class="card chk"><div class="card-title">&#x1F1ED;&#x1F1F0; 港股</div><div class="card-value" id="m-hkTotal">--</div><div class="card-sub" id="m-hkPnl">--</div><div class="card-sub-day" id="m-hkDayChange">--</div></div>
+        <div class="card cus"><div class="card-title">&#x1F1FA;&#x1F1F8; 美股</div><div class="card-value" id="m-usTotal">--</div><div class="card-sub" id="m-usPnl">--</div><div class="card-sub-day" id="m-usDayChange">--</div></div>
+        <div class="card" style="border-left:4px solid #6366f1"><div class="card-title">&#x1F4B5; 现金</div><div class="card-value" id="m-cashTotal">--</div><div class="card-sub" id="m-cashDetail" style="font-size:11px;color:#94a3b8">--</div></div>
+    </div>
+
+    <div class="row2">
+        <div class="box"><h3>&#x1F967; 资产分布</h3><div class="pie-container"><svg id="m-pieSvg" viewBox="0 0 200 200" width="180" height="180"></svg><div class="pie-legend" id="m-pieLegend"></div></div></div>
+        <div class="box"><h3>&#x1F3C6; 个股市值 TOP5</h3><div class="top5-list" id="m-top5List"></div></div>
+    </div>
+
+    <div class="row2" style="margin-bottom:20px">
+        <div class="box">
+            <h3>&#x1F4C9; 累计盈亏变化</h3>
+            <div style="display:flex;gap:16px;margin-bottom:10px">
+                <span style="font-size:12px;color:var(--text-muted)">最新: <strong id="m-pnlVal">--</strong></span>
+                <span style="font-size:12px;color:var(--text-muted)">数据: <strong id="m-chartPoints2">0</strong> 天</span>
+            </div>
+            <svg id="m-pnlSvg" viewBox="0 0 460 200" width="100%" height="200" style="background:#f8fafc;border-radius:8px"></svg>
+        </div>
+        <div class="box">
+            <h3>&#x1F4C8; 累计收益率变化</h3>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="display:flex;gap:16px">
+                    <span style="font-size:12px;color:var(--text-muted)">最新: <strong id="m-yieldVal">--</strong></span>
+                    <span style="font-size:12px;color:var(--text-muted)">数据: <strong id="m-chartPoints3">0</strong> 天</span>
+                </div>
+                <div class="time-filter" id="m-yieldFilter">
+                    <button data-range="7">近7天</button>
+                    <button data-range="15">近15天</button>
+                    <button data-range="30">近30天</button>
+                    <button data-range="0" class="active">全部</button>
+                </div>
+            </div>
+            <svg id="m-yieldSvg" viewBox="0 0 460 200" width="100%" height="200" style="background:#f8fafc;border-radius:8px"></svg>
+        </div>
+    </div>
+
+    <div id="m-tablesContainer"></div>
+</div>
+
+<!-- ========== All-weather Account Page ========== -->
+<div class="tab-page" id="page-allweather">
+    <div class="cards">
+        <div class="card caw">
+            <div class="card-title">&#x2600;&#xFE0F; 全天候持仓市值</div>
+            <div class="card-value" id="aw-totalValue">--</div>
+            <div class="card-sub" id="aw-totalPnl">--</div>
+        </div>
+        <div class="card cpn">
+            <div class="card-title">&#x1F4C8; 今日盈亏</div>
+            <div class="card-value" id="aw-dayPnl">--</div>
+            <div class="card-sub" id="aw-dayPnlPct">--</div>
+        </div>
+        <div class="card" style="border-left:4px solid #10b981">
+            <div class="card-title">&#x2705; 已实现盈亏</div>
+            <div class="card-value" id="aw-realizedPnl">¥0.00</div>
+            <div class="card-sub" style="font-size:11px;color:#94a3b8">分红等</div>
+        </div>
+    </div>
+
+    <div class="row2">
+        <div class="box"><h3>&#x1F967; 仓位分布</h3><div class="pie-container"><svg id="aw-pieSvg" viewBox="0 0 200 200" width="180" height="180"></svg><div class="pie-legend" id="aw-pieLegend"></div></div></div>
+    </div>
+    <div class="row2" style="margin-bottom:20px">
+        <div class="box">
+            <h3>&#x1F4C9; 累计收益变化</h3>
+            <div style="display:flex;gap:16px;margin-bottom:10px">
+                <span style="font-size:12px;color:var(--text-muted)">最新: <strong id="aw-pnlVal">--</strong></span>
+                <span style="font-size:12px;color:var(--text-muted)">数据: <strong id="aw-chartPoints2">0</strong> 天</span>
+            </div>
+            <svg id="aw-pnlSvg" viewBox="0 0 460 200" width="100%" height="200" style="background:#f8fafc;border-radius:8px"></svg>
+        </div>
+        <div class="box">
+            <h3>&#x1F4C8; 累计收益率变化</h3>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div style="display:flex;gap:16px">
+                    <span style="font-size:12px;color:var(--text-muted)">最新: <strong id="aw-yieldVal">--</strong></span>
+                    <span style="font-size:12px;color:var(--text-muted)">数据: <strong id="aw-chartPoints3">0</strong> 天</span>
+                </div>
+                <div class="time-filter" id="aw-yieldFilter">
+                    <button data-range="7">近7天</button>
+                    <button data-range="15">近15天</button>
+                    <button data-range="30">近30天</button>
+                    <button data-range="0" class="active">全部</button>
+                </div>
+            </div>
+            <svg id="aw-yieldSvg" viewBox="0 0 460 200" width="100%" height="200" style="background:#f8fafc;border-radius:8px"></svg>
+        </div>
+    </div>
+    <div id="aw-tablesContainer"></div>
+</div>
+
+<!-- ========== Trades Page ========== -->
+<div class="tab-page" id="page-trades">
+    <div class="cards">
+        <div class="card" style="border-left:4px solid #4f46e5">
+            <div class="card-title">&#x1F4CB; 操作次数</div>
+            <div class="card-value" id="tr-tradeCount">0</div>
+            <div class="card-sub" style="font-size:11px;color:#94a3b8">买入 + 卖出</div>
+        </div>
+        <div class="card" style="border-left:4px solid #10b981">
+            <div class="card-title">&#x2705; 已实现盈亏</div>
+            <div class="card-value" id="tr-realizedPnL">¥0.00</div>
+            <div class="card-sub" id="tr-closedCount" style="font-size:11px;color:#94a3b8">0 笔清仓</div>
+        </div>
+        <div class="card ct">
+            <div class="card-title">&#x1F4B0; 总盈亏(未实现+已实现)</div>
+            <div class="card-value" id="tr-totalPnL">--</div>
+            <div class="card-sub" id="tr-totalPnlPct">--</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header"><div class="section-title">&#x1F4DD; 主账户买卖操作记录</div></div>
+        <table><thead><tr><th>日期</th><th>标的</th><th>操作</th><th>价格</th><th>数量</th><th>金额</th><th>原因</th></tr></thead>
+        <tbody id="tr-tradesBody"></tbody></table>
+    </div>
+
+    <div class="section">
+        <div class="section-header"><div class="section-title">&#x1F3C1; 已清仓标的</div></div>
+        <table><thead><tr><th>标的</th><th>总成本</th><th>总收入</th><th>实现盈亏</th><th>清仓日期</th></tr></thead>
+        <tbody id="tr-closedBody"></tbody></table>
+    </div>
+
+    <div class="row2">
+        <div class="box">
+            <h3>&#x1F4C9; 总盈亏曲线（含已实现）</h3>
+            <div style="display:flex;gap:16px;margin-bottom:10px">
+                <span style="font-size:12px;color:var(--text-muted)">最新: <strong id="tr-totalPnlVal">--</strong></span>
+                <span style="font-size:12px;color:var(--text-muted)">数据: <strong id="tr-chartPoints">0</strong> 天</span>
+            </div>
+            <svg id="tr-totalPnlSvg" viewBox="0 0 460 200" width="100%" height="200" style="background:#f8fafc;border-radius:8px"></svg>
+        </div>
+        <div class="box">
+            <h3>&#x1F4CA; 已实现 vs 未实现</h3>
+            <div style="display:flex;gap:16px;margin-bottom:10px">
+                <span style="font-size:12px;color:var(--text-muted)">已实现: <strong id="tr-rpnlVal">¥0.00</strong></span>
+                <span style="font-size:12px;color:var(--text-muted)">未实现: <strong id="tr-upnlVal">--</strong></span>
+            </div>
+            <svg id="tr-splitSvg" viewBox="0 0 340 180" width="100%" height="180" style="background:#f8fafc;border-radius:8px"></svg>
+        </div>
+    </div>
+</div>
+
+<div class="footer">数据来源：腾讯自选股 · 仅供参考，不构成投资建议</div>
+
+<script>
+// ==================== 数据 ====================
+var CONFIG = {"name":"Bill 持仓组合","lastUpdated":"2026-07-02T11:30:00Z","holdings":{"cn":[{"code":"sh513110","name":"纳指ETF华泰柏瑞","qty":100,"cost":-9.998},{"code":"sh515080","name":"中证红利ETF招商","qty":10000,"cost":1.417},{"code":"sh518880","name":"黄金ETF华安","qty":4000,"cost":7.767},{"code":"sh520550","name":"港股红利低波ETF招商","qty":16600,"cost":1.059},{"code":"sh600036","name":"招商银行","qty":900,"cost":38.151},{"code":"sz002027","name":"分众传媒","qty":5000,"cost":5.483},{"code":"sz159263","name":"价值ETF易方达","qty":20000,"cost":1.059}],"hk":[{"code":"hk00700","name":"腾讯控股","qty":180,"cost":474.8},{"code":"hk00883","name":"中国海洋石油","qty":1000,"cost":17.189},{"code":"hk03690","name":"美团-W","qty":300,"cost":95.467}],"us":[{"code":"usGOOG","name":"谷歌-C","qty":17,"cost":138.545},{"code":"usMSFT","name":"微软","qty":18,"cost":396.809},{"code":"usNVDA","name":"英伟达","qty":38,"cost":164.364},{"code":"usINTU","name":"财捷","qty":17,"cost":361.001},{"code":"usMETA","name":"Meta","qty":4,"cost":609.803},{"code":"usSOFI","name":"SoFi Tech","qty":120,"cost":17.263},{"code":"usASML","name":"阿斯麦","qty":1,"cost":-202.21},{"code":"usSPCX","name":"SpaceX","qty":15,"cost":150}]},"allweather":{"holdings":[{"code":"sz159632","name":"纳斯达克ETF华安","qty":4800,"cost":2.3505},{"code":"sh513650","name":"标普500ETF南方","qty":8400,"cost":1.8583},{"code":"sh512890","name":"红利低波ETF华泰柏瑞","qty":10000,"cost":1.1546},{"code":"sh518880","name":"黄金ETF华安","qty":800,"cost":9.9545},{"code":"sz159981","name":"能源化工ETF建信","qty":2700,"cost":1.3223},{"code":"sh512400","name":"有色金属ETF南方","qty":1700,"cost":2.182},{"code":"sz159985","name":"豆粕ETF华夏","qty":1700,"cost":1.9827}],"funds":[{"code":"009803","name":"易方达中债7-10国开债C","shares":12895,"cost":1.3184},{"code":"001512","name":"易方达中债3-5年国债","shares":4343.46,"cost":1.3814}],"cash":{"rmb":13744.57},"targets":[{"group":"权益核心","targetPct":50,"items":[{"label":"标普500","subPct":20,"codes":["sh513650"]},{"label":"纳指100","subPct":15,"codes":["sz159632"]},{"label":"红利低波","subPct":15,"codes":["sh512890"]}]},{"group":"债券压舱石","targetPct":35,"items":[{"label":"长债(7-10年)","subPct":25,"codes":["009803"]},{"label":"中债(3-5年)","subPct":10,"codes":["001512"]}]},{"group":"商品对冲","targetPct":15,"items":[{"label":"黄金","subPct":7.5,"codes":["sh518880"]},{"label":"有色金属","subPct":2.5,"codes":["sh512400"]},{"label":"能源化工","subPct":2.5,"codes":["sz159981"]},{"label":"豆粕","subPct":2.5,"codes":["sz159985"]}]}]},"cash":{"usd":2038.2,"hkd":0,"rmb":86153.31}};
+
+var HISTORY_MAIN = {"snapshots":[{"date":"2026-06-15","dataTime":"2026-06-15T15:42:37.795Z","rates":{"USD_CNY":6.769141,"HKD_CNY":0.8639},"prices":{"sh513110":2.508,"sh513260":1.156,"sh513330":0.387,"sh515080":1.577,"sh518880":8.928,"sh520550":1.136,"sh600036":38.95,"sz002027":5.35,"sz159263":1.133,"hk00700":459.6,"hk00883":24.2,"hk03690":78.25,"usGOOG":368.99,"usMSFT":398.5,"usNVDA":211.53,"usINTU":286.67,"usMETA":598.32,"usSOFI":17.35,"usASML":1888.77,"usSPCX":174.36},"changePct":{"sh513110":4.28,"sh513260":1.31,"sh513330":0.52,"sh515080":-0.88,"sh518880":3.11,"sh520550":0,"sh600036":-0.99,"sz002027":-1.83,"sz159263":-0.87,"hk00700":-0.86,"hk00883":-2.89,"hk03690":0.45,"usGOOG":3.02,"usMSFT":1.99,"usNVDA":3.09,"usINTU":3.59,"usMETA":5.63,"usSOFI":4.61,"usASML":1.35,"usSPCX":8.33},"realizedPnL_CNY":0},{"date":"2026-06-16","dataTime":"2026-06-16T13:44:45.383Z","rates":{"USD_CNY":6.771909,"HKD_CNY":0.864348,"updated":"Tue, 16 Jun 2026 00:02:31 +0000"},"prices":{"sh513110":2.543,"sh513260":1.131,"sh513330":0.378,"sh515080":1.551,"sh518880":8.949,"sh520550":1.122,"sh600036":38.57,"sz002027":5.2,"sz159263":1.11,"hk00700":447.4,"hk00883":23.58,"hk03690":75.3,"usGOOG":366.74,"usMSFT":393.77,"usNVDA":209.36,"usINTU":282.27,"usMETA":601.36,"usSOFI":17.61,"usASML":1866.28,"usSPCX":211.53},"changePct":{"sh513110":1.4,"sh513260":-2.16,"sh513330":-2.33,"sh515080":-1.65,"sh518880":0.24,"sh520550":-1.23,"sh600036":-0.98,"sz002027":-2.8,"sz159263":-2.03,"hk00700":-2.65,"hk00883":-2.56,"hk03690":-3.77,"usGOOG":-0.1,"usMSFT":-1.5,"usNVDA":-1.46,"usINTU":0.18,"usMETA":1.33,"usSOFI":2.77,"usASML":-1.39,"usSPCX":9.89},"realizedPnL_CNY":0},{"date":"2026-06-17","dataTime":"2026-06-24T08:32:59.960Z","rates":{"USD_CNY":6.775794,"HKD_CNY":0.864749},"prices":{"sh513110":2.544,"sh513260":1.134,"sh513330":0.377,"sh515080":1.537,"sh518880":8.957,"sh520550":1.107,"sh600036":38.23,"sz002027":5.12,"sz159263":1.1,"hk00700":445.4,"hk00883":22.84,"hk03690":74.4,"usGOOG":362.1,"usMSFT":378.91,"usNVDA":204.65,"usINTU":269.08,"usMETA":567.58,"usSOFI":17.42,"usASML":1867.83,"usSPCX":191.82},"changePct":{"sh513110":0.04,"sh513260":0.27,"sh513330":-0.26,"sh515080":-0.9,"sh518880":0.09,"sh520550":-1.34,"sh600036":-0.88,"sz002027":-1.54,"sz159263":-0.9,"hk00700":-0.45,"hk00883":-3.14,"hk03690":-1.2,"usGOOG":-2.43,"usMSFT":-3.79,"usNVDA":-1.33,"usINTU":-4.24,"usMETA":-5.44,"usSOFI":-1.64,"usASML":3.54,"usSPCX":-4.95},"realizedPnL_CNY":0},{"date":"2026-06-18","dataTime":"2026-06-24T08:33:05.292Z","rates":{"USD_CNY":6.77968,"HKD_CNY":0.86515},"prices":{"sh513110":2.531,"sh513260":1.115,"sh513330":0.368,"sh515080":1.488,"sh518880":8.908,"sh520550":1.077,"sh600036":37.26,"sz002027":5.02,"sz159263":1.08,"hk00700":440.2,"hk00883":22.38,"hk03690":71.8,"usGOOG":367.46,"usMSFT":379.4,"usNVDA":210.69,"usINTU":267,"usMETA":577.22,"usSOFI":17.91,"usASML":1929.68,"usSPCX":185},"changePct":{"sh513110":-0.51,"sh513260":-1.68,"sh513330":-2.39,"sh515080":-1.91,"sh518880":-0.55,"sh520550":-2.71,"sh600036":-2.54,"sz002027":-1.95,"sz159263":-1.82,"hk00700":-1.17,"hk00883":-2.01,"hk03690":-3.49,"usGOOG":1.48,"usMSFT":0.13,"usNVDA":2.95,"usINTU":-0.77,"usMETA":1.7,"usSOFI":2.81,"usASML":3.31,"usSPCX":-3.56},"realizedPnL_CNY":0},{"date":"2026-06-19","dataTime":"2026-06-19T16:08:04.913Z","rates":{"USD_CNY":6.783567,"HKD_CNY":0.865551,"updated":"Fri, 19 Jun 2026 00:02:32 +0000"},"prices":{"sh513110":2.531,"sh513260":1.115,"sh513330":0.368,"sh515080":1.488,"sh518880":8.908,"sh520550":1.077,"sh600036":37.26,"sz002027":5.02,"sz159263":1.08,"hk00700":440.2,"hk00883":22.38,"hk03690":71.8,"usGOOG":367.46,"usMSFT":379.4,"usNVDA":210.69,"usINTU":267,"usMETA":577.22,"usSOFI":17.91,"usASML":1929.68,"usSPCX":185},"changePct":{"sh513110":-0.51,"sh513260":-1.68,"sh513330":-2.39,"sh515080":-1.91,"sh518880":-0.55,"sh520550":-2.71,"sh600036":-2.54,"sz002027":-1.95,"sz159263":-1.82,"hk00700":-1.17,"hk00883":-2.01,"hk03690":-3.49,"usGOOG":1.48,"usMSFT":0.13,"usNVDA":2.95,"usINTU":-0.77,"usMETA":1.7,"usSOFI":2.81,"usASML":3.31,"usSPCX":-3.56},"realizedPnL_CNY":0},{"date":"2026-06-22","dataTime":"2026-06-24T08:33:10.813Z","rates":{"USD_CNY":6.793685,"HKD_CNY":0.866587},"prices":{"sh513110":2.536,"sh513260":1.117,"sh513330":0.367,"sh515080":1.503,"sh518880":8.716,"sh520550":1.073,"sh600036":37.65,"sz002027":5.06,"sz159263":1.094,"hk00700":433,"hk00883":22.2,"hk03690":72,"usGOOG":348.78,"usMSFT":367.34,"usNVDA":208.65,"usINTU":257.77,"usMETA":563.85,"usSOFI":17.1,"usASML":1929.25,"usSPCX":154.6},"changePct":{"sh513110":0.2,"sh513260":0.18,"sh513330":-0.27,"sh515080":1.01,"sh518880":-2.16,"sh520550":-0.37,"sh600036":1.05,"sz002027":0.8,"sz159263":1.3,"hk00700":-1.64,"hk00883":-0.8,"hk03690":0.28,"usGOOG":-5.08,"usMSFT":-3.18,"usNVDA":-0.97,"usINTU":-3.46,"usMETA":-2.32,"usSOFI":-4.52,"usASML":-0.02,"usSPCX":-16.43},"realizedPnL_CNY":-9763.5},{"date":"2026-06-23","dataTime":"2026-06-24T08:33:16.860Z","rates":{"USD_CNY":6.797044,"HKD_CNY":0.866933},"prices":{"sh513110":2.454,"sh513260":1.072,"sh513330":0.351,"sh515080":1.493,"sh518880":8.537,"sh520550":1.056,"sh600036":37.4,"sz002027":4.92,"sz159263":1.082,"hk00700":414.8,"hk00883":21.9,"hk03690":69.6,"usGOOG":346.08,"usMSFT":373.94,"usNVDA":200.04,"usINTU":258.05,"usMETA":562.2,"usSOFI":17.29,"usASML":1778.46,"usSPCX":156.11},"changePct":{"sh513110":-3.23,"sh513260":-4.03,"sh513330":-4.36,"sh515080":-0.67,"sh518880":-2.05,"sh520550":-1.58,"sh600036":-0.66,"sz002027":-2.77,"sz159263":-1.1,"hk00700":-4.2,"hk00883":-1.35,"hk03690":-3.33,"usGOOG":-0.77,"usMSFT":1.8,"usNVDA":-4.13,"usINTU":0.11,"usMETA":-0.29,"usSOFI":1.11,"usASML":-7.82,"usSPCX":0.98},"realizedPnL_CNY":-9763.5},{"date":"2026-06-24","dataTime":"2026-06-24T14:43:22.732Z","rates":{"USD_CNY":6.800403,"HKD_CNY":0.867278,"updated":"Wed, 24 Jun 2026 00:02:32 +0000"},"prices":{"sh513110":2.469,"sh515080":1.473,"sh518880":8.515,"sh520550":1.047,"sh600036":36.76,"sz002027":4.8,"sz159263":1.065,"hk00700":428.8,"hk00883":21.82,"hk03690":67.75,"usGOOG":350.19,"usMSFT":372.69,"usNVDA":200.22,"usINTU":263.06,"usMETA":561.09,"usSOFI":18.06,"usASML":1753.53,"usSPCX":156.75},"changePct":{"sh513110":0.61,"sh515080":-1.34,"sh518880":-0.26,"sh520550":-0.85,"sh600036":-1.71,"sz002027":-2.44,"sz159263":-1.57,"hk00700":3.38,"hk00883":-0.37,"hk03690":-2.66,"usGOOG":1.19,"usMSFT":-0.34,"usNVDA":0.09,"usINTU":1.94,"usMETA":-0.2,"usSOFI":4.42,"usASML":-1.4,"usSPCX":0.41},"realizedPnL_CNY":-9763.5},{"date":"2026-06-25","dataTime":"2026-06-25T11:59:19.780Z","rates":{"USD_CNY":6.81767,"HKD_CNY":0.869639,"updated":"Thu, 25 Jun 2026 00:02:31 +0000"},"prices":{"sh513110":2.5,"sh515080":1.455,"sh518880":8.287,"sh520550":1.035,"sh600036":36.23,"sz002027":4.82,"sz159263":1.057,"hk00700":421.4,"hk00883":21.22,"hk03690":66.1,"usGOOG":345.04,"usMSFT":365.46,"usNVDA":199,"usINTU":262.24,"usMETA":557.67,"usSOFI":17.31,"usASML":1762.77,"usSPCX":154.54},"changePct":{"sh513110":1.26,"sh515080":-1.22,"sh518880":-2.68,"sh520550":-1.15,"sh600036":-1.44,"sz002027":0.42,"sz159263":-0.75,"hk00700":-1.73,"hk00883":-2.75,"hk03690":-2.44,"usGOOG":-0.3,"usMSFT":-2.27,"usNVDA":-0.52,"usINTU":1.62,"usMETA":-0.81,"usSOFI":0.12,"usASML":-0.88,"usSPCX":-1.01},"realizedPnL_CNY":-9763.5},{"date":"2026-06-26","dataTime":"2026-06-28T09:17:04.986Z","rates":{"USD_CNY":6.81116,"HKD_CNY":0.868579,"updated":"Sun, 28 Jun 2026 00:02:31 +0000"},"prices":{"sh513110":2.434,"sh515080":1.429,"sh518880":8.39,"sh520550":1.026,"sh600036":36,"sz002027":4.76,"sz159263":1.042,"hk00700":411.8,"hk00883":20.86,"hk03690":64.25,"usGOOG":334.69,"usMSFT":372.97,"usNVDA":192.53,"usINTU":267.72,"usMETA":550.25,"usSOFI":17.88,"usASML":1794.62,"usSPCX":153.23},"changePct":{"sh513110":-2.64,"sh515080":-1.79,"sh518880":1.24,"sh520550":-0.87,"sh600036":-0.63,"sz002027":-1.24,"sz159263":-1.42,"hk00700":-2.28,"hk00883":-1.7,"hk03690":-2.8,"usGOOG":-2.19,"usMSFT":5.71,"usNVDA":-1.64,"usINTU":4.96,"usMETA":1.36,"usSOFI":3.35,"usASML":-2.53,"usSPCX":0.15},"realizedPnL_CNY":-9763.5},{"date":"2026-06-29","dataTime":"2026-06-29T15:24:22.769Z","rates":{"USD_CNY":6.803731,"HKD_CNY":0.867598,"updated":"Mon, 29 Jun 2026 00:02:31 +0000"},"prices":{"sh513110":2.446,"sh515080":1.436,"sh518880":8.449,"sh520550":1.032,"sh600036":36.42,"sz002027":4.82,"sz159263":1.055,"hk00700":420.2,"hk00883":21.08,"hk03690":67.65,"usGOOG":348.75,"usMSFT":372.93,"usNVDA":194.05,"usINTU":269.96,"usMETA":564.9,"usSOFI":17.83,"usASML":1828.91,"usSPCX":155.56},"changePct":{"sh513110":0.49,"sh515080":0.49,"sh518880":0.7,"sh520550":0.58,"sh600036":1.17,"sz002027":1.26,"sz159263":1.25,"hk00700":2.04,"hk00883":1.05,"hk03690":5.29,"usGOOG":4.3,"usMSFT":-0.12,"usNVDA":0.94,"usINTU":1.11,"usMETA":2.57,"usSOFI":-0.25,"usASML":2.12,"usSPCX":1.68},"realizedPnL_CNY":-9763.5},{"date":"2026-06-30","dataTime":"2026-06-30T15:18:15.908Z","rates":{"USD_CNY":6.804421,"HKD_CNY":0.867748,"updated":"Tue, 30 Jun 2026 00:02:31 +0000"},"prices":{"sh513110":2.481,"sh515080":1.41,"sh518880":8.378,"sh520550":1.001,"sh600036":35.5,"sz002027":4.84,"sz159263":1.033,"hk00700":429.8,"hk00883":20.32,"hk03690":68.5,"usGOOG":352.36,"usMSFT":369.46,"usNVDA":197.91,"usINTU":259.78,"usMETA":554.66,"usSOFI":17.79,"usASML":1978.4,"usSPCX":171.36},"changePct":{"sh513110":1.43,"sh515080":-1.81,"sh518880":-0.84,"sh520550":-3,"sh600036":-2.53,"sz002027":0.41,"sz159263":-2.09,"hk00700":2.28,"hk00883":-3.61,"hk03690":1.26,"usGOOG":0.29,"usMSFT":0.23,"usNVDA":1.6,"usINTU":-2.5,"usMETA":-1.35,"usSOFI":-2.14,"usASML":5.09,"usSPCX":4.3},"realizedPnL_CNY":-9763.5},{"date":"2026-07-01","dataTime":"2026-07-01T15:58:10.704Z","rates":{"USD_CNY":6.796501,"HKD_CNY":0.866616,"updated":"Wed, 01 Jul 2026 00:02:31 +0000"},"prices":{"sh513110":2.494,"sh515080":1.434,"sh518880":8.271,"sh520550":1.006,"sh600036":35.91,"sz002027":4.85,"sz159263":1.047,"hk00700":429.8,"hk00883":20.32,"hk03690":68.5,"usGOOG":356.08,"usMSFT":385.24,"usNVDA":196.89,"usINTU":272.72,"usMETA":619.02,"usSOFI":18.52,"usASML":1863.14,"usSPCX":158.4},"changePct":{"sh513110":0.52,"sh515080":1.7,"sh518880":-1.28,"sh520550":0.5,"sh600036":1.15,"sz002027":0.21,"sz159263":1.36,"hk00700":2.28,"hk00883":-3.61,"hk03690":1.26,"usGOOG":0.74,"usMSFT":3.19,"usNVDA":-1.68,"usINTU":4.53,"usMETA":9.87,"usSOFI":3.29,"usASML":-6.31,"usSPCX":-7.29},"realizedPnL_CNY":-9763.5},{"date":"2026-07-02","dataTime":"2026-07-02T11:26:16.761Z","rates":{"USD_CNY":6.801054,"HKD_CNY":0.87193},"realizedPnL_CNY":-9763.5,"prices":{"sh513110":2.437,"sh515080":1.448,"sh518880":8.475,"sh520550":1.013,"sh600036":36.6,"sz002027":4.91,"sz159263":1.06,"hk00700":430.2,"hk00883":20.4,"hk03690":70.85,"usGOOG":357.89,"usMSFT":384.28,"usNVDA":197.58,"usINTU":267.08,"usMETA":612.91,"usSOFI":18.44,"usASML":1843.04,"usSPCX":157.54},"changePct":{"sh513110":-2.29,"sh515080":0.98,"sh518880":2.47,"sh520550":0.7,"sh600036":1.92,"sz002027":1.24,"sz159263":1.24,"hk00700":0.09,"hk00883":0.39,"hk03690":3.43,"usGOOG":1.29,"usMSFT":3.02,"usNVDA":-1.25,"usINTU":2.33,"usMETA":8.81,"usSOFI":2.84,"usASML":-7.36,"usSPCX":-7.8}}],"lastUpdated":"2026-07-02T11:26:16.774Z"};
+
+var HISTORY_AW = {"snapshots":[{"date":"2026-06-15","dataTime":"2026-06-15T15:42:37.795Z","rates":{"USD_CNY":6.769141,"HKD_CNY":0.8639},"prices":{"sz159632":2.478,"sh513650":1.918,"sh512890":1.161,"sh518880":8.928,"sz159981":1.552,"sh512400":2.063,"sz159985":2.017},"changePct":{"sz159632":4.29,"sh513650":3.45,"sh512890":-0.94,"sh518880":3.11,"sz159981":-6.79,"sh512400":4.4,"sz159985":0},"funds":{"009803":1.3362,"001512":1.3912},"awRealizedPnL_CNY":212.77},{"date":"2026-06-16","dataTime":"2026-06-16T13:44:45.383Z","rates":{"USD_CNY":6.771909,"HKD_CNY":0.864348,"updated":"Tue, 16 Jun 2026 00:02:31 +0000"},"prices":{"sz159632":2.514,"sh513650":1.921,"sh512890":1.145,"sh518880":8.949,"sz159981":1.52,"sh512400":2.049,"sz159985":2.015},"changePct":{"sz159632":1.45,"sh513650":0.16,"sh512890":-1.38,"sh518880":0.24,"sz159981":-2.06,"sh512400":-0.68,"sz159985":-0.1},"funds":{"009803":1.3197,"001512":1.3914},"awRealizedPnL_CNY":212.77},{"date":"2026-06-17","dataTime":"2026-06-24T08:32:59.961Z","rates":{"USD_CNY":6.775794,"HKD_CNY":0.864749},"prices":{"sz159632":2.515,"sh513650":1.919,"sh512890":1.14,"sh518880":8.957,"sz159981":1.496,"sh512400":2.045,"sz159985":2.028},"changePct":{"sz159632":0.04,"sh513650":-0.1,"sh512890":-0.44,"sh518880":0.09,"sz159981":-1.58,"sh512400":-0.2,"sz159985":0.65},"funds":{},"awRealizedPnL_CNY":212.77},{"date":"2026-06-18","dataTime":"2026-06-24T08:33:05.293Z","rates":{"USD_CNY":6.77968,"HKD_CNY":0.86515},"prices":{"sz159632":2.501,"sh513650":1.908,"sh512890":1.115,"sh518880":8.908,"sz159981":1.492,"sh512400":2.05,"sz159985":2.004},"changePct":{"sz159632":-0.56,"sh513650":-0.57,"sh512890":-2.19,"sh518880":-0.55,"sz159981":-0.27,"sh512400":0.24,"sz159985":-1.18},"funds":{},"awRealizedPnL_CNY":212.77},{"date":"2026-06-19","dataTime":"2026-06-19T16:08:04.913Z","rates":{"USD_CNY":6.783567,"HKD_CNY":0.865551,"updated":"Fri, 19 Jun 2026 00:02:32 +0000"},"prices":{"sz159632":2.501,"sh513650":1.908,"sh512890":1.115,"sh518880":8.908,"sz159981":1.492,"sh512400":2.05,"sz159985":2.004},"changePct":{"sz159632":-0.56,"sh513650":-0.57,"sh512890":-2.19,"sh518880":-0.55,"sz159981":-0.27,"sh512400":0.24,"sz159985":-1.18},"funds":{"009803":1.3237,"001512":1.3927},"awRealizedPnL_CNY":212.77},{"date":"2026-06-22","dataTime":"2026-06-24T08:33:10.814Z","rates":{"USD_CNY":6.793685,"HKD_CNY":0.866587},"prices":{"sz159632":2.507,"sh513650":1.909,"sh512890":1.114,"sh518880":8.716,"sz159981":1.476,"sh512400":2.155,"sz159985":1.989},"changePct":{"sz159632":0.24,"sh513650":0.05,"sh512890":-0.09,"sh518880":-2.16,"sz159981":-1.07,"sh512400":5.12,"sz159985":-0.75},"funds":{},"awRealizedPnL_CNY":212.77},{"date":"2026-06-23","dataTime":"2026-06-24T08:33:16.861Z","rates":{"USD_CNY":6.797044,"HKD_CNY":0.866933},"prices":{"sz159632":2.428,"sh513650":1.868,"sh512890":1.118,"sh518880":8.537,"sz159981":1.459,"sh512400":1.976,"sz159985":1.994},"changePct":{"sz159632":-3.15,"sh513650":-2.15,"sh512890":0.36,"sh518880":-2.05,"sz159981":-1.15,"sh512400":-8.31,"sz159985":0.25},"funds":{},"awRealizedPnL_CNY":212.77},{"date":"2026-06-24","dataTime":"2026-06-24T14:43:22.732Z","rates":{"USD_CNY":6.800403,"HKD_CNY":0.867278,"updated":"Wed, 24 Jun 2026 00:02:32 +0000"},"prices":{"sz159632":2.444,"sh513650":1.883,"sh512890":1.099,"sh518880":8.515,"sz159981":1.441,"sh512400":1.98,"sz159985":2},"changePct":{"sz159632":0.66,"sh513650":0.8,"sh512890":-1.7,"sh518880":-0.26,"sz159981":-1.23,"sh512400":0.2,"sz159985":0.3},"funds":{"009803":1.323,"001512":1.3931},"awRealizedPnL_CNY":212.77},{"date":"2026-06-25","dataTime":"2026-06-25T11:59:19.780Z","rates":{"USD_CNY":6.81767,"HKD_CNY":0.869639,"updated":"Thu, 25 Jun 2026 00:02:31 +0000"},"prices":{"sz159632":2.477,"sh513650":1.883,"sh512890":1.086,"sh518880":8.287,"sz159981":1.4,"sh512400":1.922,"sz159985":1.997},"changePct":{"sz159632":1.35,"sh513650":0,"sh512890":-1.18,"sh518880":-2.68,"sz159981":-2.85,"sh512400":-2.93,"sz159985":-0.15},"funds":{"009803":1.3233,"001512":1.3933},"awRealizedPnL_CNY":212.77},{"date":"2026-06-26","dataTime":"2026-06-28T09:17:04.986Z","rates":{"USD_CNY":6.81116,"HKD_CNY":0.868579,"updated":"Sun, 28 Jun 2026 00:02:31 +0000"},"prices":{"sz159632":2.41,"sh513650":1.855,"sh512890":1.081,"sh518880":8.39,"sz159981":1.403,"sh512400":1.839,"sz159985":2.007},"changePct":{"sz159632":-2.7,"sh513650":-1.49,"sh512890":-0.46,"sh518880":1.24,"sz159981":0.21,"sh512400":-4.32,"sz159985":0.5},"funds":{"009803":1.3248,"001512":1.3939},"awRealizedPnL_CNY":212.77},{"date":"2026-06-29","dataTime":"2026-06-29T15:24:22.769Z","rates":{"USD_CNY":6.803731,"HKD_CNY":0.867598,"updated":"Mon, 29 Jun 2026 00:02:31 +0000"},"prices":{"sz159632":2.419,"sh513650":1.86,"sh512890":1.089,"sh518880":8.449,"sz159981":1.423,"sh512400":1.864,"sz159985":2.008},"changePct":{"sz159632":0.37,"sh513650":0.27,"sh512890":0.74,"sh518880":0.7,"sz159981":1.43,"sh512400":1.36,"sz159985":0.05},"funds":{"009803":1.3251,"001512":1.3943},"awRealizedPnL_CNY":212.77},{"date":"2026-06-30","dataTime":"2026-06-30T15:18:15.908Z","rates":{"USD_CNY":6.804421,"HKD_CNY":0.867748,"updated":"Tue, 30 Jun 2026 00:02:31 +0000"},"prices":{"sz159632":2.461,"sh513650":1.868,"sh512890":1.067,"sh518880":8.378,"sz159981":1.418,"sh512400":1.854,"sz159985":1.985},"changePct":{"sz159632":1.74,"sh513650":0.43,"sh512890":-2.02,"sh518880":-0.84,"sz159981":-0.35,"sh512400":-0.54,"sz159985":-1.15},"funds":{"009803":1.3269,"001512":1.3953},"awRealizedPnL_CNY":212.77},{"date":"2026-07-01","dataTime":"2026-07-01T15:58:10.704Z","rates":{"USD_CNY":6.796501,"HKD_CNY":0.866616,"updated":"Wed, 01 Jul 2026 00:02:31 +0000"},"prices":{"sz159632":2.47,"sh513650":1.879,"sh512890":1.079,"sh518880":8.271,"sz159981":1.386,"sh512400":1.848,"sz159985":1.997},"changePct":{"sz159632":0.37,"sh513650":0.59,"sh512890":1.12,"sh518880":-1.28,"sz159981":-2.26,"sh512400":-0.32,"sz159985":0.6},"funds":{"009803":1.3256,"001512":1.3944},"awRealizedPnL_CNY":212.77},{"date":"2026-07-02","dataTime":"2026-07-02T11:26:17.033Z","rates":{"USD_CNY":6.801054,"HKD_CNY":0.87193},"awRealizedPnL_CNY":212.77,"prices":{"sz159632":2.407,"sh513650":1.872,"sh512890":1.087,"sh518880":8.475,"sz159981":1.366,"sh512400":1.88,"sz159985":2.066},"changePct":{"sz159632":-2.55,"sh513650":-0.37,"sh512890":0.74,"sh518880":2.47,"sz159981":-1.44,"sh512400":1.73,"sz159985":3.46},"funds":{"009803":1.3239,"001512":1.3934}}],"lastUpdated":"2026-07-02T11:26:17.033Z"};
+
+// ==================== 工具 ====================
+var TRADES = {"version":1,"lastUpdated":"2026-07-02","trades":[{"id":11,"date":"2026-07-02","code":"sh513650","name":"标普500ETF南方","action":"buy","price":1.883,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1883,"reason":"全天候账户月度定投"},{"id":12,"date":"2026-07-02","code":"sh512890","name":"红利低波ETF华泰柏瑞","action":"buy","price":1.079,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1079,"reason":"全天候账户月度定投"},{"id":13,"date":"2026-07-02","code":"sh518880","name":"黄金ETF华安","action":"buy","price":8.446,"currency":"CNY","qty":100,"settleCcy":"CNY","settleAmount":844.6,"reason":"全天候账户月度定投"},{"id":14,"date":"2026-07-02","code":"sz159632","name":"纳斯达克ETF华安","action":"buy","price":2.445,"currency":"CNY","qty":600,"settleCcy":"CNY","settleAmount":1467,"reason":"全天候账户月度定投"},{"id":15,"date":"2026-07-02","code":"sz159985","name":"豆粕ETF华夏","action":"buy","price":2.042,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":1021,"reason":"全天候账户月度定投 - 豆粕超跌多加"},{"id":16,"date":"2026-07-02","code":"sz159981","name":"能源化工ETF建信","action":"buy","price":1.359,"currency":"CNY","qty":900,"settleCcy":"CNY","settleAmount":1223.1,"reason":"全天候账户月度定投 - 能源超跌多加"},{"id":17,"date":"2026-07-02","code":"sh512400","name":"有色金属ETF南方","action":"buy","price":1.901,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":950.5,"reason":"全天候账户月度定投 - 有色超跌多加"},{"id":1,"date":"2026-06-15","code":"hk00700","name":"腾讯控股","action":"buy","price":461,"currency":"HKD","qty":100,"settleCcy":"CNY","settleAmount":39826,"reason":"消息面驱动，短期做个波动"},{"id":3,"date":"2026-06-22","code":"sh513260","name":"恒生科技ETF汇添富","action":"sell","price":1.105,"currency":"CNY","qty":16300,"settleCcy":"CNY","settleAmount":18011.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"id":5,"date":"2026-06-24","code":"sh515080","name":"中证红利ETF招商","action":"dividend","price":0.02,"currency":"CNY","qty":10000,"settleCcy":"CNY","settleAmount":200,"reason":"股息发放，成本从1.437调整为1.417"},{"id":6,"date":"2026-06-26","code":"usINTU","name":"财捷","action":"buy","price":269.01,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":807.03,"reason":"左侧买入，大跌补仓压低成本"},{"id":7,"date":"2026-06-26","code":"usMSFT","name":"微软","action":"buy","price":371.38,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":1114.14,"reason":"左侧买入，大跌补仓压低成本"},{"id":8,"date":"2026-06-26","code":"usNVDA","name":"英伟达","action":"buy","price":194.56,"currency":"USD","qty":5,"settleCcy":"USD","settleAmount":972.8,"reason":"左侧买入，大跌补仓压低成本"},{"id":9,"date":"2026-07-01","code":"sh600036","name":"招商银行","action":"buy","price":35.87,"currency":"CNY","qty":200,"settleCcy":"CNY","settleAmount":7174,"reason":"优质老登股左侧加仓"},{"id":10,"date":"2026-07-01","code":"sz002027","name":"分众传媒","action":"buy","price":4.85,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":4850,"reason":"优质老登股左侧加仓"}],"dividends":[{"code":"009803","name":"易方达中债7-10国开债C","exDate":"2026-06-15","payDate":"2026-06-16","perShare":0.0165,"shares":12895,"amount":212.77,"type":"cash","navBefore":1.3362,"navAfter":1.3197}],"closedPositions":[{"code":"sh513260","name":"恒生科技ETF汇添富","date":"2026-06-22","qty":16300,"cost":1.27,"sellPrice":1.105,"totalCost":20701,"totalRevenue":18011.5,"realizedPnL_CNY":-2689.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"code":"sh513330","name":"恒生互联网ETF华夏","date":"2026-06-22","qty":54000,"cost":0.492,"sellPrice":0.361,"totalCost":26568,"totalRevenue":19494,"realizedPnL_CNY":-7074,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"}],"realizedPnLSummary":{"mainCNY":0,"allweatherCNY":212.77,"note":"已实现盈亏(人民币)，按账户分别统计"}};
+var DR={USD_CNY:6.78,HKD_CNY:0.865};
+var COLORS=['#4f46e5','#8b5cf6','#ec4899','#f59e0b','#10b981'];
+var MC={cn:'#f97316',hk:'#3b82f6',us:'#22c55e',aw:'#8b5cf6',cash:'#94a3b8'};
+function fmt(n,d){d=d||2;if(n==null||isNaN(n))return'--';return n.toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function sgn(n,d){d=d||2;var v=fmt(Math.abs(n),d);return n>=0?'+'+v:'-'+v}
+function clr(v){return v>=0?'up':'down'}
+function toCNY(v,m,r){if(m==='cn'||m==='aw')return v;if(m==='hk')return v*r.HKD_CNY;return v*r.USD_CNY}
+
+// ==================== Tab 切换 ====================
+function switchTab(name){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+    document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active')});
+    var btns=document.querySelectorAll('.tab-btn');
+    var idx={main:0,allweather:1,trades:2}[name]||0;
+    btns[idx].classList.add('active');
+    document.getElementById('page-'+name).classList.add('active');
+}
+
+// ==================== 主账户计算 ====================
+function calcMain(snap){
+    var r=(snap.rates&&snap.rates.USD_CNY!=null)?snap.rates:DR;
+    var mk={cn:[],hk:[],us:[]};
+    var tv=0,tc=0,tdp=0;
+    ['cn','hk','us'].forEach(function(m){
+        var mvo=0,mco=0,mdp=0;
+        CONFIG.holdings[m].forEach(function(h){
+            var p=snap.prices[h.code]||0,cp=snap.changePct[h.code]||0;
+            var mv=h.qty*p,cv=h.qty*h.cost,pnl=mv-cv,dp=mv*cp/100;
+            mvo+=mv;mco+=cv;mdp+=dp;
+            mk[m].push({code:h.code,name:h.name,qty:h.qty,cost:h.cost,price:p,chgPct:cp,mv_orig:mv,pnl_orig:pnl,dayPnl_orig:dp,pnlPct_orig:cv>0?pnl/cv*100:0});
+        });
+        var mvc=toCNY(mvo,m,r),mcc=toCNY(mco,m,r);
+        mk[m].forEach(function(h){h.mv_cny=toCNY(h.mv_orig,m,r);h.pnl_cny=toCNY(h.pnl_orig,m,r);h.dayPnl_cny=toCNY(h.dayPnl_orig,m,r);h.cost_cny=toCNY(h.qty*h.cost,m,r);h.pnlPct_cny=h.cost_cny>0?h.pnl_cny/h.cost_cny*100:0});
+        mk[m].totalValueCNY=mvc;mk[m].totalCostCNY=mcc;mk[m].totalPnlCNY=mvc-mcc;mk[m].totalPnlPctCNY=mcc>0?(mvc-mcc)/mcc*100:0;mk[m].dayPnlCNY=toCNY(mdp,m,r);mk[m].dayPnlPctCNY=mvc>0?toCNY(mdp,m,r)/mvc*100:0;
+        tv+=mvc;tc+=mcc;tdp+=toCNY(mdp,m,r);
+    });
+    var cash=CONFIG.cash||{usd:0,hkd:0,rmb:0};
+    var cashCNY=cash.rmb+cash.hkd*r.HKD_CNY+cash.usd*r.USD_CNY;
+    var total=tv+cashCNY;
+    return {markets:mk,rates:r,cashCNY:cashCNY,cash:cash,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:tv-tc,totalPnlPctCNY:tc>0?(tv-tc)/tc*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0};
+}
+
+// ==================== 全天候计算 ====================
+function calcAW(snap){
+    var r=(snap.rates&&snap.rates.USD_CNY!=null)?snap.rates:DR;
+    var awc=CONFIG.allweather||{holdings:[],funds:[],cash:{rmb:0}};
+    var stocks=[],tv=0,tc=0,tdp=0;
+    var awPrices=snap.prices||{},awChg=snap.changePct||{};
+    awc.holdings.forEach(function(h){
+        var p=awPrices[h.code]||0,cp=awChg[h.code]||0;
+        var mv=h.qty*p,cv=h.qty*h.cost,pnl=mv-cv,dp=mv*cp/100;
+        tv+=mv;tc+=cv;tdp+=dp;
+        stocks.push({code:h.code,name:h.name,qty:h.qty,cost:h.cost,price:p,chgPct:cp,mv_orig:mv,pnl_orig:pnl,dayPnl_orig:dp,pnlPct_orig:cv>0?pnl/cv*100:0,mv_cny:mv,cost_cny:cv,pnl_cny:pnl,pnlPct_cny:cv>0?pnl/cv*100:0});
+    });
+    // 基金
+    var fundNAVs=snap.funds||{};
+    (awc.funds||[]).forEach(function(f){
+        var nav=fundNAVs[f.code]||0;
+        var mv=f.shares*nav, cv=f.shares*f.cost, pnl=mv-cv;
+        tv+=mv;tc+=cv;
+        stocks.push({code:f.code,name:f.name,qty:f.shares,cost:f.cost,price:nav,chgPct:0,mv_orig:mv,pnl_orig:pnl,dayPnl_orig:0,pnlPct_orig:cv>0?pnl/cv*100:0,mv_cny:mv,cost_cny:cv,pnl_cny:pnl,pnlPct_cny:cv>0?pnl/cv*100:0});
+    });
+    var cashCNY=awc.cash.rmb||0;
+    var total=tv+cashCNY;
+    var awRealized=snap.awRealizedPnL_CNY||0;
+    var totalPnlCNY=tv-tc+awRealized;
+    return {stocks:stocks,rates:r,cashCNY:cashCNY,cash:awc.cash,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:totalPnlCNY,totalPnlPctCNY:tc>0?totalPnlCNY/tc*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0,realizedPnLCNY:awRealized};
+}
+
+// ==================== 饼图 ====================
+function drawPie(svgId,legId,data,total,centerLabel,useQian){
+    if(total<=0)return;
+    var svg=document.getElementById(svgId);
+    var cx=100,cy=100,r=70,ir=45;
+    var unit=useQian?1000:10000;
+    var unitLbl=useQian?'千':'万';
+    var angle=-Math.PI/2,html='',legHtml='';
+    data.forEach(function(s){
+        var pct=total>0?(s.value/total*100).toFixed(1):'0.0';
+        legHtml+='<div class="legend-item"><span class="legend-dot" style="background:'+s.color+'"></span>'+s.label+'<span class="legend-val">'+pct+'%</span><span class="legend-pct">¥'+fmt(s.value/unit,1)+unitLbl+'</span></div>';
+        if(s.value<=0)return;
+        var slice=(s.value/total)*Math.PI*2;
+        var sx=cx+r*Math.cos(angle),sy=cy+r*Math.sin(angle);
+        angle+=slice;
+        var ex=cx+r*Math.cos(angle),ey=cy+r*Math.sin(angle);
+        var large=slice>Math.PI?1:0;
+        var dPath='M'+cx+','+cy+' L'+sx+','+sy+' A'+r+','+r+' 0 '+large+',1 '+ex+','+ey+' Z';
+        html+='<path d="'+dPath+'" fill="'+s.color+'" stroke="#fff" stroke-width="2"/>';
+        var mid=angle-slice/2;
+        var lx=cx+(ir+(r-ir)*0.55)*Math.cos(mid),ly=cy+(ir+(r-ir)*0.55)*Math.sin(mid);
+        if(parseFloat(pct)>6) html+='<text x="'+lx+'" y="'+ly+'" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">'+pct+'%</text>';
+    });
+    html+='<circle cx="'+cx+'" cy="'+cy+'" r="'+ir+'" fill="#fff"/>';
+    html+='<text x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" fill="#64748b" font-size="11">'+centerLabel+'</text>';
+    html+='<text x="'+cx+'" y="'+(cy+14)+'" text-anchor="middle" fill="#1e293b" font-size="16" font-weight="700">¥'+fmt(total/unit,1)+unitLbl+'</text>';
+    svg.innerHTML=html;
+    document.getElementById(legId).innerHTML=legHtml;
+}
+
+// ==================== TOP5 ====================
+function drawTop5(listId,items){
+    var top5=items.slice(0,5);
+    var maxV=top5[0]?top5[0].mv:1;
+    var html='';
+    top5.forEach(function(s,i){
+        var w=(s.mv/maxV*100).toFixed(1),c=s.color||COLORS[i];
+        html+='<div class="top5-item"><div class="top5-rank" style="background:'+c+'">'+(i+1)+'</div><div class="top5-name">'+s.name+'</div><div class="top5-bar-wrap"><div class="top5-bar" style="width:'+w+'%;background:'+c+'"></div><span class="top5-bar-val">¥'+fmt(s.mv/10000,1)+'万</span></div></div>';
+    });
+    document.getElementById(listId).innerHTML=html;
+}
+
+// ==================== 工具提示 ====================
+function showTooltip(evt, date, value, prefix, suffix, isUp){
+    var tt=document.getElementById('chartTooltip');
+    var c=isUp===true?'up':(isUp===false?'down':'');
+    tt.innerHTML='<div class="tt-date">'+date+'</div><div class="tt-val'+(c?' '+c:'')+'">'+prefix+value+suffix+'</div>';
+    tt.style.display='block';
+    tt.style.left=Math.min(evt.clientX+16, window.innerWidth-180)+'px';
+    tt.style.top=(evt.clientY-50)+'px';
+}
+function hideTooltip(){ document.getElementById('chartTooltip').style.display='none'; }
+
+// ==================== 时间筛选 ====================
+var yieldFilterMain=0, yieldFilterAW=0; // 0=全部
+
+function setupYieldFilters(){
+    var mf=document.getElementById('m-yieldFilter');
+    if(mf){
+        mf.querySelectorAll('button').forEach(function(b){
+            b.addEventListener('click',function(){
+                mf.querySelectorAll('button').forEach(function(x){x.classList.remove('active')});
+                this.classList.add('active');
+                yieldFilterMain=parseInt(this.dataset.range)||0;
+                drawYieldChart();
+            });
+        });
+    }
+    var af=document.getElementById('aw-yieldFilter');
+    if(af){
+        af.querySelectorAll('button').forEach(function(b){
+            b.addEventListener('click',function(){
+                af.querySelectorAll('button').forEach(function(x){x.classList.remove('active')});
+                this.classList.add('active');
+                yieldFilterAW=parseInt(this.dataset.range)||0;
+                drawAWYieldChart();
+            });
+        });
+    }
+}
+
+// Helper: apply time filter to snapshots
+function filterSnaps(snaps, days){
+    if(!days||days<=0||snaps.length<=days)return snaps;
+    return snaps.slice(snaps.length-days);
+}
+
+// ==================== 历史曲线 ====================
+function drawPnLChart(){
+    var snaps=HISTORY_MAIN.snapshots;
+    if(snaps.length<1)return;
+    var portfolios=snaps.map(function(s){return calcMain(s)});
+    var dates=snaps.map(function(s){return s.date.slice(5)});
+    var pnls=portfolios.map(function(p){return p.totalPnlCNY});
+
+    document.getElementById('m-chartPoints2').textContent=snaps.length;
+    var last=portfolios[portfolios.length-1];
+    document.getElementById('m-pnlVal').innerHTML='<span class="'+clr(last.totalPnlCNY)+'">¥'+sgn(last.totalPnlCNY,2)+'</span>';
+
+    var svg=document.getElementById('m-pnlSvg');
+    var W=460,H=200,pad={t:20,r:20,b:42,l:64};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+
+    if(snaps.length===1){
+        var v=pnls[0];
+        svg.innerHTML='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" fill="#94a3b8" font-size="13">数据将在下次更新后生成</text>';
+        return;
+    }
+
+    var min=Math.min.apply(null,pnls)*1.02, max=Math.max.apply(null,pnls)*1.02;
+    if(min>0)min=0; if(max<0)max=0;
+    var range=(max-min)||1;
+    var zeroY=pad.t+ph*(1-(0-min)/range);
+
+    var html='';
+    for(var i=0;i<=3;i++){
+        var val=min+range*i/3;
+        var gy=pad.t+ph*(1-i/3);
+        html+='<line x1="'+pad.l+'" y1="'+gy+'" x2="'+(W-pad.r)+'" y2="'+gy+'" stroke="#e2e8f0" stroke-width="1"/>';
+        html+='<text x="'+(pad.l-6)+'" y="'+(gy+4)+'" text-anchor="end" fill="#64748b" font-size="10">¥'+(val/10000).toFixed(1)+'万</text>';
+    }
+    // 垂直网格线
+    var step=Math.max(1,Math.ceil(snaps.length/8));
+    for(var i=0;i<snaps.length;i+=step){
+        var gx=pad.l+pw*i/(snaps.length-1||1);
+        html+='<line x1="'+gx.toFixed(1)+'" y1="'+pad.t+'" x2="'+gx.toFixed(1)+'" y2="'+(H-pad.b)+'" stroke="#f1f5f9" stroke-width="1"/>';
+    }
+    // zero line
+    if(zeroY>pad.t&&zeroY<H-pad.b){
+        html+='<line x1="'+pad.l+'" y1="'+zeroY.toFixed(1)+'" x2="'+(W-pad.r)+'" y2="'+zeroY.toFixed(1)+'" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>';
+    }
+    // 隔行显示日期
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        if(i%step===0||i===snaps.length-1){
+            html+='<text x="'+x+'" y="'+(H-22)+'" text-anchor="middle" fill="#475569" font-size="10" font-weight="500">'+d+'</text>';
+            html+='<line x1="'+x.toFixed(1)+'" y1="'+(H-pad.b)+'" x2="'+x.toFixed(1)+'" y2="'+(H-pad.b+3)+'" stroke="#94a3b8" stroke-width="1"/>';
+        }
+    });
+
+    var path='',area='';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(pnls[i]-min)/range);
+        path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
+        if(i===0)area='M'+x.toFixed(1)+','+zeroY.toFixed(1)+' L'+x.toFixed(1)+','+y.toFixed(1);
+        else area+=' L'+x.toFixed(1)+','+y.toFixed(1);
+    });
+    area+=' L'+(pad.l+pw)+','+zeroY.toFixed(1)+' Z';
+    html+='<path d="'+area+'" fill="url(#pnlGrad)" opacity="0.3"/>';
+    html+='<defs><linearGradient id="pnlGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4f46e5" stop-opacity="0.45"/><stop offset="100%" stop-color="#4f46e5" stop-opacity="0.05"/></linearGradient></defs>';
+    html+='<path d="'+path+'" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(pnls[i]-min)/range);
+        var up=pnls[i]>=0;
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="22" fill="transparent" class="chart-hover-area" onmouseover="showTooltip(event,\''+snaps[i].date+'\',\''+sgn(pnls[i],2)+'\',\'¥\',\'\','+up+')" onmouseout="hideTooltip()"/>';
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="#4f46e5" stroke="#fff" stroke-width="1.5"/>';
+    });
+    svg.innerHTML=html;
+}
+
+function drawYieldChart(){
+    var snaps=filterSnaps(HISTORY_MAIN.snapshots, yieldFilterMain);
+    if(snaps.length<1)return;
+    var portfolios=snaps.map(function(s){return calcMain(s)});
+    var dates=snaps.map(function(s){return s.date.slice(5)});
+    var yields=portfolios.map(function(p){return p.totalPnlPctCNY});
+
+    document.getElementById('m-chartPoints3').textContent=snaps.length;
+    var last=portfolios[portfolios[portfolios.length-1]?portfolios.length-1:0];
+    document.getElementById('m-yieldVal').innerHTML='<span class="'+clr(last.totalPnlPctCNY)+'">'+sgn(last.totalPnlPctCNY,2)+'%</span>';
+
+    var svg=document.getElementById('m-yieldSvg');
+    var W=460,H=200,pad={t:20,r:20,b:42,l:60};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+
+    if(snaps.length===1){
+        svg.innerHTML='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" fill="#94a3b8" font-size="13">数据将在下次更新后生成</text>';
+        return;
+    }
+
+    var min=Math.min.apply(null,yields)*1.1, max=Math.max.apply(null,yields)*1.1;
+    if(min>0)min=-0.5; if(max<0)max=0.5;
+    var range=(max-min)||1;
+    var zeroY=pad.t+ph*(1-(0-min)/range);
+
+    var html='';
+    for(var i=0;i<=3;i++){
+        var val=min+range*i/3;
+        var gy=pad.t+ph*(1-i/3);
+        html+='<line x1="'+pad.l+'" y1="'+gy+'" x2="'+(W-pad.r)+'" y2="'+gy+'" stroke="#e2e8f0" stroke-width="1"/>';
+        html+='<text x="'+(pad.l-6)+'" y="'+(gy+4)+'" text-anchor="end" fill="#64748b" font-size="10">'+val.toFixed(1)+'%</text>';
+    }
+    // 垂直网格线（按日期密度自适应）
+    var step=Math.max(1,Math.ceil(snaps.length/8));
+    for(var i=0;i<snaps.length;i+=step){
+        var gx=pad.l+pw*i/(snaps.length-1||1);
+        html+='<line x1="'+gx.toFixed(1)+'" y1="'+pad.t+'" x2="'+gx.toFixed(1)+'" y2="'+(H-pad.b)+'" stroke="#f1f5f9" stroke-width="1"/>';
+    }
+    if(zeroY>pad.t&&zeroY<H-pad.b){
+        html+='<line x1="'+pad.l+'" y1="'+zeroY.toFixed(1)+'" x2="'+(W-pad.r)+'" y2="'+zeroY.toFixed(1)+'" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>';
+    }
+    // 隔行显示日期标签，避免重叠
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        if(i%step===0||i===snaps.length-1){
+            html+='<text x="'+x+'" y="'+(H-22)+'" text-anchor="middle" fill="#475569" font-size="10" font-weight="500">'+d+'</text>';
+        }
+    });
+    // 刻度线
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        if(i%step===0||i===snaps.length-1){
+            html+='<line x1="'+x.toFixed(1)+'" y1="'+(H-pad.b)+'" x2="'+x.toFixed(1)+'" y2="'+(H-pad.b+3)+'" stroke="#94a3b8" stroke-width="1"/>';
+        }
+    });
+
+    var path='',area='';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(yields[i]-min)/range);
+        path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
+        if(i===0)area='M'+x.toFixed(1)+','+zeroY.toFixed(1)+' L'+x.toFixed(1)+','+y.toFixed(1);
+        else area+=' L'+x.toFixed(1)+','+y.toFixed(1);
+    });
+    area+=' L'+(pad.l+pw)+','+zeroY.toFixed(1)+' Z';
+    html+='<path d="'+area+'" fill="url(#yieldGrad)" opacity="0.3"/>';
+    html+='<defs><linearGradient id="yieldGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ec4899" stop-opacity="0.4"/><stop offset="100%" stop-color="#ec4899" stop-opacity="0.05"/></linearGradient></defs>';
+    html+='<path d="'+path+'" fill="none" stroke="#ec4899" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(yields[i]-min)/range);
+        var up=yields[i]>=0;
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="22" fill="transparent" class="chart-hover-area" onmouseover="showTooltip(event,\''+snaps[i].date+'\',\''+sgn(yields[i],2)+'\',\'\',\'%\','+up+')" onmouseout="hideTooltip()"/>';
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="#ec4899" stroke="#fff" stroke-width="1.5"/>';
+    });
+    svg.innerHTML=html;
+}
+
+// ==================== 主账户渲染 ====================
+function renderMain(d){
+    var tc=document.getElementById('m-tablesContainer');
+    var cur={cn:'¥',hk:'HK$',us:'$'},labels={cn:'A股 / 沪深',hk:'港股',us:'美股'},tags={cn:'tcn',hk:'thk',us:'tus'};
+    var total=d.totalValueCNY,html='';
+    ['cn','hk','us'].forEach(function(m){
+        var data=d.markets[m],c=cur[m];
+        var stocks=data.filter(function(x){return x.code});
+        stocks.sort(function(a,b){return b.mv_cny - a.mv_cny});
+        html+='<div class="section"><div class="section-header"><div class="section-title">'+labels[m]+'<span class="mkt-tag '+tags[m]+'">'+m.toUpperCase()+'</span></div></div><table><thead><tr><th>证券</th><th>持仓</th><th>现价</th><th>成本</th><th>日涨跌</th><th>市值</th><th>市值(¥)</th><th>占比</th><th>持仓盈亏(¥)</th></tr></thead><tbody>';
+        stocks.forEach(function(h){
+            var pct=total>0?(h.mv_cny/total*100).toFixed(2):'0.00';
+            html+='<tr><td><div class="stock-name">'+h.name+'</div><div class="stock-code">'+h.code.toUpperCase()+'</div></td><td>'+fmt(h.qty,0)+'</td><td class="mono">'+c+fmt(h.price,3)+'</td><td class="mono">'+c+fmt(h.cost,3)+'</td><td class="'+clr(h.chgPct)+'">¥'+sgn(h.dayPnl_cny,0)+' <small>('+sgn(h.chgPct,2)+'%)</small></td><td class="mono">'+c+fmt(h.mv_orig,2)+'</td><td class="mono">¥'+fmt(h.mv_cny,2)+'</td><td class="mono">'+pct+'%</td><td class="pnl-'+clr(h.pnl_cny)+'">'+sgn(h.pnl_cny,2)+' <small>('+sgn(h.pnlPct_cny,2)+'%)</small></td></tr>';
+        });
+        var mp=total>0?(data.totalValueCNY/total*100).toFixed(1):'0.0';
+        var dayClr=clr(data.dayPnlCNY);
+        var daySign=data.dayPnlCNY>=0?'+':'';
+        html+='<tr class="tot"><td colspan="4">'+labels[m]+'合计</td><td class="mono '+dayClr+'" style="font-weight:600">¥'+daySign+fmt(data.dayPnlCNY,0)+' <small>('+sgn(data.dayPnlPctCNY,2)+'%)</small></td><td colspan="2" class="mono">¥'+fmt(data.totalValueCNY,2)+'</td><td class="mono">'+mp+'%</td><td class="pnl-'+clr(data.totalPnlCNY)+'">'+sgn(data.totalPnlCNY,2)+' ('+sgn(data.totalPnlPctCNY,2)+'%)</td></tr></tbody></table></div>';
+    });
+    // 现金
+    html+='<div class="section"><div class="section-header"><div class="section-title">💵 现金<span class="mkt-tag" style="background:#f1f5f9;color:#64748b">CASH</span></div></div><table><thead><tr><th>币种</th><th>金额</th><th>折合(¥)</th><th>占比</th><th></th><th></th><th></th><th></th></tr></thead><tbody>';
+    html+='<tr><td><span class="mkt-tag tcn">CNY</span> 人民币</td><td class="mono">¥'+fmt(d.cash.rmb,2)+'</td><td class="mono">¥'+fmt(d.cash.rmb,2)+'</td><td class="mono">'+fmt(d.cash.rmb/total*100,2)+'%</td><td></td><td></td><td></td><td></td></tr>';
+    html+='<tr><td><span class="mkt-tag thk">HKD</span> 港币</td><td class="mono">HK$'+fmt(d.cash.hkd,2)+'</td><td class="mono">¥'+fmt(d.cash.hkd*d.rates.HKD_CNY,2)+'</td><td class="mono">'+fmt(d.cash.hkd*d.rates.HKD_CNY/total*100,2)+'%</td><td></td><td></td><td></td><td></td></tr>';
+    html+='<tr><td><span class="mkt-tag tus">USD</span> 美元</td><td class="mono">$'+fmt(d.cash.usd,2)+'</td><td class="mono">¥'+fmt(d.cash.usd*d.rates.USD_CNY,2)+'</td><td class="mono">'+fmt(d.cash.usd*d.rates.USD_CNY/total*100,2)+'%</td><td></td><td></td><td></td><td></td></tr>';
+    html+='<tr class="tot"><td colspan="4">💵 现金合计</td><td class="mono">'+fmt(d.cashCNY/total*100,2)+'%</td><td></td><td class="mono">¥'+fmt(d.cashCNY,2)+'</td><td></td><td></td></tr></tbody></table></div>';
+    tc.innerHTML=html;
+
+    // 饼图
+    drawPie('m-pieSvg','m-pieLegend',[
+        {label:'A股',value:d.markets.cn.totalValueCNY,color:MC.cn},
+        {label:'港股',value:d.markets.hk.totalValueCNY,color:MC.hk},
+        {label:'美股',value:d.markets.us.totalValueCNY,color:MC.us},
+        {label:'现金',value:d.cashCNY,color:MC.cash}
+    ],total,'总资产');
+
+    // TOP5
+    var all=[];
+    ['cn','hk','us'].forEach(function(m){d.markets[m].forEach(function(h){if(h.code)all.push({name:h.name,mv:h.mv_cny,color:MC[m]});});});
+    all.sort(function(a,b){return b.mv-a.mv});
+    drawTop5('m-top5List',all);
+    drawPnLChart();
+    drawYieldChart();
+
+    // 卡片
+    document.getElementById('m-totalValue').textContent='¥'+fmt(total,2);
+    document.getElementById('m-totalPnl').innerHTML='<span class="'+clr(d.totalPnlCNY)+'">持仓盈亏 '+sgn(d.totalPnlCNY,2)+' ('+sgn(d.totalPnlPctCNY,2)+'%)</span>';
+    document.getElementById('m-dayPnl').innerHTML='<span class="'+clr(d.totalDayPnlCNY)+'">¥'+sgn(d.totalDayPnlCNY,2)+' ('+sgn(d.totalDayPnlPctCNY,2)+'%)</span>';
+    document.getElementById('m-dayPnlPct').innerHTML='';
+    document.getElementById('m-cnTotal').textContent='¥'+fmt(d.markets.cn.totalValueCNY,2);
+    document.getElementById('m-cnPnl').innerHTML='<small style="color:#94a3b8">持仓 '+sgn(d.markets.cn.totalPnlCNY,2)+' ('+sgn(d.markets.cn.totalPnlPctCNY,2)+'%)</small>';
+    document.getElementById('m-cnDayChange').innerHTML='&#x1F4C8; 今日涨跌 '+sgn(d.markets.cn.dayPnlCNY,2)+' <span style="font-size:13px">('+sgn(d.markets.cn.dayPnlPctCNY,2)+'%)</span>';
+    document.getElementById('m-cnDayChange').className='card-sub-day '+clr(d.markets.cn.dayPnlCNY);
+    document.getElementById('m-hkTotal').textContent='¥'+fmt(d.markets.hk.totalValueCNY,2);
+    document.getElementById('m-hkPnl').innerHTML='<small style="color:#94a3b8">持仓 '+sgn(d.markets.hk.totalPnlCNY,2)+' ('+sgn(d.markets.hk.totalPnlPctCNY,2)+'%)</small>';
+    document.getElementById('m-hkDayChange').innerHTML='&#x1F4C8; 今日涨跌 '+sgn(d.markets.hk.dayPnlCNY,2)+' <span style="font-size:13px">('+sgn(d.markets.hk.dayPnlPctCNY,2)+'%)</span>';
+    document.getElementById('m-hkDayChange').className='card-sub-day '+clr(d.markets.hk.dayPnlCNY);
+    document.getElementById('m-usTotal').textContent='¥'+fmt(d.markets.us.totalValueCNY,2);
+    document.getElementById('m-usPnl').innerHTML='<small style="color:#94a3b8">持仓 '+sgn(d.markets.us.totalPnlCNY,2)+' ('+sgn(d.markets.us.totalPnlPctCNY,2)+'%)</small>';
+    document.getElementById('m-usDayChange').innerHTML='&#x1F4C8; 今日涨跌 '+sgn(d.markets.us.dayPnlCNY,2)+' <span style="font-size:13px">('+sgn(d.markets.us.dayPnlPctCNY,2)+'%)</span>';
+    document.getElementById('m-usDayChange').className='card-sub-day '+clr(d.markets.us.dayPnlCNY);
+    document.getElementById('m-cashTotal').textContent='¥'+fmt(d.cashCNY,2);
+    document.getElementById('m-cashDetail').textContent='USD $'+fmt(d.cash.usd,0)+' · HKD '+fmt(d.cash.hkd,0)+' · RMB ¥'+fmt(d.cash.rmb,0);
+}
+
+// ==================== 全天候渲染 ====================
+function renderAW(d){
+    var tc=document.getElementById('aw-tablesContainer');
+    var total=d.stockValueCNY; // ETF+基金合计，不含现金
+    var isETF=function(h){return h.qty>0;};
+    var html='<div class="section"><div class="section-header"><div class="section-title">全天候持仓<span class="mkt-tag taw">ALL-WEATHER</span></div></div><table><thead><tr><th>名称</th><th>持仓</th><th>净值/现价</th><th>成本</th><th>市值(¥)</th><th>占比</th><th>持仓盈亏(¥)</th></tr></thead><tbody>';
+    d.stocks.forEach(function(h){
+        var pct=total>0?(h.mv_cny/total*100).toFixed(2):'0.00';
+        var qtyLabel=isETF(h)?fmt(h.qty,0)+'股':'份额'+fmt(h.qty,0);
+        var priceLabel='¥'+fmt(h.price,isETF(h)?3:4);
+        var costLabel='¥'+fmt(h.cost,isETF(h)?3:4);
+        html+='<tr><td><div class="stock-name">'+h.name+'</div><div class="stock-code">'+h.code.toUpperCase()+'</div></td><td>'+qtyLabel+'</td><td class="mono">'+priceLabel+'</td><td class="mono">'+costLabel+'</td><td class="mono">¥'+fmt(h.mv_cny,2)+'</td><td class="mono">'+pct+'%</td><td class="pnl-'+clr(h.pnl_cny)+'">'+sgn(h.pnl_cny,2)+' <small>('+sgn(h.pnlPct_cny,2)+'%)</small></td></tr>';
+    });
+    html+='<tr class="tot"><td colspan="4">📊 ETF+基金合计</td><td class="mono">¥'+fmt(d.stockValueCNY,2)+'</td><td class="mono">100%</td><td class="pnl-'+clr(d.totalPnlCNY)+'">'+sgn(d.totalPnlCNY,2)+' ('+sgn(d.totalPnlPctCNY,2)+'%)</td></tr></tbody></table></div>';
+
+    // 目标仓位对比
+    var targets=CONFIG.allweather.targets||[];
+    if(targets.length>0){
+        var stockMap={};
+        d.stocks.forEach(function(s){stockMap[s.code]=s.mv_cny});
+
+        html+='<div class="section"><div class="section-header"><div class="section-title">🎯 目标仓位对比</div></div><table><thead><tr><th>大类</th><th>子项</th><th>目标%</th><th>当前%</th><th>当前市值</th><th>差距</th></tr></thead><tbody>';
+        targets.forEach(function(g){
+            var groupActual=0, groupTarget=0;
+            var rows='';
+            g.items.forEach(function(item){
+                var actual=0;
+                item.codes.forEach(function(c){actual+=stockMap[c]||0});
+                var actualPct=total>0?(actual/total*100):0;
+                var gap=actualPct-item.subPct;
+                groupActual+=actual; groupTarget+=item.subPct;
+                var gapColor=Math.abs(gap)<1?'#94a3b8':(gap>0?'#ef4444':'#f59e0b');
+                rows+='<tr><td></td><td>'+item.label+'</td><td class="mono">'+item.subPct.toFixed(1)+'%</td><td class="mono">'+actualPct.toFixed(1)+'%</td><td class="mono">¥'+fmt(actual,0)+'</td><td style="color:'+gapColor+';font-weight:600">'+(gap>=0?'+':'')+gap.toFixed(1)+'%</td></tr>';
+            });
+            html+='<tr style="background:#f8fafc;font-weight:600"><td>'+g.group+'</td><td>合计</td><td class="mono">'+g.targetPct+'%</td><td class="mono">'+(groupActual/total*100).toFixed(1)+'%</td><td class="mono">¥'+fmt(groupActual,0)+'</td><td></td></tr>';
+            html+=rows;
+        });
+        html+='</tbody></table></div>';
+    }
+    tc.innerHTML=html;
+
+    // 饼图
+    var palette=['#4f46e5','#7c3aed','#ec4899','#f59e0b','#10b981','#06b6d4','#ef4444','#f97316','#84cc16','#94a3b8'];
+    var pieData=d.stocks.map(function(s,i){return {label:s.name,value:s.mv_cny,color:palette[i%palette.length]};});
+    drawPie('aw-pieSvg','aw-pieLegend',pieData,total,'持仓市值',true);
+
+    drawAWPnLChart();
+    drawAWYieldChart();
+
+    // 卡片
+    document.getElementById('aw-totalValue').textContent='¥'+fmt(total,2);
+    document.getElementById('aw-totalPnl').innerHTML='<span class="'+clr(d.totalPnlCNY)+'">持仓盈亏 '+sgn(d.totalPnlCNY,2)+' ('+sgn(d.totalPnlPctCNY,2)+'%)</span>';
+    document.getElementById('aw-dayPnl').innerHTML='<span class="'+clr(d.totalDayPnlCNY)+'">¥'+sgn(d.totalDayPnlCNY,2)+' ('+sgn(d.totalDayPnlPctCNY,2)+'%)</span>';
+    document.getElementById('aw-dayPnlPct').innerHTML='';
+    document.getElementById('aw-realizedPnl').innerHTML='<span class="'+clr(d.realizedPnLCNY)+'">¥'+sgn(d.realizedPnLCNY,2)+'</span>';
+}
+
+// ==================== 全天候图表 ====================
+function drawAWPnLChart(){
+    var snaps=HISTORY_AW.snapshots;
+    if(snaps.length<1)return;
+    var portfolios=snaps.map(function(s){return calcAW(s)});
+    var dates=snaps.map(function(s){return s.date.slice(5)});
+    var pnls=portfolios.map(function(p){return p.totalPnlCNY});
+
+    document.getElementById('aw-chartPoints2').textContent=snaps.length;
+    var last=portfolios[portfolios.length-1];
+    document.getElementById('aw-pnlVal').innerHTML='<span class="'+clr(last.totalPnlCNY)+'">¥'+sgn(last.totalPnlCNY,2)+'</span>';
+
+    var svg=document.getElementById('aw-pnlSvg');
+    var W=460,H=200,pad={t:20,r:20,b:42,l:64};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+
+    if(snaps.length===1){
+        svg.innerHTML='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" fill="#94a3b8" font-size="13">数据将在下次更新后生成</text>';
+        return;
+    }
+
+    var min=Math.min.apply(null,pnls)*1.02, max=Math.max.apply(null,pnls)*1.02;
+    if(min>0)min=0; if(max<0)max=0;
+    var range=(max-min)||1;
+    var zeroY=pad.t+ph*(1-(0-min)/range);
+
+    var html='';
+    for(var i=0;i<=3;i++){
+        var val=min+range*i/3;
+        var gy=pad.t+ph*(1-i/3);
+        html+='<line x1="'+pad.l+'" y1="'+gy+'" x2="'+(W-pad.r)+'" y2="'+gy+'" stroke="#e2e8f0" stroke-width="1"/>';
+        html+='<text x="'+(pad.l-6)+'" y="'+(gy+4)+'" text-anchor="end" fill="#64748b" font-size="10">¥'+(val/10000).toFixed(1)+'万</text>';
+    }
+    var step=Math.max(1,Math.ceil(snaps.length/8));
+    for(var i=0;i<snaps.length;i+=step){
+        var gx=pad.l+pw*i/(snaps.length-1||1);
+        html+='<line x1="'+gx.toFixed(1)+'" y1="'+pad.t+'" x2="'+gx.toFixed(1)+'" y2="'+(H-pad.b)+'" stroke="#f1f5f9" stroke-width="1"/>';
+    }
+    if(zeroY>pad.t&&zeroY<H-pad.b){
+        html+='<line x1="'+pad.l+'" y1="'+zeroY.toFixed(1)+'" x2="'+(W-pad.r)+'" y2="'+zeroY.toFixed(1)+'" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>';
+    }
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        if(i%step===0||i===snaps.length-1){
+            html+='<text x="'+x+'" y="'+(H-22)+'" text-anchor="middle" fill="#475569" font-size="10" font-weight="500">'+d+'</text>';
+            html+='<line x1="'+x.toFixed(1)+'" y1="'+(H-pad.b)+'" x2="'+x.toFixed(1)+'" y2="'+(H-pad.b+3)+'" stroke="#94a3b8" stroke-width="1"/>';
+        }
+    });
+    var path='',area='';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(pnls[i]-min)/range);
+        path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
+        if(i===0)area='M'+x.toFixed(1)+','+zeroY.toFixed(1)+' L'+x.toFixed(1)+','+y.toFixed(1);
+        else area+=' L'+x.toFixed(1)+','+y.toFixed(1);
+    });
+    area+=' L'+(pad.l+pw)+','+zeroY.toFixed(1)+' Z';
+    html+='<path d="'+area+'" fill="url(#awPnlGrad)" opacity="0.3"/>';
+    html+='<defs><linearGradient id="awPnlGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.45"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.05"/></linearGradient></defs>';
+    html+='<path d="'+path+'" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(pnls[i]-min)/range);
+        var up=pnls[i]>=0;
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="22" fill="transparent" class="chart-hover-area" onmouseover="showTooltip(event,\''+snaps[i].date+'\',\''+sgn(pnls[i],2)+'\',\'¥\',\'\','+up+')" onmouseout="hideTooltip()"/>';
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="#f59e0b" stroke="#fff" stroke-width="1.5"/>';
+    });
+    svg.innerHTML=html;
+}
+
+function drawAWYieldChart(){
+    var snaps=filterSnaps(HISTORY_AW.snapshots, yieldFilterAW);
+    if(snaps.length<1)return;
+    var portfolios=snaps.map(function(s){return calcAW(s)});
+    var dates=snaps.map(function(s){return s.date.slice(5)});
+    var yields=portfolios.map(function(p){return p.totalPnlPctCNY});
+
+    document.getElementById('aw-chartPoints3').textContent=snaps.length;
+    var last=portfolios[portfolios.length-1];
+    document.getElementById('aw-yieldVal').innerHTML='<span class="'+clr(last.totalPnlPctCNY)+'">'+sgn(last.totalPnlPctCNY,2)+'%</span>';
+
+    var svg=document.getElementById('aw-yieldSvg');
+    var W=460,H=200,pad={t:20,r:20,b:42,l:60};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+
+    if(snaps.length===1){
+        svg.innerHTML='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" fill="#94a3b8" font-size="13">数据将在下次更新后生成</text>';
+        return;
+    }
+
+    var min=Math.min.apply(null,yields)*1.1, max=Math.max.apply(null,yields)*1.1;
+    if(min>0)min=-0.5; if(max<0)max=0.5;
+    var range=(max-min)||1;
+    var zeroY=pad.t+ph*(1-(0-min)/range);
+
+    var html='';
+    for(var i=0;i<=3;i++){
+        var val=min+range*i/3;
+        var gy=pad.t+ph*(1-i/3);
+        html+='<line x1="'+pad.l+'" y1="'+gy+'" x2="'+(W-pad.r)+'" y2="'+gy+'" stroke="#e2e8f0" stroke-width="1"/>';
+        html+='<text x="'+(pad.l-6)+'" y="'+(gy+4)+'" text-anchor="end" fill="#64748b" font-size="10">'+val.toFixed(1)+'%</text>';
+    }
+    var step=Math.max(1,Math.ceil(snaps.length/8));
+    for(var i=0;i<snaps.length;i+=step){
+        var gx=pad.l+pw*i/(snaps.length-1||1);
+        html+='<line x1="'+gx.toFixed(1)+'" y1="'+pad.t+'" x2="'+gx.toFixed(1)+'" y2="'+(H-pad.b)+'" stroke="#f1f5f9" stroke-width="1"/>';
+    }
+    if(zeroY>pad.t&&zeroY<H-pad.b){
+        html+='<line x1="'+pad.l+'" y1="'+zeroY.toFixed(1)+'" x2="'+(W-pad.r)+'" y2="'+zeroY.toFixed(1)+'" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>';
+    }
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        if(i%step===0||i===snaps.length-1){
+            html+='<text x="'+x+'" y="'+(H-22)+'" text-anchor="middle" fill="#475569" font-size="10" font-weight="500">'+d+'</text>';
+            html+='<line x1="'+x.toFixed(1)+'" y1="'+(H-pad.b)+'" x2="'+x.toFixed(1)+'" y2="'+(H-pad.b+3)+'" stroke="#94a3b8" stroke-width="1"/>';
+        }
+    });
+    var path='',area='';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(yields[i]-min)/range);
+        path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
+        if(i===0)area='M'+x.toFixed(1)+','+zeroY.toFixed(1)+' L'+x.toFixed(1)+','+y.toFixed(1);
+        else area+=' L'+x.toFixed(1)+','+y.toFixed(1);
+    });
+    area+=' L'+(pad.l+pw)+','+zeroY.toFixed(1)+' Z';
+    html+='<path d="'+area+'" fill="url(#awYieldGrad)" opacity="0.3"/>';
+    html+='<defs><linearGradient id="awYieldGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4"/><stop offset="100%" stop-color="#f59e0b" stop-opacity="0.05"/></linearGradient></defs>';
+    html+='<path d="'+path+'" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(yields[i]-min)/range);
+        var up=yields[i]>=0;
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="22" fill="transparent" class="chart-hover-area" onmouseover="showTooltip(event,\''+snaps[i].date+'\',\''+sgn(yields[i],2)+'\',\'\',\'%\','+up+')" onmouseout="hideTooltip()"/>';
+        html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="#f59e0b" stroke="#fff" stroke-width="1.5"/>';
+    });
+    svg.innerHTML=html;
+}
+
+// ==================== 操作记录渲染 ====================
+function renderTrades(){
+    var trades=TRADES.trades||[];
+    var closed=TRADES.closedPositions||[];
+    var mainRealized=0;
+    (TRADES.closedPositions||[]).forEach(function(cp){mainRealized+=cp.realizedPnL_CNY||0;});
+
+    document.getElementById('tr-tradeCount').textContent=trades.length;
+    document.getElementById('tr-realizedPnL').innerHTML='<span class="'+clr(mainRealized)+'">¥'+sgn(mainRealized,2)+'</span>';
+    document.getElementById('tr-closedCount').textContent=closed.length+' 笔清仓';
+
+    var snap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
+    if(snap){
+        var md=calcMain(snap);
+        var unrealized=md.totalPnlCNY;
+        var realized=snap.realizedPnL_CNY||mainRealized;
+        var total=unrealized+realized;
+        document.getElementById('tr-totalPnL').innerHTML='<span class="'+clr(total)+'">¥'+sgn(total,2)+'</span>';
+        var costBase=Math.abs(md.totalPnlCNY-md.totalValueCNY+md.cashCNY)||1;
+        document.getElementById('tr-totalPnlPct').innerHTML='<span class="'+clr(total)+'">'+sgn(total/costBase*100,2)+'%</span>';
+    }
+
+    // 买卖操作表
+    var tbody=document.getElementById('tr-tradesBody');
+    if(trades.length===0){
+        tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:24px">暂无操作记录</td></tr>';
+    }else{
+        var html='';
+        trades.slice().reverse().forEach(function(t){
+            var actionLabel=t.action==='buy'?'<span style="color:#ef4444;font-weight:600">买入</span>':'<span style="color:#10b981;font-weight:600">卖出</span>';
+            var curMap={CNY:'¥',HKD:'HK$',USD:'$'};
+            var curSym=curMap[t.currency]||t.currency;
+            var amount=t.qty*t.price;
+            html+='<tr><td class="mono">'+t.date+'</td><td><div class="stock-name">'+t.name+'</div><div class="stock-code">'+t.code.toUpperCase()+'</div></td><td>'+actionLabel+'</td><td class="mono">'+curSym+fmt(t.price,3)+'</td><td class="mono">'+Math.round(t.qty).toLocaleString('zh-CN')+'</td><td class="mono">'+curSym+fmt(amount,2)+'</td><td style="color:#64748b;font-size:12px">'+t.reason+'</td></tr>';
+        });
+        tbody.innerHTML=html;
+    }
+
+    // 已清仓表
+    var ctbody=document.getElementById('tr-closedBody');
+    if(closed.length===0){
+        ctbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:24px">暂无清仓记录</td></tr>';
+    }else{
+        var html2='';
+        closed.forEach(function(cp){
+            var pnlClr=clr(cp.realizedPnL_CNY);
+            html2+='<tr><td><div class="stock-name">'+cp.name+'</div><div class="stock-code">'+cp.code.toUpperCase()+'</div></td><td class="mono">'+fmt(cp.totalCost,2)+'</td><td class="mono">'+fmt(cp.totalRevenue,2)+'</td><td class="pnl-'+pnlClr+'">'+sgn(cp.realizedPnL_CNY,2)+'</td><td class="mono">'+(cp.date||cp.closeDate||'')+'</td></tr>';
+        });
+        ctbody.innerHTML=html2;
+    }
+
+    drawTotalPnLChart();
+    drawSplitChart();
+}
+
+function drawTotalPnLChart(){
+    var snaps=HISTORY_MAIN.snapshots;
+    if(snaps.length<1)return;
+    var dates=snaps.map(function(s){return s.date.slice(5)});
+    var pnls=snaps.map(function(s){
+        var md=calcMain(s);
+        var realized=s.realizedPnL_CNY||0;
+        return md.totalPnlCNY+realized;
+    });
+
+    document.getElementById('tr-chartPoints').textContent=snaps.length;
+    var last=pnls[pnls.length-1]||0;
+    document.getElementById('tr-totalPnlVal').innerHTML='<span class="'+clr(last)+'">¥'+sgn(last,2)+'</span>';
+
+    var svg=document.getElementById('tr-totalPnlSvg');
+    var W=460,H=200,pad={t:20,r:20,b:42,l:64};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+
+    if(snaps.length===1){
+        svg.innerHTML='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" fill="#94a3b8" font-size="13">数据将在下次更新后生成</text>';
+        return;
+    }
+
+    var min=Math.min.apply(null,pnls)*1.02, max=Math.max.apply(null,pnls)*1.02;
+    if(min>0)min=0; if(max<0)max=0;
+    var range=(max-min)||1;
+    var zeroY=pad.t+ph*(1-(0-min)/range);
+    var html='';
+    for(var i=0;i<=3;i++){
+        var val=min+range*i/3;
+        var gy=pad.t+ph*(1-i/3);
+        html+='<line x1="'+pad.l+'" y1="'+gy+'" x2="'+(W-pad.r)+'" y2="'+gy+'" stroke="#e2e8f0" stroke-width="1"/>';
+        html+='<text x="'+(pad.l-6)+'" y="'+(gy+4)+'" text-anchor="end" fill="#64748b" font-size="10">¥'+(val/10000).toFixed(1)+'万</text>';
+    }
+    // 垂直网格线（按日期密度自适应）
+    var step=Math.max(1,Math.ceil(snaps.length/8));
+    for(var i=0;i<snaps.length;i+=step){
+        var gx=pad.l+pw*i/(snaps.length-1||1);
+        html+='<line x1="'+gx.toFixed(1)+'" y1="'+pad.t+'" x2="'+gx.toFixed(1)+'" y2="'+(H-pad.b)+'" stroke="#f1f5f9" stroke-width="1"/>';
+    }
+    if(zeroY>pad.t&&zeroY<H-pad.b) html+='<line x1="'+pad.l+'" y1="'+zeroY.toFixed(1)+'" x2="'+(W-pad.r)+'" y2="'+zeroY.toFixed(1)+'" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,2"/>';
+    // 隔行显示日期标签
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        if(i%step===0||i===snaps.length-1){
+            html+='<text x="'+x+'" y="'+(H-22)+'" text-anchor="middle" fill="#475569" font-size="10" font-weight="500">'+d+'</text>';
+        }
+    });
+    // 刻度线
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        if(i%step===0||i===snaps.length-1){
+            html+='<line x1="'+x.toFixed(1)+'" y1="'+(H-pad.b)+'" x2="'+x.toFixed(1)+'" y2="'+(H-pad.b+3)+'" stroke="#94a3b8" stroke-width="1"/>';
+        }
+    });
+    var path='',area='';
+    dates.forEach(function(d,i){
+        var x=pad.l+pw*i/(snaps.length-1||1);
+        var y=pad.t+ph*(1-(pnls[i]-min)/range);
+        path+=(i===0?'M':'L')+x.toFixed(1)+','+y.toFixed(1);
+        if(i===0)area='M'+x.toFixed(1)+','+zeroY.toFixed(1)+' L'+x.toFixed(1)+','+y.toFixed(1);
+        else area+=' L'+x.toFixed(1)+','+y.toFixed(1);
+    });
+    area+=' L'+(pad.l+pw)+','+zeroY.toFixed(1)+' Z';
+    html+='<path d="'+area+'" fill="url(#tpnlGrad)" opacity="0.3"/>';
+    html+='<defs><linearGradient id="tpnlGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4f46e5" stop-opacity="0.45"/><stop offset="100%" stop-color="#4f46e5" stop-opacity="0.05"/></linearGradient></defs>';
+    html+='<path d="'+path+'" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    dates.forEach(function(d,i){var x=pad.l+pw*i/(snaps.length-1||1);var y=pad.t+ph*(1-(pnls[i]-min)/range);var up=pnls[i]>=0;html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="22" fill="transparent" class="chart-hover-area" onmouseover="showTooltip(event,\''+snaps[i].date+'\',\''+sgn(pnls[i],2)+'\',\'¥\',\'\','+up+')" onmouseout="hideTooltip()"/>';html+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="#4f46e5" stroke="#fff" stroke-width="1.5"/>';});
+    svg.innerHTML=html;
+}
+
+function drawSplitChart(){
+    var snap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
+    if(!snap)return;
+    var md=calcMain(snap);
+    var realized=snap.realizedPnL_CNY||0;
+    var unrealized=md.totalPnlCNY;
+
+    document.getElementById('tr-rpnlVal').innerHTML='<span class="'+clr(realized)+'">¥'+sgn(realized,2)+'</span>';
+    document.getElementById('tr-upnlVal').innerHTML='<span class="'+clr(unrealized)+'">¥'+sgn(unrealized,2)+'</span>';
+
+    var svg=document.getElementById('tr-splitSvg');
+    var W=340,H=180;
+    var cx=W/2,cy=H/2+10,r=65,ir=38;
+    var data=[{label:'已实现',value:realized,color:'#10b981'},{label:'未实现',value:unrealized,color:'#4f46e5'}];
+    var absTotal=data.reduce(function(s,d){return s+Math.abs(d.value)},0)||1;
+    var html='',angle=-Math.PI/2;
+    data.forEach(function(s){
+        if(s.value===0)return;
+        var pct=(Math.abs(s.value)/absTotal*100).toFixed(1);
+        var slice=(Math.abs(s.value)/absTotal)*Math.PI*2;
+        var sx=cx+r*Math.cos(angle),sy=cy+r*Math.sin(angle);
+        angle+=slice;
+        var ex=cx+r*Math.cos(angle),ey=cy+r*Math.sin(angle);
+        var large=slice>Math.PI?1:0;
+        var dPath='M'+cx+','+cy+' L'+sx+','+sy+' A'+r+','+r+' 0 '+large+',1 '+ex+','+ey+' Z';
+        html+='<path d="'+dPath+'" fill="'+s.color+'" stroke="#fff" stroke-width="2"/>';
+        var mid=angle-slice/2;
+        var lx=cx+(ir+(r-ir)*0.55)*Math.cos(mid),ly=cy+(ir+(r-ir)*0.55)*Math.sin(mid);
+        if(parseFloat(pct)>8) html+='<text x="'+lx+'" y="'+ly+'" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">'+pct+'%</text>';
+    });
+    html+='<circle cx="'+cx+'" cy="'+cy+'" r="'+ir+'" fill="#fff"/>';
+    html+='<text x="'+cx+'" y="'+(cy-4)+'" text-anchor="middle" fill="#64748b" font-size="10">盈亏构成</text>';
+    html+='<text x="'+cx+'" y="'+(cy+12)+'" text-anchor="middle" fill="#1e293b" font-size="14" font-weight="700">¥'+fmt((realized+unrealized)/10000,1)+'万</text>';
+    html+='<rect x="20" y="10" width="10" height="10" rx="2" fill="#10b981"/><text x="35" y="19" fill="#64748b" font-size="11">已实现 ¥'+fmt(realized,0)+'</text>';
+    html+='<rect x="180" y="10" width="10" height="10" rx="2" fill="#4f46e5"/><text x="195" y="19" fill="#64748b" font-size="11">未实现 ¥'+fmt(unrealized,0)+'</text>';
+    svg.innerHTML=html;
+}
+
+// ==================== 共享 ====================
+function sharedSetup(){
+    var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
+    var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
+    var snap=mainSnap||awSnap;
+    if(!snap)throw new Error('无数据');
+    var r=(snap.rates&&snap.rates.USD_CNY!=null)?snap.rates:DR;
+    document.getElementById('rateHK').textContent=r.HKD_CNY.toFixed(4);
+    document.getElementById('rateBar').style.display='flex';
+    // 显示两个账户的数据日期
+    var dateText='数据时间：';
+    if(mainSnap&&awSnap){
+        if(mainSnap.date===awSnap.date) dateText+=mainSnap.date;
+        else dateText+='主账户 '+mainSnap.date+' / 全天候 '+awSnap.date;
+    }else if(mainSnap) dateText+=mainSnap.date;
+    else dateText+=awSnap.date;
+    document.getElementById('dataDate').textContent=dateText;
+    var now=new Date(),day=now.getDay(),badge=document.getElementById('marketStatus');
+    badge.textContent=day===0||day===6?'周末休市':'已收盘';
+    badge.className='badge '+(day===0||day===6?'badge-closed':'badge-stale');
+}
+
+// ==================== 重新渲染全部 ====================
+function renderAll(){
+    sharedSetup();
+    var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
+    var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
+    if(mainSnap) renderMain(calcMain(mainSnap));
+    if(awSnap) renderAW(calcAW(awSnap));
+    renderTrades();
+}
+
+// ==================== 实时更新 ====================
+var SERVER_URL = '';
+var LIVE_MODE = false;
+var POLL_INTERVAL = 30000; // 30 秒轮询
+var pollTimer = null;
+
+function detectServer(){
+    // 优先检测当前 origin 是否为本地服务器
+    if(window.location.protocol==='http:'&&window.location.hostname==='localhost'){
+        SERVER_URL = window.location.origin;
+        return Promise.resolve(true);
+    }
+    // file:// 下尝试检测默认端口
+    SERVER_URL = 'http://localhost:9876';
+    return fetch(SERVER_URL+'/api/status',{signal:AbortSignal.timeout(2000)})
+        .then(function(r){return r.json()})
+        .then(function(d){return d.status==='running'})
+        .catch(function(){return false});
+}
+
+function fetchLiveData(){
+    return fetch(SERVER_URL+'/api/data',{signal:AbortSignal.timeout(5000)})
+        .then(function(r){return r.json()})
+        .then(function(d){
+            if(d.config) CONFIG=d.config;
+            if(d.historyMain) HISTORY_MAIN=d.historyMain;
+            if(d.historyAW) HISTORY_AW=d.historyAW;
+            if(d.trades) TRADES=d.trades;
+            return d;
+        });
+}
+
+function enableLiveMode(){
+    LIVE_MODE=true;
+    document.getElementById('liveIndicator').style.display='inline-block';
+    document.getElementById('refreshBar').style.display='flex';
+    console.log('🔴 实时模式已启用 —',SERVER_URL);
+}
+
+function updateRefreshBar(serverMeta){
+    var bar=document.getElementById('refreshBar');
+    if(!LIVE_MODE){bar.style.display='none';return;}
+    bar.style.display='flex';
+    if(serverMeta&&serverMeta.lastRefresh){
+        var t=new Date(serverMeta.lastRefresh);
+        document.getElementById('lastRefreshText').textContent='上次刷新: '+t.toLocaleTimeString();
+    }
+    if(serverMeta&&serverMeta.isRefreshing){
+        document.getElementById('manualRefreshBtn').disabled=true;
+        document.getElementById('manualRefreshBtn').textContent='刷新中...';
+    }else{
+        document.getElementById('manualRefreshBtn').disabled=false;
+        document.getElementById('manualRefreshBtn').textContent='立即刷新';
+    }
+}
+
+function manualRefresh(){
+    if(!LIVE_MODE)return;
+    document.getElementById('manualRefreshBtn').disabled=true;
+    document.getElementById('manualRefreshBtn').textContent='刷新中...';
+    fetch(SERVER_URL+'/api/refresh',{method:'POST',signal:AbortSignal.timeout(60000)})
+        .then(function(r){return r.json()})
+        .then(function(){
+            // 刷新完成后拉取最新数据
+            return fetchLiveData();
+        })
+        .then(function(d){
+            renderAll();
+            updateRefreshBar(d&&d.serverMeta?d.serverMeta:null);
+        })
+        .catch(function(e){
+            console.warn('手动刷新失败:',e);
+            document.getElementById('manualRefreshBtn').disabled=false;
+            document.getElementById('manualRefreshBtn').textContent='立即刷新';
+        });
+}
+
+function startPolling(){
+    if(pollTimer)clearInterval(pollTimer);
+    pollTimer=setInterval(function(){
+        fetchLiveData()
+            .then(function(d){
+                renderAll();
+                updateRefreshBar(d&&d.serverMeta?d.serverMeta:null);
+            })
+            .catch(function(e){
+                console.warn('轮询失败:',e);
+            });
+    },POLL_INTERVAL);
+}
+
+// ==================== 启动 ====================
+try{
+    // 先用内嵌数据渲染
+    sharedSetup();
+    var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
+    var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
+    if(mainSnap) renderMain(calcMain(mainSnap));
+    if(awSnap) renderAW(calcAW(awSnap));
+    renderTrades();
+    setupYieldFilters();
+
+    // 检测本地服务器，启用实时模式
+    detectServer().then(function(found){
+        if(found){
+            enableLiveMode();
+            // 立即拉取一次最新数据
+            fetchLiveData().then(function(d){
+                renderAll();
+                updateRefreshBar(d&&d.serverMeta?d.serverMeta:null);
+            }).catch(function(){});
+            // 开始轮询
+            startPolling();
+        }
+    });
+}catch(e){
+    document.body.innerHTML='<div style="padding:40px;text-align:center;color:#dc2626;font-size:16px">⚠ 渲染失败: '+e.message+'</div>';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{
+  "name": "Bill 持仓组合",
+  "lastUpdated": "2026-07-02T11:30:00Z",
+  "holdings": {
+    "cn": [
+      { "code": "sh513110", "name": "纳指ETF华泰柏瑞", "qty": 100, "cost": -9.998 },
+      { "code": "sh515080", "name": "中证红利ETF招商", "qty": 10000, "cost": 1.417 },
+      { "code": "sh518880", "name": "黄金ETF华安", "qty": 4000, "cost": 7.767 },
+      { "code": "sh520550", "name": "港股红利低波ETF招商", "qty": 16600, "cost": 1.059 },
+      { "code": "sh600036", "name": "招商银行", "qty": 900, "cost": 38.151 },
+      { "code": "sz002027", "name": "分众传媒", "qty": 5000, "cost": 5.483 },
+      { "code": "sz159263", "name": "价值ETF易方达", "qty": 20000, "cost": 1.059 }
+    ],
+    "hk": [
+      { "code": "hk00700", "name": "腾讯控股", "qty": 180, "cost": 474.8 },
+      { "code": "hk00883", "name": "中国海洋石油", "qty": 1000, "cost": 17.189 },
+      { "code": "hk03690", "name": "美团-W", "qty": 300, "cost": 95.467 }
+    ],
+    "us": [
+      { "code": "usGOOG", "name": "谷歌-C", "qty": 17, "cost": 138.545 },
+      { "code": "usMSFT", "name": "微软", "qty": 18, "cost": 396.809 },
+      { "code": "usNVDA", "name": "英伟达", "qty": 38, "cost": 164.364 },
+      { "code": "usINTU", "name": "财捷", "qty": 17, "cost": 361.001 },
+      { "code": "usMETA", "name": "Meta", "qty": 4, "cost": 609.803 },
+      { "code": "usSOFI", "name": "SoFi Tech", "qty": 120, "cost": 17.263 },
+      { "code": "usASML", "name": "阿斯麦", "qty": 1, "cost": -202.21 },
+      { "code": "usSPCX", "name": "SpaceX", "qty": 15, "cost": 150.00 }
+    ]
+  },
+  "allweather": {
+    "holdings": [
+      { "code": "sz159632", "name": "纳斯达克ETF华安", "qty": 4800, "cost": 2.3505 },
+      { "code": "sh513650", "name": "标普500ETF南方", "qty": 8400, "cost": 1.8583 },
+      { "code": "sh512890", "name": "红利低波ETF华泰柏瑞", "qty": 10000, "cost": 1.1546 },
+      { "code": "sh518880", "name": "黄金ETF华安", "qty": 800, "cost": 9.9545 },
+      { "code": "sz159981", "name": "能源化工ETF建信", "qty": 2700, "cost": 1.3223 },
+      { "code": "sh512400", "name": "有色金属ETF南方", "qty": 1700, "cost": 2.1820 },
+      { "code": "sz159985", "name": "豆粕ETF华夏", "qty": 1700, "cost": 1.9827 }
+    ],
+    "funds": [
+      { "code": "009803", "name": "易方达中债7-10国开债C", "shares": 12895.00, "cost": 1.3184 },
+      { "code": "001512", "name": "易方达中债3-5年国债", "shares": 4343.46, "cost": 1.3814 }
+    ],
+    "cash": { "rmb": 13744.57 },
+    "targets": [
+      { "group": "权益核心", "targetPct": 50, "items": [
+        { "label": "标普500", "subPct": 20, "codes": ["sh513650"] },
+        { "label": "纳指100", "subPct": 15, "codes": ["sz159632"] },
+        { "label": "红利低波", "subPct": 15, "codes": ["sh512890"] }
+      ]},
+      { "group": "债券压舱石", "targetPct": 35, "items": [
+        { "label": "长债(7-10年)", "subPct": 25, "codes": ["009803"] },
+        { "label": "中债(3-5年)", "subPct": 10, "codes": ["001512"] }
+      ]},
+      { "group": "商品对冲", "targetPct": 15, "items": [
+        { "label": "黄金", "subPct": 7.5, "codes": ["sh518880"] },
+        { "label": "有色金属", "subPct": 2.5, "codes": ["sh512400"] },
+        { "label": "能源化工", "subPct": 2.5, "codes": ["sz159981"] },
+        { "label": "豆粕", "subPct": 2.5, "codes": ["sz159985"] }
+      ]}
+    ]
+  },
+  "cash": {
+    "usd": 2038.20,
+    "hkd": 0,
+    "rmb": 86153.31
+  }
+}
