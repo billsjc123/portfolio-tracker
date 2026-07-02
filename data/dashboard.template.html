@@ -143,6 +143,74 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 }
 .time-filter button.active { background: #fff; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-weight: 600; }
 .time-filter button:hover:not(.active) { color: var(--text); }
+
+/* ============= 移动端适配 ============= */
+@media (max-width: 900px) {
+    body { padding: 14px; }
+    .header { padding: 18px 22px; border-radius: 16px; }
+    .header h1 { font-size: 21px; }
+    .row2 { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .tab-btn { padding: 10px 12px; font-size: 13px; }
+    .box { padding: 18px; }
+    .box h3 { font-size: 14px; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; font-size: 13px; }
+    .header { padding: 14px 16px; border-radius: 14px; margin-bottom: 16px; }
+    .header > div { flex-direction: column; align-items: flex-start !important; gap: 8px !important; }
+    .header h1 { font-size: 18px; }
+    .header .info { font-size: 12px; }
+    .badge { font-size: 11px; padding: 4px 10px; }
+    #liveIndicator { margin-left: 0 !important; font-size: 10px !important; }
+
+    .tabs { border-radius: 10px; padding: 3px; margin-bottom: 16px; }
+    .tab-btn { padding: 9px 6px; font-size: 12px; }
+
+    .cards { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 16px; }
+    .card { padding: 12px; border-radius: 12px; }
+    .card-title { font-size: 10px; letter-spacing: 0.3px; margin-bottom: 4px; }
+    .card-value { font-size: 17px; }
+    .card-sub { font-size: 11px; }
+    .card-sub-day { font-size: 12px; padding: 3px 6px; }
+
+    .row2 { gap: 12px; margin-bottom: 16px; }
+    .box { padding: 14px; border-radius: 12px; }
+    .box h3 { font-size: 13px; margin-bottom: 12px; }
+
+    .pie-container { flex-direction: column; align-items: center; gap: 16px; }
+    .pie-container svg { width: 160px !important; height: 160px !important; }
+    .pie-legend { width: 100%; }
+    .top5-item { gap: 8px; }
+    .top5-name { width: 64px; font-size: 12px; }
+    .top5-bar-val { display: none; }
+    .top5-bar { padding-left: 8px; font-size: 11px; }
+
+    .section { border-radius: 12px; margin-bottom: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .section table { min-width: 580px; }
+    .section-header { padding: 10px 14px; }
+    .section-title { font-size: 13px; }
+    th { padding: 9px 12px; font-size: 11px; white-space: nowrap; }
+    td { padding: 9px 12px; font-size: 12px; }
+    tr:hover { background: transparent; }
+
+    .rate-bar { padding: 8px 12px; font-size: 11px; gap: 8px; }
+
+    .time-filter { padding: 2px; }
+    .time-filter button { padding: 4px 8px; font-size: 11px; }
+
+    .footer { padding: 16px 8px; font-size: 11px; }
+
+    /* 图表内边距 */
+    .box > div[style*="display:flex"] { flex-wrap: wrap; gap: 8px !important; }
+}
+
+@media (max-width: 380px) {
+    .cards { grid-template-columns: 1fr; }
+    .tab-btn { font-size: 11px; padding: 8px 4px; }
+    .card-value { font-size: 16px; }
+}
 </style>
 </head>
 <body>
