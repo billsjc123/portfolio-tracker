@@ -48,6 +48,8 @@ jobs:
 
       - name: 提交并推送
         run: |
+          # push 到 main 后，GitHub Pages "Deploy from a branch" 模式
+          # 会自动检测 main /output 目录变化并部署（< 30 秒）
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add output/portfolio-history-main.json \
