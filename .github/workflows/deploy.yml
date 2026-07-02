@@ -1,0 +1,45 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 本地 launchd 跑完后 push 上来，自动部署
+  # 数据更新由本机 launchd 调度（~/Library/LaunchAgents/com.bill.portfolio-tracker.plist）
+  push:
+    branches: [main]
+    paths:
+      - 'output/portfolio-dashboard.html'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: portfolio-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    name: 部署 GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload dashboard artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: output/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
