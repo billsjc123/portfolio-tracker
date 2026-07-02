@@ -228,7 +228,10 @@ async function main() {
     });
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     fs.writeFileSync(DASHBOARD_OUT, html, 'utf-8');
+    // 同时输出 index.html，让 GitHub Pages 根路径 / 直接可访问
+    fs.writeFileSync(path.join(OUTPUT_DIR, 'index.html'), html, 'utf-8');
     console.log(`[render] ✅ ${DASHBOARD_OUT} (${(html.length / 1024).toFixed(1)} KB)`);
+    console.log(`[render] ✅ ${path.join(OUTPUT_DIR, 'index.html')} (Pages 根路径入口)`);
 
     // 落盘 last-run 状态
     const runStat = {

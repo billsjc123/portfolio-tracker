@@ -36,6 +36,11 @@ if (require.main === module) {
 
     const html = renderDashboard({ template: tpl, config, historyMain, historyAW, trades });
     if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
-    fs.writeFileSync(path.join(OUT, 'portfolio-dashboard.html'), html, 'utf-8');
-    console.log('✅ 看板已渲染：' + path.join(OUT, 'portfolio-dashboard.html') + ' (' + Math.round(html.length / 1024) + ' KB)');
+    const dashPath = path.join(OUT, 'portfolio-dashboard.html');
+    const indexPath = path.join(OUT, 'index.html');
+    fs.writeFileSync(dashPath, html, 'utf-8');
+    // 同时输出 index.html，让 GitHub Pages 根路径 / 直接可访问
+    fs.writeFileSync(indexPath, html, 'utf-8');
+    console.log('✅ 看板已渲染：' + dashPath + ' (' + Math.round(html.length / 1024) + ' KB)');
+    console.log('   + ' + indexPath + ' (根路径入口)');
 }

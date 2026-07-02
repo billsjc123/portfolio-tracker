@@ -7,6 +7,7 @@ on:
     branches: [main]
     paths:
       - 'output/portfolio-dashboard.html'
+      - 'output/index.html'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
