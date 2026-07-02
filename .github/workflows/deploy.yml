@@ -15,35 +15,35 @@ concurrency:
   group: portfolio-deploy
   cancel-in-progress: false
 
+# 改用 gh-pages 分支直接推送，绕开 GitHub Pages 部署 API
+# 这样 GITHUB_TOKEN 默认的 contents: write 权限就够了，
+# 不再依赖 Pages 写权限（避免 visibility 变更后 Pages 站点丢失的问题）
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 jobs:
   deploy:
-    name: 部署 GitHub Pages
+    name: 部署到 gh-pages 分支
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          # 如果仓库因 visibility 变更导致 Pages 被 reset，自动重新开启
-          enablement: true
+      - name: 准备部署文件
+        run: |
+          # 添加 .nojekyll 文件，让 GitHub Pages 不走 Jekyll 处理
+          # 避免下划线开头的文件被忽略
+          touch output/.nojekyll
 
-      - name: Upload dashboard artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: 推送到 gh-pages 分支
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          path: output/
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: output
+          clean: true
+          single-commit: true
+          git-config-name: 'github-actions[bot]'
+          git-config-email: 'github-actions[bot]@users.noreply.github.com'
