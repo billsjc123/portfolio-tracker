@@ -1,0 +1,127 @@
+[2026-07-02 19:37:23] === 开始更新 portfolio ===
+[2026-07-02 19:37:23] 跑 update-portfolio.js...
+==== Portfolio Update ====
+时间: 2026-07-02 星期四
+[main] 抓取 18 只标的行情...
+[main] 成功 18/18 (含 ETF 复权)
+[main] 写入快照 2026-07-02 (历史 14 条)
+[aw] 抓取 7 只 ETF...
+[aw] 抓取 2 只基金净值...
+[aw]   009803 易方达中债7-10年期国开行债券指数C NAV=1.3239 (2026-07-01)
+[aw]   001512 易方达中债3-5年期国债指数 NAV=1.3934 (2026-07-01)
+[aw] ETF 7/7, Fund 2/2
+[aw] 写入快照 2026-07-02 (历史 14 条)
+[render] 用模板渲染 dashboard.html...
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/portfolio-dashboard.html (89.1 KB)
+==== Done ====
+[2026-07-02 19:37:23] ✅ update 成功
+[2026-07-02 19:37:23] 推送到 GitHub...
+[main ebd90a1] chore: update portfolio 2026-07-02T11:37:24Z
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+To github.com:billsjc123/portfolio-tracker.git
+   b8370a1..ebd90a1  main -> main
+[2026-07-02 19:37:23] ✅ push 成功，看板将自动更新
+[2026-07-02 19:37:23] === 完成 ===
+[2026-07-02 19:40:55] === 开始更新 portfolio ===
+[2026-07-02 19:40:55] 跑 update-portfolio.js...
+==== Portfolio Update ====
+时间: 2026-07-02 星期四
+[main] 抓取 18 只标的行情...
+[main] 成功 18/18 (含 ETF 复权)
+[main] 写入快照 2026-07-02 (历史 14 条)
+[aw] 抓取 7 只 ETF...
+[aw] 抓取 2 只基金净值...
+[aw]   009803 易方达中债7-10年期国开行债券指数C NAV=1.3239 (2026-07-01)
+[aw]   001512 易方达中债3-5年期国债指数 NAV=1.3934 (2026-07-01)
+[aw] ETF 7/7, Fund 2/2
+[aw] 写入快照 2026-07-02 (历史 14 条)
+[render] 用模板渲染 dashboard.html...
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/portfolio-dashboard.html (89.1 KB)
+==== Done ====
+[2026-07-02 19:40:55] ✅ update 成功
+[2026-07-02 19:40:55] 推送到 GitHub...
+[main 3998cc4] chore: update portfolio 2026-07-02T11:40:56Z
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+To github.com:billsjc123/portfolio-tracker.git
+   91bf092..3998cc4  main -> main
+[2026-07-02 19:40:55] ✅ push 成功，看板将自动更新
+[2026-07-02 19:40:55] === 完成 ===
+[2026-07-02 19:41:26] === 开始更新 portfolio ===
+[2026-07-02 19:41:26] 跑 update-portfolio.js...
+==== Portfolio Update ====
+时间: 2026-07-02 星期四
+[main] 抓取 18 只标的行情...
+[main] 成功 18/18 (含 ETF 复权)
+[main] 写入快照 2026-07-02 (历史 14 条)
+[aw] 抓取 7 只 ETF...
+[aw] 抓取 2 只基金净值...
+[aw]   009803 易方达中债7-10年期国开行债券指数C NAV=1.3239 (2026-07-01)
+[aw]   001512 易方达中债3-5年期国债指数 NAV=1.3934 (2026-07-01)
+[aw] ETF 7/7, Fund 2/2
+[aw] 写入快照 2026-07-02 (历史 14 条)
+[render] 用模板渲染 dashboard.html...
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/portfolio-dashboard.html (89.1 KB)
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/index.html (Pages 根路径入口)
+==== Done ====
+[2026-07-02 19:41:26] ✅ update 成功
+[2026-07-02 19:41:26] 推送到 GitHub...
+[main bae053e] chore: update portfolio 2026-07-02T11:41:26Z
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+To github.com:billsjc123/portfolio-tracker.git
+   3998cc4..bae053e  main -> main
+[2026-07-02 19:41:26] ✅ push 成功，看板将自动更新
+[2026-07-02 19:41:26] === 完成 ===
+[2026-07-02 19:41:42] === 开始更新 portfolio ===
+[2026-07-02 19:41:42] 跑 update-portfolio.js...
+==== Portfolio Update ====
+时间: 2026-07-02 星期四
+[main] 抓取 18 只标的行情...
+[main] 成功 18/18 (含 ETF 复权)
+[main] 写入快照 2026-07-02 (历史 14 条)
+[aw] 抓取 7 只 ETF...
+[aw] 抓取 2 只基金净值...
+[aw]   009803 易方达中债7-10年期国开行债券指数C NAV=1.3239 (2026-07-01)
+[aw]   001512 易方达中债3-5年期国债指数 NAV=1.3934 (2026-07-01)
+[aw] ETF 7/7, Fund 2/2
+[aw] 写入快照 2026-07-02 (历史 14 条)
+[render] 用模板渲染 dashboard.html...
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/portfolio-dashboard.html (89.1 KB)
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/index.html (Pages 根路径入口)
+==== Done ====
+[2026-07-02 19:41:42] ✅ update 成功
+[2026-07-02 19:41:42] 推送到 GitHub...
+[main b3ba8f6] chore: update portfolio 2026-07-02T11:41:42Z
+ 4 files changed, 1244 insertions(+), 6 deletions(-)
+ create mode 100644 output/index.html
+To github.com:billsjc123/portfolio-tracker.git
+   bae053e..b3ba8f6  main -> main
+[2026-07-02 19:41:42] ✅ push 成功，看板将自动更新
+[2026-07-02 19:41:42] === 完成 ===
+[2026-07-02 19:47:08] === 开始更新 portfolio ===
+[2026-07-02 19:47:08] git pull 拉取最新配置...
+Already up to date.
+[2026-07-02 19:47:08]   ✅ pull 成功
+[2026-07-02 19:47:08] 跑 update-portfolio.js...
+==== Portfolio Update ====
+时间: 2026-07-02 星期四
+[main] 抓取 18 只标的行情...
+[main] 成功 18/18 (含 ETF 复权)
+[main] 写入快照 2026-07-02 (历史 14 条)
+[aw] 抓取 7 只 ETF...
+[aw] 抓取 2 只基金净值...
+[aw]   009803 易方达中债7-10年期国开行债券指数C NAV=1.3239 (2026-07-01)
+[aw]   001512 易方达中债3-5年期国债指数 NAV=1.3934 (2026-07-01)
+[aw] ETF 7/7, Fund 2/2
+[aw] 写入快照 2026-07-02 (历史 14 条)
+[render] 用模板渲染 dashboard.html...
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/portfolio-dashboard.html (89.1 KB)
+[render] ✅ /Users/bill/Projects/portfolio-tracker/output/index.html (Pages 根路径入口)
+==== Done ====
+[2026-07-02 19:47:08] ✅ update 成功
+[2026-07-02 19:47:08] 推送到 GitHub...
+[main 1b9fd41] chore: update portfolio 2026-07-02T11:47:12Z
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+To github.com:billsjc123/portfolio-tracker.git
+   b3ba8f6..1b9fd41  main -> main
+[2026-07-02 19:47:08] ✅ push 成功，看板将自动更新
+[2026-07-02 19:47:08] === 完成 ===
