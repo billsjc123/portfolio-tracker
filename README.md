@@ -1,6 +1,6 @@
 # portfolio-tracker
 
-个人持仓看板，每天 9:00 / 17:00 自动刷新，公开访问。
+个人持仓看板，**完全跑在 GitHub 上**，关掉电脑也照常更新。公开访问。
 
 **看板地址**：[https://billsjc123.github.io/portfolio-tracker/](https://billsjc123.github.io/portfolio-tracker/)
 
@@ -15,39 +15,64 @@
 | "今天买了 sh513650 1000 份 @ 1.234" | 算加权成本、写 config、追加 trade、扣现金、push 到 GitHub |
 | "我卖了 100 股 hk00700 @ 400" | 同上，自动算剩余持仓的加权成本 |
 | "全天候账户月度定投：能源、有色、豆粕多买一点" | 解析意图 → 写入多笔 buy → 刷新看板 |
-| "再刷新一次" | 立即触发一次自动跑 |
+| "再刷新一次" | 立即触发一次自动跑（手机也能） |
 
 **响应时间**：从你说完到 Pages 看板刷新大约 **30-60 秒**。
 
 ---
 
-## 🔄 自动更新流程
+## 🔄 自动更新流程（完全云端，Mac 不需要启动）
 
 工作日 **09:00** 和 **17:00**（北京时间）：
 
 ```
-[Mac 本机 launchd 调度]
+[GitHub Actions cron 触发] (UTC 01:00 / 09:00)
         ↓
-run-and-sync.sh
+update-data.yml
         ↓
-  ① git pull 拉取最新配置
+  ① checkout main 分支
         ↓
-  ② 抓行情：qt.gtimg.cn / fundgz.1234567 / open.er-api
+  ② 装 Node 20 依赖（iconv-lite）
         ↓
-  ③ 算市值、写 portfolio-config.json
+  ③ 抓行情：qt.gtimg.cn / fundgz.1234567 / open.er-api
         ↓
-  ④ 追加 portfolio-history-main.json（趋势图数据）
+  ④ 算市值、写 portfolio-config.json
         ↓
-  ⑤ 渲染 output/index.html + portfolio-dashboard.html
+  ⑤ 追加 portfolio-history-main.json（趋势图数据）
         ↓
-  ⑥ git commit + git push
+  ⑥ 渲染 output/index.html + portfolio-dashboard.html
+        ↓
+  ⑦ git commit + git push origin main
         ↓
 [GitHub] deploy.yml 看到 push
         ↓
-  ⑦ GitHub Pages 部署（约 30 秒）
+  ⑧ GitHub Pages 部署（约 30 秒）
         ↓
   https://billsjc123.github.io/portfolio-tracker/  刷新
 ```
+
+**触发矩阵**：
+
+| 场景 | 触发方式 | 频率 |
+|------|---------|------|
+| 平时自动更新 | cron | 工作日 北京时间 9:00 / 17:00 |
+| 你改了 `data/portfolio-*.json` | push 触发 | 立即跑一次 |
+| 你改了 `scripts/*.js` | push 触发 | 立即跑一次 |
+| 临时想拉一次 | Actions → Run workflow | 手动 |
+
+---
+
+## ✋ 立即触发一次更新（不等 9:00/17:00）
+
+### 方法 1：手机/网页点（推荐）
+
+1. 打开 [https://github.com/billsjc123/portfolio-tracker/actions/workflows/update-data.yml](https://github.com/billsjc123/portfolio-tracker/actions/workflows/update-data.yml)
+2. 右侧 **Run workflow** → 选 main → **Run workflow**
+3. 等 1-2 分钟，看 Actions 日志确认成功
+
+### 方法 2：告诉 WorkBuddy
+
+直接说 "再刷新一次" 或 "立即更新一下看板"，WorkBuddy 触发同样的流程。
 
 ---
 
@@ -56,56 +81,24 @@ run-and-sync.sh
 ```
 portfolio-tracker/
 ├── .github/workflows/
-│   └── deploy.yml                   # push 时自动部署 GitHub Pages
+│   ├── update-data.yml               # ⭐ 自动抓行情（cron + push + 手动）
+│   └── deploy.yml                    # push 时自动部署 GitHub Pages
 ├── scripts/
-│   ├── fetch-quote.js               # 公开 API 抓行情（GBK 解码）
-│   ├── update-portfolio.js          # 主流程：抓行情 → 算市值 → 写 history → 渲染
-│   └── render-dashboard.js          # 模板字符串替换（保留完整交互）
-├── data/                            # ⭐ 数据源（git 跟踪）
-│   ├── portfolio-config.json        #   持仓快照
-│   ├── portfolio-trades.json        #   交易记录
-│   └── dashboard.template.html      #   看板 HTML 模板
-├── output/                          # 自动生成（git 跟踪）
-│   ├── portfolio-history-main.json  #   主账户历史快照（趋势图）
-│   ├── portfolio-history-aw.json    #   全天候账户历史快照
-│   ├── portfolio-dashboard.html     #   完整看板
-│   ├── index.html                   #   Pages 入口
-│   ├── last-run.json                #   最近一次运行状态
-│   └── automation.log               #   运行日志（7 天滚动）
-├── run-and-sync.sh                  # launchd 入口
+│   ├── fetch-quote.js                # 公开 API 抓行情（GBK 解码）
+│   ├── update-portfolio.js           # 主流程：抓行情 → 算市值 → 写 history → 渲染
+│   └── render-dashboard.js           # 模板字符串替换（保留完整交互）
+├── data/                             # ⭐ 数据源（git 跟踪）
+│   ├── portfolio-config.json         #   持仓快照
+│   ├── portfolio-trades.json         #   交易记录
+│   └── dashboard.template.html       #   看板 HTML 模板
+├── output/                           # 自动生成（git 跟踪）
+│   ├── portfolio-history-main.json   #   主账户历史快照（趋势图）
+│   ├── portfolio-history-aw.json     #   全天候账户历史快照
+│   ├── portfolio-dashboard.html      #   完整看板
+│   ├── index.html                    #   Pages 入口
+│   └── last-run.json                 #   最近一次运行状态
 └── README.md
 ```
-
----
-
-## ✋ 高级操作
-
-### 立即触发一次更新（不等 9:00/17:00）
-
-```bash
-launchctl start com.bill.portfolio-tracker
-```
-
-或直接跑：
-
-```bash
-bash /Users/bill/Projects/portfolio-tracker/run-and-sync.sh
-```
-
-### 查看运行日志
-
-```bash
-tail -30 ~/Projects/portfolio-tracker/output/automation.log
-```
-
-### 查看 Git 历史（=价格时间线）
-
-```bash
-cd ~/Projects/portfolio-tracker
-git log --oneline | head -30
-```
-
-每次自动跑都是一个 commit。`portfolio-history-main.json` 是趋势图数据。
 
 ---
 
@@ -171,52 +164,23 @@ git log --oneline | head -30
 
 | 症状 | 原因 | 解决 |
 |---|---|---|
-| 看板停在某天 | launchd 没跑 / push 失败 | `launchctl start com.bill.portfolio-tracker` 看 `output/automation.log` |
-| 行情没更新 | 公开 API 临时抽风 | 等 30 分钟再跑，或 `qt.gtimg.cn` 用浏览器开看是否可达 |
-| GitHub Pages 404 | 路径错 / workflow 没跑 | 看 `https://github.com/billsjc123/portfolio-tracker/actions` |
-| 价格不准 | qt.gtimg.cn 截断到 2 位小数 | 脚本会用 `minute` 命令逐只补精度（3 位小数） |
+| 看板停在某天 | cron 没跑 / push 失败 | 看 [Actions 页面](https://github.com/billsjc123/portfolio-tracker/actions)，找最近一次 update-data run |
+| 行情没更新 | 公开 API 临时抽风 | 等 30 分钟再跑一次；或浏览器开 `qt.gtimg.cn/q=sh600036` 看是否可达 |
+| GitHub Pages 404 | gh-pages 分支 / workflow 没跑 | 看 [deploy workflow](https://github.com/billsjc123/portfolio-tracker/actions/workflows/deploy.yml) 日志 |
 | 加权成本算错 | 多笔买入被合并成一次 | 一次性发完所有要买的，别分多轮 |
+| GitHub 配额 | 每天 2 次 × 2 分钟 = 120 分钟/月 | 远低于免费 2000 分钟/月，无需担心 |
 
 ---
 
 ## 🚀 首次部署（重装用）
 
-如果将来要换机器：
+如果将来要换机器，**零本机配置**：
 
-1. 创建 GitHub 仓 `portfolio-tracker`（private）
-2. 本机克隆：`git clone git@github.com:billsjc123/portfolio-tracker.git ~/Projects/portfolio-tracker`
-3. 把本仓的 `scripts/`、`data/`、`.github/workflows/deploy.yml` 复制过去
-4. 配 SSH 公钥：`cat ~/.ssh/id_rsa.pub` → GitHub → Settings → SSH and GPG keys
-5. 测一次：`bash ~/Projects/portfolio-tracker/run-and-sync.sh`
-6. 配 launchd：
-
-```bash
-cat > ~/Library/LaunchAgents/com.bill.portfolio-tracker.plist <<'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key><string>com.bill.portfolio-tracker</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/bash</string>
-    <string>/Users/bill/Projects/portfolio-tracker/run-and-sync.sh</string>
-  </array>
-  <key>StartCalendarInterval</key>
-  <array>
-    <dict><key>Hour</key><integer>9</integer><key>Minute</key><integer>0</integer></dict>
-    <dict><key>Hour</key><integer>17</integer><key>Minute</key><integer>0</integer></dict>
-  </array>
-  <key>StandardOutPath</key><string>/tmp/portfolio-tracker.log</string>
-  <key>StandardErrorPath</key><string>/tmp/portfolio-tracker.err</string>
-</dict>
-</plist>
-EOF
-
-launchctl load ~/Library/LaunchAgents/com.bill.portfolio-tracker.plist
-```
-
-7. GitHub → Settings → Pages → Source: **GitHub Actions**
+1. 创建 GitHub 仓 `portfolio-tracker`
+2. 克隆本仓的 `scripts/`、`data/`、`.github/workflows/` 到新仓
+3. GitHub → Actions → 手动 Run 一次 `update-data.yml` 验证
+4. GitHub → Settings → Pages → Source: **Deploy from a branch** → Branch: `gh-pages` → Folder: `/`
+5. 完成。从此无需本机
 
 ---
 
@@ -226,3 +190,4 @@ launchctl load ~/Library/LaunchAgents/com.bill.portfolio-tracker.plist
 - **JSON = 表**：所有数据都是纯文本，diff 友好
 - **WorkBuddy = 入口**：你只动嘴，剩下全自动化
 - **零外部依赖**：所有行情 API 都不要鉴权
+- **零本机依赖**：所有计算跑在 GitHub Actions，关电脑也能更新
