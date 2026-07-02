@@ -35,6 +35,9 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          # 如果仓库因 visibility 变更导致 Pages 被 reset，自动重新开启
+          enablement: true
 
       - name: Upload dashboard artifact
         uses: actions/upload-pages-artifact@v3
