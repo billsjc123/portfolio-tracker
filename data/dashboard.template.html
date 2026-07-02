@@ -113,9 +113,13 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 12px; }
 #liveIndicator { animation: pulse-live 2s infinite; }
 @keyframes pulse-live { 0%,100%{opacity:1} 50%{opacity:0.6} }
-.refresh-bar { background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:8px 16px;margin-bottom:16px;font-size:12px;color:#16a34a;display:none;align-items:center;gap:12px }
-.refresh-bar button { background:#16a34a;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;cursor:pointer;font-weight:600 }
-.refresh-bar button:disabled { opacity:0.5;cursor:default }
+.refresh-bar { background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#16a34a;display:none;align-items:center;gap:10px }
+.refresh-info { flex:1; min-width:0; display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.refresh-mode { white-space:nowrap; font-weight:600 }
+.refresh-text { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0 }
+.refresh-btn { background:#16a34a;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;font-weight:600;min-height:36px;touch-action:manipulation;flex-shrink:0;white-space:nowrap }
+.refresh-btn:disabled { opacity:0.5;cursor:default }
+.refresh-btn:active:not(:disabled) { background:#15803d }
 .refresh-bar.error { background:#fef2f2;border-color:#fecaca;color:#dc2626 }
 
 /* Tooltip */
@@ -159,7 +163,9 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 @media (max-width: 600px) {
     body { padding: 10px; font-size: 13px; }
     .header { padding: 14px 16px; border-radius: 14px; margin-bottom: 16px; }
-    .header > div { flex-direction: column; align-items: flex-start !important; gap: 8px !important; }
+    .refresh-bar { flex-direction:column; align-items:stretch; gap:8px }
+    .refresh-info { font-size:12px }
+    .refresh-btn { width:100% }    .header > div { flex-direction: column; align-items: flex-start !important; gap: 8px !important; }
     .header h1 { font-size: 18px; }
     .header .info { font-size: 12px; }
     .badge { font-size: 11px; padding: 4px 10px; }
@@ -242,10 +248,11 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 
 <!-- Live refresh bar -->
 <div id="refreshBar" class="refresh-bar">
-    <span>&#x1F504; 实时模式</span>
-    <span id="lastRefreshText">--</span>
-    <button id="manualRefreshBtn" onclick="manualRefresh()">立即刷新</button>
-    <span id="nextRefreshText" style="margin-left:auto;color:#94a3b8"></span>
+    <div class="refresh-info">
+        <span class="refresh-mode">&#x1F504; 实时模式</span>
+        <span id="lastRefreshText" class="refresh-text">--</span>
+    </div>
+    <button id="manualRefreshBtn" class="refresh-btn" onclick="manualRefresh()">立即刷新</button>
 </div>
 
 <!-- ========== Main Account Page ========== -->
@@ -1183,124 +1190,216 @@ function renderAll(){
     renderTrades();
 }
 
-// ==================== 实时更新 ====================
-var SERVER_URL = '';
-var LIVE_MODE = false;
-var POLL_INTERVAL = 30000; // 30 秒轮询
-var pollTimer = null;
+// ==================== 实时更新（浏览器直连公开 API） ====================
+// 重写于 2026-07-02：原方案依赖本地 Node 服务（localhost:9876），
+// GitHub Pages 上不可用。现改为浏览器直接拉 qt.gtimg.cn / fundgz / er-api，
+// 无服务器、零配置、零依赖。点"立即刷新"才拉，不自动轮询（省电、省接口）。
 
-function detectServer(){
-    // 优先检测当前 origin 是否为本地服务器
-    if(window.location.protocol==='http:'&&window.location.hostname==='localhost'){
-        SERVER_URL = window.location.origin;
-        return Promise.resolve(true);
-    }
-    // file:// 下尝试检测默认端口
-    SERVER_URL = 'http://localhost:9876';
-    return fetch(SERVER_URL+'/api/status',{signal:AbortSignal.timeout(2000)})
-        .then(function(r){return r.json()})
-        .then(function(d){return d.status==='running'})
-        .catch(function(){return false});
+var _fundCbQueue = {};
+window.jsonpgz = function(data){
+    var cb = _fundCbQueue[data.fundcode];
+    if(cb){ delete _fundCbQueue[data.fundcode]; cb(data); }
+};
+
+// 抓股票 / ETF 行情（qt.gtimg.cn）
+// 返回: { [code]: { price, prevClose, changePct, ... } }
+function fetchStockQuotes(codes){
+    return new Promise(function(resolve, reject){
+        if(!codes.length) return resolve({});
+        // 分批：每批 60 个，避免 URL 太长
+        var batches=[];
+        for(var i=0;i<codes.length;i+=60) batches.push(codes.slice(i,i+60));
+        var results={};
+        var pending=batches.length;
+        var hadError=false;
+        batches.forEach(function(batch){
+            var script=document.createElement('script');
+            script.src='https://qt.gtimg.cn/q='+batch.join(',')+'&_t='+Date.now()+Math.floor(Math.random()*1000);
+            script.onload=function(){
+                batch.forEach(function(code){
+                    var data=window['v_'+code];
+                    if(data){
+                        var p=data.split('~');
+                        // 港股、美股的字段位置不同，但 price(3) 和 changePct 在 sh/sz/hk/us 都一致
+                        results[code]={
+                            price:parseFloat(p[3]),
+                            prevClose:parseFloat(p[4]),
+                            open:parseFloat(p[5]),
+                            change:parseFloat(p[31]),
+                            changePct:parseFloat(p[32]),
+                            high:parseFloat(p[33]),
+                            low:parseFloat(p[34])
+                        };
+                    }
+                });
+                if(script.parentNode) script.parentNode.removeChild(script);
+                if(--pending===0){ hadError?reject(new Error('部分行情拉取失败')):resolve(results); }
+            };
+            script.onerror=function(){
+                if(script.parentNode) script.parentNode.removeChild(script);
+                hadError=true;
+                if(--pending===0) reject(new Error('qt.gtimg.cn 请求失败'));
+            };
+            document.head.appendChild(script);
+        });
+    });
 }
 
-function fetchLiveData(){
-    return fetch(SERVER_URL+'/api/data',{signal:AbortSignal.timeout(5000)})
-        .then(function(r){return r.json()})
-        .then(function(d){
-            if(d.config) CONFIG=d.config;
-            if(d.historyMain) HISTORY_MAIN=d.historyMain;
-            if(d.historyAW) HISTORY_AW=d.historyAW;
-            if(d.trades) TRADES=d.trades;
-            return d;
+// 抓基金净值（fundgz.1234567.com.cn JSONP）
+function fetchFundQuotes(codes){
+    return Promise.all(codes.map(function(code){
+        return new Promise(function(resolve){
+            _fundCbQueue[code]=function(data){
+                resolve({code:code, gsz:parseFloat(data.gsz), gszzl:parseFloat(data.gszzl)});
+            };
+            var script=document.createElement('script');
+            script.src='https://fundgz.1234567.com.cn/js/'+code+'.js?t='+Date.now();
+            script.onerror=function(){
+                delete _fundCbQueue[code];
+                if(script.parentNode) script.parentNode.removeChild(script);
+                resolve({code:code, gsz:null, gszzl:null});
+            };
+            document.body.appendChild(script);
+            // 5 秒超时
+            setTimeout(function(){
+                if(_fundCbQueue[code]){
+                    delete _fundCbQueue[code];
+                    if(script.parentNode) script.parentNode.removeChild(script);
+                    resolve({code:code, gsz:null, gszzl:null});
+                }
+            },5000);
         });
+    }));
+}
+
+// 抓汇率（open.er-api.com）
+function fetchRates(){
+    return fetch('https://open.er-api.com/v6/latest/USD',{signal:AbortSignal.timeout(8000)})
+        .then(function(r){return r.json();})
+        .then(function(d){ return {USD_CNY:d.rates.CNY, HKD_CNY:d.rates.CNY/d.rates.HKD}; });
 }
 
 function enableLiveMode(){
-    LIVE_MODE=true;
     document.getElementById('liveIndicator').style.display='inline-block';
     document.getElementById('refreshBar').style.display='flex';
-    console.log('🔴 实时模式已启用 —',SERVER_URL);
+    document.getElementById('lastRefreshText').textContent='数据为快照';
 }
 
-function updateRefreshBar(serverMeta){
+function updateRefreshBar(success, detail){
     var bar=document.getElementById('refreshBar');
-    if(!LIVE_MODE){bar.style.display='none';return;}
-    bar.style.display='flex';
-    if(serverMeta&&serverMeta.lastRefresh){
-        var t=new Date(serverMeta.lastRefresh);
-        document.getElementById('lastRefreshText').textContent='上次刷新: '+t.toLocaleTimeString();
-    }
-    if(serverMeta&&serverMeta.isRefreshing){
-        document.getElementById('manualRefreshBtn').disabled=true;
-        document.getElementById('manualRefreshBtn').textContent='刷新中...';
+    var btn=document.getElementById('manualRefreshBtn');
+    var txt=document.getElementById('lastRefreshText');
+    var now=new Date();
+    var timeStr=now.toLocaleTimeString('zh-CN',{hour12:false});
+    if(success){
+        bar.classList.remove('error');
+        txt.textContent='已更新 '+timeStr+(detail?' · '+detail:'');
     }else{
-        document.getElementById('manualRefreshBtn').disabled=false;
-        document.getElementById('manualRefreshBtn').textContent='立即刷新';
+        bar.classList.add('error');
+        txt.textContent='刷新失败 '+(detail||'网络错误');
     }
+    btn.disabled=false;
+    btn.textContent='立即刷新';
 }
 
 function manualRefresh(){
-    if(!LIVE_MODE)return;
-    document.getElementById('manualRefreshBtn').disabled=true;
-    document.getElementById('manualRefreshBtn').textContent='刷新中...';
-    fetch(SERVER_URL+'/api/refresh',{method:'POST',signal:AbortSignal.timeout(60000)})
-        .then(function(r){return r.json()})
-        .then(function(){
-            // 刷新完成后拉取最新数据
-            return fetchLiveData();
-        })
-        .then(function(d){
-            renderAll();
-            updateRefreshBar(d&&d.serverMeta?d.serverMeta:null);
-        })
-        .catch(function(e){
-            console.warn('手动刷新失败:',e);
-            document.getElementById('manualRefreshBtn').disabled=false;
-            document.getElementById('manualRefreshBtn').textContent='立即刷新';
-        });
-}
+    var btn=document.getElementById('manualRefreshBtn');
+    if(btn.disabled) return;
+    btn.disabled=true;
+    btn.textContent='刷新中...';
+    document.getElementById('lastRefreshText').textContent='拉取中...';
+    document.getElementById('refreshBar').classList.remove('error');
 
-function startPolling(){
-    if(pollTimer)clearInterval(pollTimer);
-    pollTimer=setInterval(function(){
-        fetchLiveData()
-            .then(function(d){
-                renderAll();
-                updateRefreshBar(d&&d.serverMeta?d.serverMeta:null);
-            })
-            .catch(function(e){
-                console.warn('轮询失败:',e);
-            });
-    },POLL_INTERVAL);
+    // 收集所有代码
+    var stockCodes=[], fundCodes=[];
+    ['cn','hk','us'].forEach(function(m){
+        (CONFIG.holdings[m]||[]).forEach(function(h){stockCodes.push(h.code);});
+    });
+    (CONFIG.allweather.holdings||[]).forEach(function(h){stockCodes.push(h.code);});
+    (CONFIG.allweather.funds||[]).forEach(function(f){fundCodes.push(f.code);});
+
+    // 并发拉取（任意失败不中断其他）
+    Promise.all([
+        fetchStockQuotes(stockCodes).catch(function(e){console.warn('股票:',e);return {};}),
+        fetchFundQuotes(fundCodes).catch(function(e){console.warn('基金:',e);return [];}),
+        fetchRates().catch(function(e){console.warn('汇率:',e);return null;})
+    ]).then(function(results){
+        var stockQuotes=results[0], fundQuotes=results[1], rates=results[2];
+        var stockCount=Object.keys(stockQuotes).filter(function(c){return stockQuotes[c].price;}).length;
+        var fundCount=fundQuotes.filter(function(f){return f.gsz;}).length;
+
+        // 校验：至少要拉到一个数据
+        if(stockCount===0 && fundCount===0 && !rates){
+            updateRefreshBar(false,'全部接口超时');
+            return;
+        }
+
+        // 1) 更新 CONFIG 时间戳
+        CONFIG.lastUpdated = new Date().toISOString();
+
+        // 2) 更新最新 snapshot 的 prices / changePct / funds / rates
+        var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
+        var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
+
+        Object.keys(stockQuotes).forEach(function(code){
+            var q=stockQuotes[code];
+            if(!q.price) return;
+            if(mainSnap){
+                mainSnap.prices=mainSnap.prices||{};
+                mainSnap.changePct=mainSnap.changePct||{};
+                mainSnap.prices[code]=q.price;
+                mainSnap.changePct[code]=q.changePct;
+            }
+            if(awSnap){
+                awSnap.prices=awSnap.prices||{};
+                awSnap.changePct=awSnap.changePct||{};
+                awSnap.prices[code]=q.price;
+                awSnap.changePct[code]=q.changePct;
+            }
+        });
+        fundQuotes.forEach(function(f){
+            if(!f.gsz) return;
+            if(awSnap){
+                awSnap.funds=awSnap.funds||{};
+                awSnap.funds[f.code]=f.gsz;
+            }
+        });
+        if(rates){
+            if(mainSnap) mainSnap.rates=Object.assign({},mainSnap.rates||{},rates);
+            if(awSnap)  awSnap.rates=Object.assign({},awSnap.rates||{},rates);
+        }
+
+        // 3) 重新渲染（renderAll 内部会再调 sharedSetup 更新顶栏"数据时间"）
+        renderAll();
+
+        // 4) 状态提示
+        var parts=[];
+        if(stockCount) parts.push('股票/ETF '+stockCount+'/'+stockCodes.length);
+        if(fundCount)  parts.push('基金 '+fundCount+'/'+fundCodes.length);
+        if(rates)      parts.push('汇率');
+        var detail=parts.length?'（'+parts.join('，')+'）':'';
+        updateRefreshBar(true, detail);
+    });
 }
 
 // ==================== 启动 ====================
 try{
-    // 先用内嵌数据渲染
+    // 1) 用内嵌数据先渲染
     sharedSetup();
     var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
     var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
     if(mainSnap) renderMain(calcMain(mainSnap));
-    if(awSnap) renderAW(calcAW(awSnap));
+    if(awSnap)  renderAW(calcAW(awSnap));
     renderTrades();
     setupYieldFilters();
 
-    // 检测本地服务器，启用实时模式
-    detectServer().then(function(found){
-        if(found){
-            enableLiveMode();
-            // 立即拉取一次最新数据
-            fetchLiveData().then(function(d){
-                renderAll();
-                updateRefreshBar(d&&d.serverMeta?d.serverMeta:null);
-            }).catch(function(){});
-            // 开始轮询
-            startPolling();
-        }
-    });
+    // 2) 启用实时模式（无需服务器，浏览器直连公开 API）
+    enableLiveMode();
 }catch(e){
     document.body.innerHTML='<div style="padding:40px;text-align:center;color:#dc2626;font-size:16px">⚠ 渲染失败: '+e.message+'</div>';
 }
+
+
 </script>
 </body>
 </html>
