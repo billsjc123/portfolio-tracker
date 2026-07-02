@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bill's portfolio auto-update + GitHub Pages dashboard",
+  "scripts": {
+    "update": "node scripts/update-portfolio.js",
+    "render": "node scripts/render-dashboard.js"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.6.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
