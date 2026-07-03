@@ -29,13 +29,13 @@
   },
   "allweather": {
     "holdings": [
-      { "code": "sz159632", "name": "纳斯达克ETF华安", "qty": 4800, "cost": 2.3505 },
-      { "code": "sh513650", "name": "标普500ETF南方", "qty": 8400, "cost": 1.8583 },
-      { "code": "sh512890", "name": "红利低波ETF华泰柏瑞", "qty": 10000, "cost": 1.1546 },
-      { "code": "sh518880", "name": "黄金ETF华安", "qty": 800, "cost": 9.9545 },
-      { "code": "sz159981", "name": "能源化工ETF建信", "qty": 2700, "cost": 1.3223 },
-      { "code": "sh512400", "name": "有色金属ETF南方", "qty": 1700, "cost": 2.1820 },
-      { "code": "sz159985", "name": "豆粕ETF华夏", "qty": 1700, "cost": 1.9827 }
+      { "code": "sz159632", "name": "纳斯达克ETF华安", "qty": 4800, "cost": 2.204 },
+      { "code": "sh513650", "name": "标普500ETF南方", "qty": 8400, "cost": 1.826 },
+      { "code": "sh512890", "name": "红利低波ETF华泰柏瑞", "qty": 10000, "cost": 1.164 },
+      { "code": "sh518880", "name": "黄金ETF华安", "qty": 800, "cost": 9.803 },
+      { "code": "sz159981", "name": "能源化工ETF建信", "qty": 2700, "cost": 1.443 },
+      { "code": "sh512400", "name": "有色金属ETF南方", "qty": 1700, "cost": 2.120 },
+      { "code": "sz159985", "name": "豆粕ETF华夏", "qty": 1700, "cost": 2.065 }
     ],
     "funds": [
       { "code": "009803", "name": "易方达中债7-10国开债C", "shares": 14706.09, "cost": 1.3049 },
