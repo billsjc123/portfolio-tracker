@@ -2,8 +2,8 @@
 // scripts/update-portfolio.js
 // 主流程：抓行情 → 更新历史快照 → 用模板渲染 dashboard
 // 完全独立运行，不读写 iCloud 路径
-// 数据落盘位置：output/portfolio-history-main.json, output/portfolio-history-aw.json
-// 看板落盘位置：output/portfolio-dashboard.html
+// 数据落盘位置：docs/portfolio-history-main.json, docs/portfolio-history-aw.json
+// 看板落盘位置：docs/portfolio-dashboard.html
 
 const fs = require('fs');
 const path = require('path');
@@ -12,7 +12,7 @@ const { renderDashboard } = require('./render-dashboard');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data');
-const OUTPUT_DIR = path.join(ROOT, 'output');
+const OUTPUT_DIR = path.join(ROOT, 'docs');
 const CFG_FILE = path.join(DATA_DIR, 'portfolio-config.json');
 const TRADES_FILE = path.join(DATA_DIR, 'portfolio-trades.json');
 const TEMPLATE_FILE = path.join(DATA_DIR, 'dashboard.template.html');

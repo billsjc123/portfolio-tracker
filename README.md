@@ -40,11 +40,11 @@ update-data.yml
         ↓
   ⑤ 追加 portfolio-history-main.json（趋势图数据）
         ↓
-  ⑥ 渲染 output/index.html + portfolio-dashboard.html
+  ⑥ 渲染 docs/index.html + portfolio-dashboard.html
         ↓
   ⑦ git commit + git push origin main
         ↓
-[GitHub Pages 内置进程] 检测到 main /output 变化
+[GitHub Pages 内置进程] 检测到 main /docs 变化
         ↓
   ⑧ 自动部署（约 30 秒）
         ↓
@@ -90,7 +90,7 @@ portfolio-tracker/
 │   ├── portfolio-config.json         #   持仓快照
 │   ├── portfolio-trades.json         #   交易记录
 │   └── dashboard.template.html       #   看板 HTML 模板
-├── output/                           # 自动生成（git 跟踪）
+├── docs/                           # 自动生成（git 跟踪）
 │   ├── portfolio-history-main.json   #   主账户历史快照（趋势图）
 │   ├── portfolio-history-aw.json     #   全天候账户历史快照
 │   ├── portfolio-dashboard.html      #   完整看板
@@ -165,7 +165,7 @@ portfolio-tracker/
 |---|---|---|
 | 看板停在某天 | cron 没跑 / push 失败 | 看 [Actions 页面](https://github.com/billsjc123/portfolio-tracker/actions)，找最近一次 update-data run |
 | 行情没更新 | 公开 API 临时抽风 | 等 30 分钟再跑一次；或浏览器开 `qt.gtimg.cn/q=sh600036` 看是否可达 |
-| GitHub Pages 404 | Pages 配置不对 / main /output 不存在 | Settings → Pages → Source: main → Folder: /output |
+| GitHub Pages 404 | Pages 配置不对 / main /docs 不存在 | Settings → Pages → Source: main → Folder: /docs |
 | 加权成本算错 | 多笔买入被合并成一次 | 一次性发完所有要买的，别分多轮 |
 | GitHub 配额 | 每天 2 次 × 2 分钟 = 120 分钟/月 | 远低于免费 2000 分钟/月，无需担心 |
 
@@ -178,7 +178,7 @@ portfolio-tracker/
 1. 创建 GitHub 仓 `portfolio-tracker`
 2. 克隆本仓的 `scripts/`、`data/`、`.github/workflows/` 到新仓
 3. GitHub → Actions → 手动 Run 一次 `update-data.yml` 验证
-4. GitHub → Settings → Pages → Source: **Deploy from a branch** → Branch: `main` → Folder: `/output`
+4. GitHub → Settings → Pages → Source: **Deploy from a branch** → Branch: `main` → Folder: `/docs`
 5. 完成。从此无需本机
 
 ---
