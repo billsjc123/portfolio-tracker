@@ -24,7 +24,8 @@
       { "code": "usMETA", "name": "Meta", "qty": 4, "cost": 609.803 },
       { "code": "usSOFI", "name": "SoFi Tech", "qty": 120, "cost": 17.263 },
       { "code": "usASML", "name": "阿斯麦", "qty": 1, "cost": -202.21 },
-      { "code": "usSPCX", "name": "SpaceX", "qty": 15, "cost": 150.00 }
+      { "code": "usSPCX", "name": "SpaceX", "qty": 15, "cost": 150.00 },
+      { "code": "usNFLX", "name": "奈飞", "qty": 15, "cost": 77.53 }
     ]
   },
   "allweather": {
@@ -61,7 +62,7 @@
     ]
   },
   "cash": {
-    "usd": 2038.20,
+    "usd": 8400.54,
     "hkd": 0,
     "rmb": 86153.31
   }
