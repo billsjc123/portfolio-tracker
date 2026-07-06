@@ -7,11 +7,11 @@
 set -e
 
 PROJECT_DIR="/Users/bill/Projects/portfolio-tracker"
-LOG_FILE="$PROJECT_DIR/output/automation.log"
+LOG_FILE="$PROJECT_DIR/docs/automation.log"
 NODE_BIN="/Users/bill/.workbuddy/binaries/node/versions/22.22.2/bin/node"
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
-mkdir -p "$PROJECT_DIR/output"
+mkdir -p "$PROJECT_DIR/docs"
 echo "[$TIMESTAMP] === 开始更新 portfolio ===" >> "$LOG_FILE"
 cd "$PROJECT_DIR"
 
@@ -35,7 +35,7 @@ fi
 
 # 2. 推送到 GitHub
 echo "[$TIMESTAMP] 推送到 GitHub..." >> "$LOG_FILE"
-git add output/portfolio-history-main.json output/portfolio-history-aw.json output/portfolio-dashboard.html output/index.html 2>> "$LOG_FILE"
+git add docs/portfolio-history-main.json docs/portfolio-history-aw.json docs/portfolio-dashboard.html docs/index.html 2>> "$LOG_FILE"
 
 # 检查是否有变化
 if git diff --staged --quiet; then
@@ -53,6 +53,6 @@ else
 fi
 
 # 4. 清理过老的 log（保留 7 天）
-find "$PROJECT_DIR/output" -name "automation.log" -mtime +7 -delete 2>/dev/null
+find "$PROJECT_DIR/docs" -name "automation.log" -mtime +7 -delete 2>/dev/null
 
 echo "[$TIMESTAMP] === 完成 ===" >> "$LOG_FILE"
