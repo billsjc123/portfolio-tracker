@@ -25,7 +25,8 @@
       { "code": "usSOFI", "name": "SoFi Tech", "qty": 120, "cost": 17.263 },
       { "code": "usASML", "name": "阿斯麦", "qty": 1, "cost": -202.21 },
       { "code": "usSPCX", "name": "SpaceX", "qty": 15, "cost": 150.00 },
-      { "code": "usNFLX", "name": "奈飞", "qty": 15, "cost": 77.53 }
+      { "code": "usNFLX", "name": "奈飞", "qty": 15, "cost": 77.53 },
+      { "code": "usRKLB", "name": "Rocket Lab", "qty": 25, "cost": 83.919 }
     ]
   },
   "allweather": {
@@ -62,7 +63,7 @@
     ]
   },
   "cash": {
-    "usd": 8400.54,
+    "usd": 6302.565,
     "hkd": 0,
     "rmb": 88006.01
   }

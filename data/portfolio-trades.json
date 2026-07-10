@@ -209,6 +209,19 @@
       "settleCcy": "USD",
       "settleAmount": 1162.95,
       "reason": "奈飞首次建仓（左侧试探）"
+    },
+    {
+      "id": 19,
+      "date": "2026-07-09",
+      "code": "usRKLB",
+      "name": "Rocket Lab",
+      "action": "buy",
+      "price": 83.919,
+      "currency": "USD",
+      "qty": 25,
+      "settleCcy": "USD",
+      "settleAmount": 2097.975,
+      "reason": "新建仓 RKLB（火箭实验室），左侧试探"
     }
   ],
   "dividends": [
