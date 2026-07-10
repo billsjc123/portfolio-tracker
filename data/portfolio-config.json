@@ -1,6 +1,6 @@
 {
   "name": "Bill 持仓组合",
-  "lastUpdated": "2026-07-02T11:30:00Z",
+  "lastUpdated": "2026-07-10T02:14:00Z",
   "holdings": {
     "cn": [
       { "code": "sh513110", "name": "纳指ETF华泰柏瑞", "qty": 100, "cost": -9.998 },
@@ -64,6 +64,6 @@
   "cash": {
     "usd": 8400.54,
     "hkd": 0,
-    "rmb": 86153.31
+    "rmb": 88006.01
   }
 }
