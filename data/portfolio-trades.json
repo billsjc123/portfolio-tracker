@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-07-10",
+  "lastUpdated": "2026-07-11",
   "trades": [
     {
       "id": 11,
@@ -222,6 +222,19 @@
       "settleCcy": "USD",
       "settleAmount": 2097.975,
       "reason": "新建仓 RKLB（火箭实验室），左侧试探"
+    },
+    {
+      "id": 20,
+      "date": "2026-07-01",
+      "code": "usASML",
+      "name": "阿斯麦",
+      "action": "sell",
+      "price": 1864.0,
+      "currency": "USD",
+      "qty": 1,
+      "settleCcy": "USD",
+      "settleAmount": 1864.0,
+      "reason": "清仓卖出"
     }
   ],
   "dividends": [
@@ -286,6 +299,18 @@
       "totalRevenue": 19494.0,
       "realizedPnL_CNY": -7074.0,
       "reason": "恒科相似标的仓位过重，集中仓位到优质标的"
+    },
+    {
+      "code": "usASML",
+      "name": "阿斯麦",
+      "date": "2026-07-01",
+      "qty": 1,
+      "cost": -202.21,
+      "sellPrice": 1864.0,
+      "totalCost": -202.21,
+      "totalRevenue": 1864.0,
+      "realizedPnL_USD": 2066.21,
+      "reason": "清仓卖出"
     }
   ],
   "realizedPnLSummary": {

@@ -1,6 +1,6 @@
 {
   "name": "Bill 持仓组合",
-  "lastUpdated": "2026-07-10T02:14:00Z",
+  "lastUpdated": "2026-07-11T02:55:00Z",
   "holdings": {
     "cn": [
       { "code": "sh513110", "name": "纳指ETF华泰柏瑞", "qty": 100, "cost": -9.998 },
@@ -23,7 +23,7 @@
       { "code": "usINTU", "name": "财捷", "qty": 17, "cost": 361.001 },
       { "code": "usMETA", "name": "Meta", "qty": 4, "cost": 609.803 },
       { "code": "usSOFI", "name": "SoFi Tech", "qty": 120, "cost": 17.263 },
-      { "code": "usASML", "name": "阿斯麦", "qty": 1, "cost": -202.21 },
+
       { "code": "usSPCX", "name": "SpaceX", "qty": 15, "cost": 150.00 },
       { "code": "usNFLX", "name": "奈飞", "qty": 15, "cost": 77.53 },
       { "code": "usRKLB", "name": "Rocket Lab", "qty": 25, "cost": 83.919 }
