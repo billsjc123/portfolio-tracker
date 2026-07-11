@@ -36,6 +36,31 @@ function isWeekend(date) {
 }
 
 /**
+ * 汇总已实现 CNY 盈亏（含 USD PnL 按汇率折算）
+ * 所有清仓记录必须包含 realizedPnL_CNY 或 realizedPnL_USD
+ */
+function sumRealizedPnL(closedPositions) {
+    let total = 0;
+    for (const cp of closedPositions) {
+        total += (cp.realizedPnL_CNY || 0);
+    }
+    return total;
+}
+
+/**
+ * 补充汇总仅有 USD 盈亏的记录（等汇率到位后再调用）
+ */
+function sumRealizedPnL_UsdOnly(closedPositions, usdCny) {
+    let total = 0;
+    for (const cp of closedPositions) {
+        if (cp.realizedPnL_USD && !cp.realizedPnL_CNY) {
+            total += cp.realizedPnL_USD * usdCny;
+        }
+    }
+    return total;
+}
+
+/**
  * 主账户快照
  */
 async function updateMainAccount(cfg, trades) {
@@ -46,10 +71,11 @@ async function updateMainAccount(cfg, trades) {
     console.log(`[main] 抓取 ${codes.length} 只标的行情...`);
     const quotes = await fetchQuotes(codes);
 
-    // 已实现盈亏（兼容 closedPositions + realizedPnLSummary.mainCNY）
+    // 已实现盈亏汇总（closedPositions + realizedPnLSummary.mainCNY）
+    // 注意：USD 盈亏需乘汇率转 CNY，确保累计图表不遗漏外币盈利
     let realized = 0;
     if (Array.isArray(trades.closedPositions)) {
-        for (const cp of trades.closedPositions) realized += (cp.realizedPnL_CNY || 0);
+        realized += sumRealizedPnL(trades.closedPositions);
     }
     if (trades.realizedPnLSummary) realized += (trades.realizedPnLSummary.mainCNY || 0);
 
@@ -58,6 +84,11 @@ async function updateMainAccount(cfg, trades) {
         USD_CNY: fxRaw?.USD_CNY || 7.0,
         HKD_CNY: fxRaw?.HKD_CNY || deriveHkdCny(fxRaw?.USD_CNY) || 0.9
     };
+
+    // 二次汇总：把等待汇率后再算的 USD PnL 补上
+    if (Array.isArray(trades.closedPositions)) {
+        realized += sumRealizedPnL_UsdOnly(trades.closedPositions, rates.USD_CNY);
+    }
 
     const today = todayISO();
     const snap = {

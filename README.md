@@ -147,6 +147,25 @@ portfolio-tracker/
 }
 ```
 
+> ⚠️ **清仓操作必须遵守的规则**：卖出一只股票后，必须在 `closedPositions` 中同时记录 `realizedPnL_CNY`（人民币）和 `realizedPnL_USD`（如果是美元计价）。否则累计盈亏图表会遗漏已实现利润，导致历史 PnL 错误下沉。
+
+```json
+// closedPositions 示例
+{
+  "code": "usASML",
+  "name": "阿斯麦",
+  "date": "2026-07-01",
+  "qty": 1,
+  "cost": 705.46,
+  "sellPrice": 1864.0,
+  "totalCost": 705.46,
+  "totalRevenue": 1864.0,
+  "realizedPnL_USD": 1158.54,
+  "realizedPnL_CNY": 7869.0,
+  "reason": "清仓卖出"
+}
+```
+
 ---
 
 ## 📊 数据源（全部免费公开 API，无鉴权）

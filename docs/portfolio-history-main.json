@@ -671,7 +671,7 @@
         "usASML": -6.31,
         "usSPCX": -7.29
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": 4279.5
     },
     {
       "date": "2026-07-02",
@@ -680,7 +680,7 @@
         "USD_CNY": 6.801054,
         "HKD_CNY": 0.87193
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.437,
         "sh515080": 1.448,
@@ -729,7 +729,7 @@
         "USD_CNY": 6.796274,
         "HKD_CNY": 0.871317
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.445,
         "sh515080": 1.464,
@@ -780,7 +780,7 @@
         "USD_CNY": 6.785482,
         "HKD_CNY": 0.869934
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.45,
         "sh515080": 1.49,
@@ -831,7 +831,7 @@
         "USD_CNY": 6.801784,
         "HKD_CNY": 0.872024
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.443,
         "sh515080": 1.47,
@@ -882,7 +882,7 @@
         "USD_CNY": 6.801883,
         "HKD_CNY": 0.872036
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.423,
         "sh515080": 1.48,
@@ -933,7 +933,7 @@
         "USD_CNY": 6.810223,
         "HKD_CNY": 0.873106
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.422,
         "sh515080": 1.461,
@@ -984,7 +984,7 @@
         "USD_CNY": 6.80023,
         "HKD_CNY": 0.871824
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.44,
         "sh515080": 1.46,
@@ -1037,7 +1037,7 @@
         "USD_CNY": 6.784818,
         "HKD_CNY": 0.869848
       },
-      "realizedPnL_CNY": -9763.5,
+      "realizedPnL_CNY": 4279.5,
       "prices": {
         "sh513110": 2.44,
         "sh515080": 1.46,
@@ -1082,5 +1082,5 @@
       }
     }
   ],
-  "lastUpdated": "2026-07-11T02:59:04.267Z"
+  "lastUpdated": "2026-07-11T12:58:00Z"
 }
