@@ -2,3 +2,5 @@ node_modules/
 *.tmp
 .DS_Store
 output/last-run.json
+# 本地运行时状态（由 update 脚本每次重写），移出跟踪以根除 pull 冲突
+docs/last-run.json
