@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-07-11",
+  "lastUpdated": "2026-07-15",
   "trades": [
     {
       "id": 11,
@@ -273,6 +273,18 @@
       "amount": 950.0,
       "type": "cash",
       "taxNote": "每10股派1.9元含税，持股超1年免征个税，实收=宣告额"
+    },
+    {
+      "code": "hk00883",
+      "name": "中国海洋石油",
+      "exDate": "2026-07-13",
+      "payDate": "2026-07-13",
+      "perShare": 0.495,
+      "shares": 1000,
+      "amount": 495.0,
+      "currency": "HKD",
+      "type": "cash",
+      "taxNote": "港股现金分红，实收 495 HKD（每股 0.495 HKD）；日期为用户给定派息日"
     }
   ],
   "closedPositions": [
