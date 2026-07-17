@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-07-15",
+  "lastUpdated": "2026-07-17",
   "trades": [
     {
       "id": 11,
@@ -235,6 +235,45 @@
       "settleCcy": "USD",
       "settleAmount": 1864.0,
       "reason": "清仓卖出"
+    },
+    {
+      "id": 21,
+      "date": "2026-07-17",
+      "code": "sh515080",
+      "name": "中证红利ETF招商",
+      "action": "sell",
+      "price": 1.504,
+      "currency": "CNY",
+      "qty": 10000,
+      "settleCcy": "CNY",
+      "settleAmount": 15040.0,
+      "reason": "调仓：卖出红利ETF，转投高股息优质个股"
+    },
+    {
+      "id": 22,
+      "date": "2026-07-17",
+      "code": "sz159263",
+      "name": "价值ETF易方达",
+      "action": "sell",
+      "price": 1.105,
+      "currency": "CNY",
+      "qty": 20000,
+      "settleCcy": "CNY",
+      "settleAmount": 22100.0,
+      "reason": "调仓：卖出价值ETF，转投高股息优质个股"
+    },
+    {
+      "id": 23,
+      "date": "2026-07-17",
+      "code": "sh520550",
+      "name": "港股红利低波ETF招商",
+      "action": "sell",
+      "price": 1.068,
+      "currency": "CNY",
+      "qty": 16600,
+      "settleCcy": "CNY",
+      "settleAmount": 17728.8,
+      "reason": "调仓：卖出港股红利低波ETF，转投高股息优质个股"
     }
   ],
   "dividends": [
@@ -324,6 +363,42 @@
       "realizedPnL_USD": 2066.21,
       "realizedPnL_CNY": 14043.0,
       "reason": "清仓卖出"
+    },
+    {
+      "code": "sh515080",
+      "name": "中证红利ETF招商",
+      "date": "2026-07-17",
+      "qty": 10000,
+      "cost": 1.417,
+      "sellPrice": 1.504,
+      "totalCost": 14170.0,
+      "totalRevenue": 15040.0,
+      "realizedPnL_CNY": 870.0,
+      "reason": "调仓：卖出红利ETF，转投高股息优质个股"
+    },
+    {
+      "code": "sz159263",
+      "name": "价值ETF易方达",
+      "date": "2026-07-17",
+      "qty": 20000,
+      "cost": 1.059,
+      "sellPrice": 1.105,
+      "totalCost": 21180.0,
+      "totalRevenue": 22100.0,
+      "realizedPnL_CNY": 920.0,
+      "reason": "调仓：卖出价值ETF，转投高股息优质个股"
+    },
+    {
+      "code": "sh520550",
+      "name": "港股红利低波ETF招商",
+      "date": "2026-07-17",
+      "qty": 16600,
+      "cost": 1.059,
+      "sellPrice": 1.068,
+      "totalCost": 17579.4,
+      "totalRevenue": 17728.8,
+      "realizedPnL_CNY": 149.4,
+      "reason": "调仓：卖出港股红利低波ETF，转投高股息优质个股"
     }
   ],
   "realizedPnLSummary": {
