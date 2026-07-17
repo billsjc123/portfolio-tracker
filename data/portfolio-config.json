@@ -1,9 +1,8 @@
 {
   "name": "Bill 持仓组合",
-  "lastUpdated": "2026-07-17T08:00:00Z",
+  "lastUpdated": "2026-07-17T08:26:00Z",
   "holdings": {
     "cn": [
-      { "code": "sh513110", "name": "纳指ETF华泰柏瑞", "qty": 100, "cost": -9.998 },
       { "code": "sh518880", "name": "黄金ETF华安", "qty": 4000, "cost": 7.767 },
       { "code": "sh600036", "name": "招商银行", "qty": 900, "cost": 38.151 },
       { "code": "sz002027", "name": "分众传媒", "qty": 5000, "cost": 5.483 }
@@ -64,6 +63,6 @@
   "cash": {
     "usd": 6302.565,
     "hkd": 850,
-    "rmb": 95920
+    "rmb": 96161.6
   }
 }
