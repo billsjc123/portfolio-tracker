@@ -166,6 +166,24 @@ portfolio-tracker/
 }
 ```
 
+### 历史累计盈亏的不可变性
+
+每次 `update-portfolio.js` 写入行情快照时，都会一并冻结当日的 `portfolioState`（`holdings` + `cash`）和截至当日的 `realizedPnL_CNY`。看板渲染历史曲线时只读取这个冻结状态，**绝不使用今天的 `portfolio-config.json` 回算过去**。
+
+因此，完整清仓必须遵循以下顺序：
+
+1. 在 `trades` 追加卖出交易；
+2. 在 `closedPositions` 追加同一标的的平仓记录，包含日期、数量、成本、收入和数值型 `realizedPnL_CNY`；
+3. 最后才从 `holdings` 移除该标的。
+
+脚本会把上一快照仍持有、但当前 `holdings` 已删除且没有合格 `closedPositions` 的标的视为账务错误并停止更新；这避免了清仓操作悄悄改写历史累计盈亏。`cost` 必须是非负的实际加权成本；历史遗留的负成本需先核对原始成交记录后修正，不能用作收益归零的占位符。
+
+旧快照的一次性回填可执行：
+
+```bash
+node scripts/backfill-main-portfolio-states.js
+```
+
 ---
 
 ## 📊 数据源（全部免费公开 API，无鉴权）

@@ -51,7 +51,131 @@
         "usASML": 1.35,
         "usSPCX": 8.33
       },
-      "realizedPnL_CNY": 0
+      "realizedPnL_CNY": 0,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-16",
@@ -105,7 +229,131 @@
         "usASML": -1.39,
         "usSPCX": 9.89
       },
-      "realizedPnL_CNY": 0
+      "realizedPnL_CNY": 0,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-17",
@@ -158,7 +406,131 @@
         "usASML": 3.54,
         "usSPCX": -4.95
       },
-      "realizedPnL_CNY": 0
+      "realizedPnL_CNY": 0,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-18",
@@ -211,7 +583,131 @@
         "usASML": 3.31,
         "usSPCX": -3.56
       },
-      "realizedPnL_CNY": 0
+      "realizedPnL_CNY": 0,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-19",
@@ -265,7 +761,131 @@
         "usASML": 3.31,
         "usSPCX": -3.56
       },
-      "realizedPnL_CNY": 0
+      "realizedPnL_CNY": 0,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-22",
@@ -318,7 +938,131 @@
         "usASML": -0.02,
         "usSPCX": -16.43
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": -9763.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-23",
@@ -371,7 +1115,131 @@
         "usASML": -7.82,
         "usSPCX": 0.98
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": -9763.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-24",
@@ -421,7 +1289,131 @@
         "usASML": -1.4,
         "usSPCX": 0.41
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": -9763.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-25",
@@ -471,7 +1463,131 @@
         "usASML": -0.88,
         "usSPCX": -1.01
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": -9763.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh513110",
+              "name": "纳指ETF华泰柏瑞",
+              "qty": 100,
+              "cost": -9.998
+            },
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-26",
@@ -521,7 +1637,125 @@
         "usASML": -2.53,
         "usSPCX": 0.15
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": -9763.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-29",
@@ -571,7 +1805,125 @@
         "usASML": 2.12,
         "usSPCX": 1.68
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": -9763.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-06-30",
@@ -621,7 +1973,125 @@
         "usASML": 5.09,
         "usSPCX": 4.3
       },
-      "realizedPnL_CNY": -9763.5
+      "realizedPnL_CNY": -9763.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usASML",
+              "name": "阿斯麦",
+              "qty": 1,
+              "cost": -202.21
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-07-01",
@@ -671,7 +2141,119 @@
         "usASML": -6.31,
         "usSPCX": -7.29
       },
-      "realizedPnL_CNY": 4279.5
+      "realizedPnL_CNY": 4279.5,
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            }
+          ]
+        },
+        "cash": {
+          "usd": 2038.2,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "d8dd42a (初始持仓基线)"
+      }
     },
     {
       "date": "2026-07-02",
@@ -720,6 +2302,124 @@
         "usSOFI": 2.84,
         "usASML": -7.36,
         "usSPCX": -7.8
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            }
+          ]
+        },
+        "cash": {
+          "usd": 8400.54,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "4f297c1 (奈飞建仓后)"
       }
     },
     {
@@ -771,6 +2471,124 @@
         "usASML": -4,
         "usSPCX": 2.83,
         "usNFLX": 4.66
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            }
+          ]
+        },
+        "cash": {
+          "usd": 8400.54,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "4f297c1 (奈飞建仓后)"
       }
     },
     {
@@ -822,6 +2640,124 @@
         "usASML": -4,
         "usSPCX": 2.83,
         "usNFLX": 4.66
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            }
+          ]
+        },
+        "cash": {
+          "usd": 8400.54,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "4f297c1 (奈飞建仓后)"
       }
     },
     {
@@ -873,6 +2809,124 @@
         "usASML": 3.15,
         "usSPCX": -0.98,
         "usNFLX": -2.1
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            }
+          ]
+        },
+        "cash": {
+          "usd": 8400.54,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "4f297c1 (奈飞建仓后)"
       }
     },
     {
@@ -924,6 +2978,124 @@
         "usASML": -4.26,
         "usSPCX": -6.83,
         "usNFLX": 0.21
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            }
+          ]
+        },
+        "cash": {
+          "usd": 8400.54,
+          "hkd": 0,
+          "rmb": 86153.31
+        },
+        "source": "4f297c1 (奈飞建仓后)"
       }
     },
     {
@@ -975,6 +3147,130 @@
         "usASML": 1.22,
         "usSPCX": -0.78,
         "usNFLX": -0.77
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 0,
+          "rmb": 88006.01
+        },
+        "source": "3f27331 (RKLB 建仓后)"
       }
     },
     {
@@ -1028,6 +3324,130 @@
         "usSPCX": 2.6,
         "usNFLX": -0.16,
         "usRKLB": -0.96
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 0,
+          "rmb": 88006.01
+        },
+        "source": "3f27331 (RKLB 建仓后)"
       }
     },
     {
@@ -1079,6 +3499,130 @@
         "usSPCX": -4.51,
         "usNFLX": -2.78,
         "usRKLB": -1.83
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 0,
+          "rmb": 88006.01
+        },
+        "source": "3f27331 (RKLB 建仓后)"
       }
     },
     {
@@ -1130,6 +3674,130 @@
         "usSPCX": -4.51,
         "usNFLX": -2.78,
         "usRKLB": -1.83
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 0,
+          "rmb": 88006.01
+        },
+        "source": "3f27331 (RKLB 建仓后)"
       }
     },
     {
@@ -1181,6 +3849,130 @@
         "usSPCX": -4.24,
         "usNFLX": 0.63,
         "usRKLB": -5.32
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 0,
+          "rmb": 88006.01
+        },
+        "source": "3f27331 (RKLB 建仓后)"
       }
     },
     {
@@ -1232,6 +4024,130 @@
         "usSPCX": -2.2,
         "usNFLX": -0.41,
         "usRKLB": 2.71
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 0,
+          "rmb": 88006.01
+        },
+        "source": "3f27331 (RKLB 建仓后)"
       }
     },
     {
@@ -1283,6 +4199,130 @@
         "usSPCX": -0.6,
         "usNFLX": 0.2,
         "usRKLB": -3.31
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh515080",
+              "name": "中证红利ETF招商",
+              "qty": 10000,
+              "cost": 1.417
+            },
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh520550",
+              "name": "港股红利低波ETF招商",
+              "qty": 16600,
+              "cost": 1.059
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            },
+            {
+              "code": "sz159263",
+              "name": "价值ETF易方达",
+              "qty": 20000,
+              "cost": 1.059
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 0,
+          "rmb": 88006.01
+        },
+        "source": "3f27331 (RKLB 建仓后)"
       }
     },
     {
@@ -1330,8 +4370,127 @@
         "usSPCX": -3.08,
         "usNFLX": 0.91,
         "usRKLB": -11.61
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 38.151
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.483
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.8
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 17.189
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            },
+            {
+              "code": "hk00506",
+              "name": "中国食品",
+              "qty": 10000,
+              "cost": 3.24
+            },
+            {
+              "code": "hk06049",
+              "name": "保利物业",
+              "qty": 800,
+              "cost": 28.14
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.545
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 38,
+              "cost": 164.364
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 361.001
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 4,
+              "cost": 609.803
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usSPCX",
+              "name": "SpaceX",
+              "qty": 15,
+              "cost": 150
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 6302.565,
+          "hkd": 850,
+          "rmb": 96161.6
+        },
+        "source": "4672008/1b5b519 (7月17日调仓后)"
       }
     }
   ],
-  "lastUpdated": "2026-07-17T09:19:16.385Z"
+  "lastUpdated": "2026-07-18T02:24:59.158Z",
+  "schemaVersion": 2
 }

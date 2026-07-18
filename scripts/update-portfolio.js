@@ -39,25 +39,62 @@ function isWeekend(date) {
  * 汇总已实现 CNY 盈亏（含 USD PnL 按汇率折算）
  * 所有清仓记录必须包含 realizedPnL_CNY 或 realizedPnL_USD
  */
-function sumRealizedPnL(closedPositions) {
+function sumRealizedPnL(closedPositions, asOfDate) {
     let total = 0;
     for (const cp of closedPositions) {
+        if (cp.date && cp.date > asOfDate) continue;
         total += (cp.realizedPnL_CNY || 0);
     }
     return total;
 }
 
 /**
- * 补充汇总仅有 USD 盈亏的记录（等汇率到位后再调用）
+ * 补充汇总仅有 USD 盈亏的记录（等汇率到位后再调用）。
+ * 新建清仓记录仍强制要求 recorded realizedPnL_CNY；这里仅兼容旧数据。
  */
-function sumRealizedPnL_UsdOnly(closedPositions, usdCny) {
+function sumRealizedPnL_UsdOnly(closedPositions, usdCny, asOfDate) {
     let total = 0;
     for (const cp of closedPositions) {
+        if (cp.date && cp.date > asOfDate) continue;
         if (cp.realizedPnL_USD && !cp.realizedPnL_CNY) {
             total += cp.realizedPnL_USD * usdCny;
         }
     }
     return total;
+}
+
+function buildPortfolioState(cfg) {
+    return {
+        holdings: structuredClone(cfg.holdings),
+        cash: structuredClone(cfg.cash || { usd: 0, hkd: 0, rmb: 0 })
+    };
+}
+
+/**
+ * 账户状态从上一日到今日若移除了完整持仓，必须有合格的平仓记录。
+ * 这条校验阻止“先从 config 删除、后补 realizedPnL”篡改累计历史。
+ */
+function validateFullClosures(previousState, currentHoldings, closedPositions, asOfDate) {
+    if (!previousState?.holdings) return;
+
+    const currentCodes = new Set(
+        ['cn', 'hk', 'us'].flatMap(m => (currentHoldings[m] || []).map(h => h.code))
+    );
+    const removed = ['cn', 'hk', 'us']
+        .flatMap(m => previousState.holdings[m] || [])
+        .filter(h => !currentCodes.has(h.code));
+
+    for (const holding of removed) {
+        const record = (closedPositions || []).find(cp =>
+            cp.code === holding.code && cp.date <= asOfDate && Number.isFinite(cp.realizedPnL_CNY)
+        );
+        if (!record) {
+            throw new Error(
+                `检测到 ${holding.code} 已从 holdings 移除，但 closedPositions 缺少 ` +
+                `date <= ${asOfDate} 且带 realizedPnL_CNY 的平仓记录；拒绝写入会改写历史的快照。`
+            );
+        }
+    }
 }
 
 /**
@@ -71,13 +108,10 @@ async function updateMainAccount(cfg, trades) {
     console.log(`[main] 抓取 ${codes.length} 只标的行情...`);
     const quotes = await fetchQuotes(codes);
 
-    // 已实现盈亏汇总（closedPositions + realizedPnLSummary.mainCNY）
-    // 注意：USD 盈亏需乘汇率转 CNY，确保累计图表不遗漏外币盈利
-    let realized = 0;
-    if (Array.isArray(trades.closedPositions)) {
-        realized += sumRealizedPnL(trades.closedPositions);
-    }
-    if (trades.realizedPnLSummary) realized += (trades.realizedPnLSummary.mainCNY || 0);
+    const today = todayISO();
+    const hist = readHistory(HIST_MAIN);
+    const latestSnapshot = hist.snapshots[hist.snapshots.length - 1];
+    validateFullClosures(latestSnapshot?.portfolioState, cfg.holdings, trades.closedPositions, today);
 
     const fxRaw = await fetchUsdCny();
     const rates = {
@@ -85,16 +119,19 @@ async function updateMainAccount(cfg, trades) {
         HKD_CNY: fxRaw?.HKD_CNY || deriveHkdCny(fxRaw?.USD_CNY) || 0.9
     };
 
-    // 二次汇总：把等待汇率后再算的 USD PnL 补上
+    // 已实现盈亏仅计入截至本快照日期已经完成的清仓。
+    let realized = 0;
     if (Array.isArray(trades.closedPositions)) {
-        realized += sumRealizedPnL_UsdOnly(trades.closedPositions, rates.USD_CNY);
+        realized += sumRealizedPnL(trades.closedPositions, today);
+        realized += sumRealizedPnL_UsdOnly(trades.closedPositions, rates.USD_CNY, today);
     }
+    if (trades.realizedPnLSummary) realized += (trades.realizedPnLSummary.mainCNY || 0);
 
-    const today = todayISO();
     const snap = {
         date: today,
         dataTime: nowISO(),
         rates,
+        portfolioState: buildPortfolioState(cfg),
         realizedPnL_CNY: +realized.toFixed(2),
         prices: {},
         changePct: {}
@@ -116,7 +153,6 @@ async function updateMainAccount(cfg, trades) {
     }
     console.log(`[main] 成功 ${successCount}/${codes.length} (含 ETF 复权)`);
 
-    let hist = readHistory(HIST_MAIN);
     const idx = hist.snapshots.findIndex(s => s.date === today);
     if (idx >= 0) hist.snapshots[idx] = snap; else hist.snapshots.push(snap);
     hist.snapshots.sort((a, b) => a.date.localeCompare(b.date));

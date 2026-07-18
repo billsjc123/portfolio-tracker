@@ -446,11 +446,15 @@ function switchTab(name){
 // ==================== 主账户计算 ====================
 function calcMain(snap){
     var r=(snap.rates&&snap.rates.USD_CNY!=null)?snap.rates:DR;
+    // 使用快照当日的持仓状态；绝不使用今天的 CONFIG 回算历史。
+    // 清仓、调仓或删除标的因此不会改变既有日期的累计盈亏。
+    var state=snap.portfolioState||{holdings:CONFIG.holdings,cash:CONFIG.cash};
+    var holdings=state.holdings||CONFIG.holdings;
     var mk={cn:[],hk:[],us:[]};
     var tv=0,tc=0,tdp=0;
     ['cn','hk','us'].forEach(function(m){
         var mvo=0,mco=0,mdp=0;
-        CONFIG.holdings[m].forEach(function(h){
+        (holdings[m]||[]).forEach(function(h){
             var p=snap.prices[h.code]||0,cp=snap.changePct[h.code]||0;
             var mv=h.qty*p,cv=h.qty*h.cost,pnl=mv-cv,dp=mv*cp/100;
             mvo+=mv;mco+=cv;mdp+=dp;
@@ -461,10 +465,13 @@ function calcMain(snap){
         mk[m].totalValueCNY=mvc;mk[m].totalCostCNY=mcc;mk[m].totalPnlCNY=mvc-mcc;mk[m].totalPnlPctCNY=mcc>0?(mvc-mcc)/mcc*100:0;mk[m].dayPnlCNY=toCNY(mdp,m,r);mk[m].dayPnlPctCNY=mvc>0?toCNY(mdp,m,r)/mvc*100:0;
         tv+=mvc;tc+=mcc;tdp+=toCNY(mdp,m,r);
     });
-    var cash=CONFIG.cash||{usd:0,hkd:0,rmb:0};
+    var cash=state.cash||CONFIG.cash||{usd:0,hkd:0,rmb:0};
     var cashCNY=cash.rmb+cash.hkd*r.HKD_CNY+cash.usd*r.USD_CNY;
     var total=tv+cashCNY;
-    return {markets:mk,rates:r,cashCNY:cashCNY,cash:cash,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:tv-tc,totalPnlPctCNY:tc>0?(tv-tc)/tc*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0};
+    var unrealizedPnLCNY=tv-tc;
+    var realizedPnLCNY=snap.realizedPnL_CNY||0;
+    var cumulativePnLCNY=unrealizedPnLCNY+realizedPnLCNY;
+    return {markets:mk,rates:r,cashCNY:cashCNY,cash:cash,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:unrealizedPnLCNY,totalPnlPctCNY:tc>0?unrealizedPnLCNY/tc*100:0,realizedPnLCNY:realizedPnLCNY,cumulativePnLCNY:cumulativePnLCNY,cumulativePnlPctCNY:tc>0?cumulativePnLCNY/tc*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0};
 }
 
 // ==================== 全天候计算 ====================
@@ -587,11 +594,12 @@ function drawPnLChart(){
     if(snaps.length<1)return;
     var portfolios=snaps.map(function(s){return calcMain(s)});
     var dates=snaps.map(function(s){return s.date.slice(5)});
-    var pnls=portfolios.map(function(p){return p.totalPnlCNY});
+    // “累计盈亏” = 当日未实现盈亏 + 截至当日已实现盈亏。
+    var pnls=portfolios.map(function(p){return p.cumulativePnLCNY});
 
     document.getElementById('m-chartPoints2').textContent=snaps.length;
     var last=portfolios[portfolios.length-1];
-    document.getElementById('m-pnlVal').innerHTML='<span class="'+clr(last.totalPnlCNY)+'">¥'+sgn(last.totalPnlCNY,2)+'</span>';
+    document.getElementById('m-pnlVal').innerHTML='<span class="'+clr(last.cumulativePnLCNY)+'">¥'+sgn(last.cumulativePnLCNY,2)+'</span>';
 
     var svg=document.getElementById('m-pnlSvg');
     var W=460,H=200,pad={t:20,r:20,b:42,l:64};
@@ -661,11 +669,12 @@ function drawYieldChart(){
     if(snaps.length<1)return;
     var portfolios=snaps.map(function(s){return calcMain(s)});
     var dates=snaps.map(function(s){return s.date.slice(5)});
-    var yields=portfolios.map(function(p){return p.totalPnlPctCNY});
+    // 收益率与累计盈亏使用相同的、当日冻结的持仓状态和已实现盈亏。
+    var yields=portfolios.map(function(p){return p.cumulativePnlPctCNY});
 
     document.getElementById('m-chartPoints3').textContent=snaps.length;
     var last=portfolios[portfolios[portfolios.length-1]?portfolios.length-1:0];
-    document.getElementById('m-yieldVal').innerHTML='<span class="'+clr(last.totalPnlPctCNY)+'">'+sgn(last.totalPnlPctCNY,2)+'%</span>';
+    document.getElementById('m-yieldVal').innerHTML='<span class="'+clr(last.cumulativePnlPctCNY)+'">'+sgn(last.cumulativePnlPctCNY,2)+'%</span>';
 
     var svg=document.getElementById('m-yieldSvg');
     var W=460,H=200,pad={t:20,r:20,b:42,l:60};
