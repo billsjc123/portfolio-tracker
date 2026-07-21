@@ -471,7 +471,8 @@ function calcMain(snap){
     var unrealizedPnLCNY=tv-tc;
     var realizedPnLCNY=snap.realizedPnL_CNY||0;
     var cumulativePnLCNY=unrealizedPnLCNY+realizedPnLCNY;
-    return {markets:mk,rates:r,cashCNY:cashCNY,cash:cash,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:unrealizedPnLCNY,totalPnlPctCNY:tc>0?unrealizedPnLCNY/tc*100:0,realizedPnLCNY:realizedPnLCNY,cumulativePnLCNY:cumulativePnLCNY,cumulativePnlPctCNY:tc>0?cumulativePnLCNY/tc*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0};
+    // 累计收益率以总资产（证券市值 + 各币种现金）为分母，和总资产表口径一致。
+    return {markets:mk,rates:r,cashCNY:cashCNY,cash:cash,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:unrealizedPnLCNY,totalPnlPctCNY:tc>0?unrealizedPnLCNY/tc*100:0,realizedPnLCNY:realizedPnLCNY,cumulativePnLCNY:cumulativePnLCNY,cumulativePnlPctCNY:total>0?cumulativePnLCNY/total*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0};
 }
 
 // ==================== 全天候计算 ====================

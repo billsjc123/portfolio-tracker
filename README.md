@@ -168,7 +168,7 @@ portfolio-tracker/
 
 ### 历史累计盈亏的不可变性
 
-每次 `update-portfolio.js` 写入行情快照时，都会一并冻结当日的 `portfolioState`（`holdings` + `cash`）和截至当日的 `realizedPnL_CNY`。看板渲染历史曲线时只读取这个冻结状态，**绝不使用今天的 `portfolio-config.json` 回算过去**。
+每次 `update-portfolio.js` 写入行情快照时，都会一并冻结当日的 `portfolioState`（`holdings` + `cash`）和截至当日的 `realizedPnL_CNY`。看板渲染历史曲线时只读取这个冻结状态，**绝不使用今天的 `portfolio-config.json` 回算过去**。累计收益率采用 `累计盈亏 ÷ 当日总资产`，其中总资产 = 证券市值 + 各币种现金折算人民币；这与总资产表使用同一分母口径。
 
 因此，完整清仓必须遵循以下顺序：
 

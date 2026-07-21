@@ -1,6 +1,6 @@
 {
   "name": "Bill 持仓组合",
-  "lastUpdated": "2026-07-17T08:26:00Z",
+  "lastUpdated": "2026-07-21T15:43:00Z",
   "holdings": {
     "cn": [
       { "code": "sh518880", "name": "黄金ETF华安", "qty": 4000, "cost": 7.767 },
@@ -19,6 +19,7 @@
       { "code": "usMSFT", "name": "微软", "qty": 18, "cost": 396.809 },
       { "code": "usNVDA", "name": "英伟达", "qty": 38, "cost": 164.364 },
       { "code": "usINTU", "name": "财捷", "qty": 17, "cost": 361.001 },
+      { "code": "usISRG", "name": "直觉外科", "qty": 8, "cost": 354.0 },
       { "code": "usMETA", "name": "Meta", "qty": 4, "cost": 609.803 },
       { "code": "usSOFI", "name": "SoFi Tech", "qty": 120, "cost": 17.263 },
 
@@ -61,7 +62,7 @@
     ]
   },
   "cash": {
-    "usd": 6302.565,
+    "usd": 3470.565,
     "hkd": 850,
     "rmb": 96161.6
   }
