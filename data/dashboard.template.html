@@ -630,7 +630,7 @@ function heatmapCode(code){
 function showHeatmapTooltip(evt,item){
     var tt=document.getElementById('chartTooltip');
     var direction=item.chgPct>=0?'up':'down';
-    tt.innerHTML='<div class="tt-date">'+item.marketLabel+' · '+item.code.toUpperCase()+'</div>'+
+    tt.innerHTML='<div class="tt-date">'+item.marketLabel+(item.market==='us'?' · '+item.code.toUpperCase():'')+'</div>'+
         '<div class="tt-val">'+item.name+' · 市值 ¥'+fmt(item.mv_cny,0)+'</div>'+
         '<div class="tt-val '+direction+'">今日 '+sgn(item.chgPct,2)+'% · '+sgn(item.dayPnl_cny,0)+'</div>';
     tt.style.display='block';
@@ -669,13 +669,14 @@ function drawHeatmap(d){
         cell.style.height=(rect.h/baseH*100).toFixed(3)+'%';
         cell.style.background=heatmapColor(item.chgPct);
         cell.style.color=heatmapTextColor(item.chgPct);
-        cell.title=item.name+' ('+item.code.toUpperCase()+')';
+        cell.title=item.market==='us'?item.name+' ('+item.code.toUpperCase()+')':item.name;
         var tag=document.createElement('span'); tag.className='heatmap-market'; tag.textContent=item.marketLabel;
-        var code=document.createElement('div'); code.className='heatmap-code'; code.textContent=heatmapCode(item.code);
-        var name=document.createElement('div'); name.className='heatmap-name'; name.textContent=item.name;
+        // A股与港股只显示名称；美股保留代码 + 名称，便于识别海外标的。
+        var code=document.createElement('div'); code.className='heatmap-code'; code.textContent=item.market==='us'?heatmapCode(item.code):item.name;
+        var name=document.createElement('div'); name.className='heatmap-name'; name.textContent=item.market==='us'?item.name:'';
         var pct=document.createElement('div'); pct.className='heatmap-pct'; pct.textContent=sgn(item.chgPct,2)+'%';
         var share=document.createElement('div'); share.className='heatmap-share'; share.textContent='占持仓 '+(item.mv_cny/total*100).toFixed(1)+'%';
-        cell.appendChild(tag); cell.appendChild(code); cell.appendChild(name); cell.appendChild(pct); cell.appendChild(share);
+        cell.appendChild(tag); cell.appendChild(code); if(item.market==='us')cell.appendChild(name); cell.appendChild(pct); cell.appendChild(share);
         cell.addEventListener('mouseenter',function(evt){showHeatmapTooltip(evt,item);});
         cell.addEventListener('mousemove',function(evt){showHeatmapTooltip(evt,item);});
         cell.addEventListener('mouseleave',hideTooltip);
