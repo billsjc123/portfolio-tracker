@@ -458,10 +458,18 @@ function calcMain(snap){
             var p=snap.prices[h.code]||0,cp=snap.changePct[h.code]||0;
             var mv=h.qty*p,cv=h.qty*h.cost,pnl=mv-cv,dp=mv*cp/100;
             mvo+=mv;mco+=cv;mdp+=dp;
-            mk[m].push({code:h.code,name:h.name,qty:h.qty,cost:h.cost,price:p,chgPct:cp,mv_orig:mv,pnl_orig:pnl,dayPnl_orig:dp,pnlPct_orig:cv>0?pnl/cv*100:0});
+            mk[m].push({code:h.code,name:h.name,qty:h.qty,cost:h.cost,costCNY:h.costCNY,price:p,chgPct:cp,mv_orig:mv,pnl_orig:pnl,dayPnl_orig:dp,pnlPct_orig:cv>0?pnl/cv*100:0});
         });
-        var mvc=toCNY(mvo,m,r),mcc=toCNY(mco,m,r);
-        mk[m].forEach(function(h){h.mv_cny=toCNY(h.mv_orig,m,r);h.pnl_cny=toCNY(h.pnl_orig,m,r);h.dayPnl_cny=toCNY(h.dayPnl_orig,m,r);h.cost_cny=toCNY(h.qty*h.cost,m,r);h.pnlPct_cny=h.cost_cny>0?h.pnl_cny/h.cost_cny*100:0});
+        var mvc=toCNY(mvo,m,r),mcc=0;
+        mk[m].forEach(function(h){
+            h.mv_cny=toCNY(h.mv_orig,m,r);
+            // costCNY 是成交日冻结的人民币成本；没有时保留原本按标的币种折算的兼容逻辑。
+            h.cost_cny=h.costCNY!=null?h.qty*h.costCNY:toCNY(h.qty*h.cost,m,r);
+            h.pnl_cny=h.mv_cny-h.cost_cny;
+            h.dayPnl_cny=toCNY(h.dayPnl_orig,m,r);
+            h.pnlPct_cny=h.cost_cny>0?h.pnl_cny/h.cost_cny*100:0;
+            mcc+=h.cost_cny;
+        });
         mk[m].totalValueCNY=mvc;mk[m].totalCostCNY=mcc;mk[m].totalPnlCNY=mvc-mcc;mk[m].totalPnlPctCNY=mcc>0?(mvc-mcc)/mcc*100:0;mk[m].dayPnlCNY=toCNY(mdp,m,r);mk[m].dayPnlPctCNY=mvc>0?toCNY(mdp,m,r)/mvc*100:0;
         tv+=mvc;tc+=mcc;tdp+=toCNY(mdp,m,r);
     });

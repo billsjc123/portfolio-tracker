@@ -1,24 +1,24 @@
 {
   "name": "Bill 持仓组合",
-  "lastUpdated": "2026-07-21T15:43:00Z",
+  "lastUpdated": "2026-07-21T15:56:00Z",
   "holdings": {
     "cn": [
       { "code": "sh518880", "name": "黄金ETF华安", "qty": 4000, "cost": 7.767 },
-      { "code": "sh600036", "name": "招商银行", "qty": 900, "cost": 38.151 },
-      { "code": "sz002027", "name": "分众传媒", "qty": 5000, "cost": 5.483 }
+      { "code": "sh600036", "name": "招商银行", "qty": 900, "cost": 37.152 },
+      { "code": "sz002027", "name": "分众传媒", "qty": 5000, "cost": 5.294 }
     ],
     "hk": [
-      { "code": "hk00700", "name": "腾讯控股", "qty": 180, "cost": 474.8 },
-      { "code": "hk00883", "name": "中国海洋石油", "qty": 1000, "cost": 17.189 },
+      { "code": "hk00700", "name": "腾讯控股", "qty": 180, "cost": 474.786, "costCNY": 410.689778 },
+      { "code": "hk00883", "name": "中国海洋石油", "qty": 1000, "cost": 16.694 },
       { "code": "hk03690", "name": "美团-W", "qty": 300, "cost": 95.467 },
-      { "code": "hk00506", "name": "中国食品", "qty": 10000, "cost": 3.24 },
-      { "code": "hk06049", "name": "保利物业", "qty": 800, "cost": 28.14 }
+      { "code": "hk00506", "name": "中国食品", "qty": 10000, "cost": 3.24, "costCNY": 2.804 },
+      { "code": "hk06049", "name": "保利物业", "qty": 800, "cost": 28.14, "costCNY": 24.349 }
     ],
     "us": [
-      { "code": "usGOOG", "name": "谷歌-C", "qty": 17, "cost": 138.545 },
+      { "code": "usGOOG", "name": "谷歌-C", "qty": 17, "cost": 138.325 },
       { "code": "usMSFT", "name": "微软", "qty": 18, "cost": 396.809 },
-      { "code": "usNVDA", "name": "英伟达", "qty": 38, "cost": 164.364 },
-      { "code": "usINTU", "name": "财捷", "qty": 17, "cost": 361.001 },
+      { "code": "usNVDA", "name": "英伟达", "qty": 38, "cost": 150.635 },
+      { "code": "usINTU", "name": "财捷", "qty": 17, "cost": 359.801 },
       { "code": "usISRG", "name": "直觉外科", "qty": 8, "cost": 354.0 },
       { "code": "usMETA", "name": "Meta", "qty": 4, "cost": 609.803 },
       { "code": "usSOFI", "name": "SoFi Tech", "qty": 120, "cost": 17.263 },
