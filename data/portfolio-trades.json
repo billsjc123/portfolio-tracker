@@ -12,7 +12,7 @@
       "currency": "CNY",
       "qty": 1000,
       "settleCcy": "CNY",
-      "settleAmount": 1883.0,
+      "settleAmount": 1883,
       "reason": "全天候账户月度定投"
     },
     {
@@ -25,7 +25,7 @@
       "currency": "CNY",
       "qty": 1000,
       "settleCcy": "CNY",
-      "settleAmount": 1079.0,
+      "settleAmount": 1079,
       "reason": "全天候账户月度定投"
     },
     {
@@ -51,7 +51,7 @@
       "currency": "CNY",
       "qty": 600,
       "settleCcy": "CNY",
-      "settleAmount": 1467.0,
+      "settleAmount": 1467,
       "reason": "全天候账户月度定投"
     },
     {
@@ -64,7 +64,7 @@
       "currency": "CNY",
       "qty": 500,
       "settleCcy": "CNY",
-      "settleAmount": 1021.0,
+      "settleAmount": 1021,
       "reason": "全天候账户月度定投 - 豆粕超跌多加"
     },
     {
@@ -99,7 +99,7 @@
       "code": "hk00700",
       "name": "腾讯控股",
       "action": "buy",
-      "price": 461.0,
+      "price": 461,
       "currency": "HKD",
       "qty": 100,
       "settleCcy": "CNY",
@@ -129,7 +129,7 @@
       "currency": "CNY",
       "qty": 10000,
       "settleCcy": "CNY",
-      "settleAmount": 200.0,
+      "settleAmount": 200,
       "reason": "股息发放，成本从1.437调整为1.417"
     },
     {
@@ -181,7 +181,7 @@
       "currency": "CNY",
       "qty": 200,
       "settleCcy": "CNY",
-      "settleAmount": 7174.0,
+      "settleAmount": 7174,
       "reason": "优质老登股左侧加仓"
     },
     {
@@ -194,7 +194,7 @@
       "currency": "CNY",
       "qty": 1000,
       "settleCcy": "CNY",
-      "settleAmount": 4850.0,
+      "settleAmount": 4850,
       "reason": "优质老登股左侧加仓"
     },
     {
@@ -229,11 +229,11 @@
       "code": "usASML",
       "name": "阿斯麦",
       "action": "sell",
-      "price": 1864.0,
+      "price": 1864,
       "currency": "USD",
       "qty": 1,
       "settleCcy": "USD",
-      "settleAmount": 1864.0,
+      "settleAmount": 1864,
       "reason": "清仓卖出"
     },
     {
@@ -246,7 +246,7 @@
       "currency": "CNY",
       "qty": 10000,
       "settleCcy": "CNY",
-      "settleAmount": 15040.0,
+      "settleAmount": 15040,
       "reason": "调仓：卖出红利ETF，转投高股息优质个股"
     },
     {
@@ -259,7 +259,7 @@
       "currency": "CNY",
       "qty": 20000,
       "settleCcy": "CNY",
-      "settleAmount": 22100.0,
+      "settleAmount": 22100,
       "reason": "调仓：卖出价值ETF，转投高股息优质个股"
     },
     {
@@ -285,7 +285,7 @@
       "currency": "HKD",
       "qty": 10000,
       "settleCcy": "HKD",
-      "settleAmount": 32400.0,
+      "settleAmount": 32400,
       "reason": "调仓：ETF清仓后买入高股息消费股"
     },
     {
@@ -298,7 +298,7 @@
       "currency": "HKD",
       "qty": 800,
       "settleCcy": "HKD",
-      "settleAmount": 22512.0,
+      "settleAmount": 22512,
       "reason": "调仓：ETF清仓后买入高股息物业股"
     },
     {
@@ -307,11 +307,11 @@
       "code": "usISRG",
       "name": "直觉外科",
       "action": "buy",
-      "price": 354.0,
+      "price": 354,
       "currency": "USD",
       "qty": 8,
       "settleCcy": "USD",
-      "settleAmount": 2832.0,
+      "settleAmount": 2832,
       "reason": "新建仓 ISRG（直觉外科）"
     }
   ],
@@ -348,7 +348,7 @@
       "per10Share": 1.9,
       "perShare": 0.19,
       "shares": 5000,
-      "amount": 950.0,
+      "amount": 950,
       "type": "cash",
       "taxNote": "每10股派1.9元含税，持股超1年免征个税，实收=宣告额"
     },
@@ -359,7 +359,7 @@
       "payDate": "2026-07-13",
       "perShare": 0.495,
       "shares": 1000,
-      "amount": 495.0,
+      "amount": 495,
       "currency": "HKD",
       "type": "cash",
       "taxNote": "港股现金分红，实收 495 HKD（每股 0.495 HKD）；日期为用户给定派息日"
@@ -373,7 +373,7 @@
       "qty": 16300,
       "cost": 1.27,
       "sellPrice": 1.105,
-      "totalCost": 20701.0,
+      "totalCost": 20701,
       "totalRevenue": 18011.5,
       "realizedPnL_CNY": -2689.5,
       "reason": "恒科相似标的仓位过重，集中仓位到优质标的"
@@ -385,9 +385,9 @@
       "qty": 54000,
       "cost": 0.492,
       "sellPrice": 0.361,
-      "totalCost": 26568.0,
-      "totalRevenue": 19494.0,
-      "realizedPnL_CNY": -7074.0,
+      "totalCost": 26568,
+      "totalRevenue": 19494,
+      "realizedPnL_CNY": -7074,
       "reason": "恒科相似标的仓位过重，集中仓位到优质标的"
     },
     {
@@ -396,11 +396,11 @@
       "date": "2026-07-01",
       "qty": 1,
       "cost": -202.21,
-      "sellPrice": 1864.0,
+      "sellPrice": 1864,
       "totalCost": -202.21,
-      "totalRevenue": 1864.0,
+      "totalRevenue": 1864,
       "realizedPnL_USD": 2066.21,
-      "realizedPnL_CNY": 14043.0,
+      "realizedPnL_CNY": 14043,
       "reason": "清仓卖出"
     },
     {
@@ -410,9 +410,9 @@
       "qty": 10000,
       "cost": 1.417,
       "sellPrice": 1.504,
-      "totalCost": 14170.0,
-      "totalRevenue": 15040.0,
-      "realizedPnL_CNY": 870.0,
+      "totalCost": 14170,
+      "totalRevenue": 15040,
+      "realizedPnL_CNY": 870,
       "reason": "调仓：卖出红利ETF，转投高股息优质个股"
     },
     {
@@ -422,9 +422,9 @@
       "qty": 20000,
       "cost": 1.059,
       "sellPrice": 1.105,
-      "totalCost": 21180.0,
-      "totalRevenue": 22100.0,
-      "realizedPnL_CNY": 920.0,
+      "totalCost": 21180,
+      "totalRevenue": 22100,
+      "realizedPnL_CNY": 920,
       "reason": "调仓：卖出价值ETF，转投高股息优质个股"
     },
     {
@@ -438,6 +438,19 @@
       "totalRevenue": 17728.8,
       "realizedPnL_CNY": 149.4,
       "reason": "调仓：卖出港股红利低波ETF，转投高股息优质个股"
+    },
+    {
+      "code": "usSPCX",
+      "name": "SpaceX",
+      "date": "2026-07-24",
+      "qty": 15,
+      "cost": 150,
+      "sellPrice": 114.03,
+      "totalCost": 2250,
+      "totalRevenue": 1710.45,
+      "realizedPnL_USD": -539.55,
+      "realizedPnL_CNY": -3658.97,
+      "reason": "清仓卖出"
     }
   ],
   "realizedPnLSummary": {
