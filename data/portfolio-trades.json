@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-07-28",
+  "lastUpdated": "2026-07-31",
   "trades": [
     {
       "id": 11,
@@ -489,6 +489,29 @@
       "cashImpact": false,
       "evidenceStatus": "inferred_from_existing_cost",
       "reason": "期初建账：按已有平仓成本初始化买入流水，待券商成交单核验"
+    },
+    {
+      "id": 38,
+      "date": "2026-07-30",
+      "code": "usNVDA",
+      "name": "英伟达",
+      "action": "buy",
+      "price": 192.949,
+      "currency": "USD",
+      "qty": 3,
+      "settleCcy": "USD",
+      "settleAmount": 578.847,
+      "reason": "当前价格处于低估，持续加仓"
+    }
+  ],
+  "cashFlows": [
+    {
+      "date": "2026-07-31",
+      "type": "deposit",
+      "currency": "USD",
+      "amount": 665.1,
+      "account": "main",
+      "note": "入金 665.1 美元"
     }
   ],
   "dividends": [
