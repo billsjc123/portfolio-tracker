@@ -502,6 +502,20 @@
       "settleCcy": "USD",
       "settleAmount": 578.847,
       "reason": "当前价格处于低估，持续加仓"
+    },
+    {
+      "id": 39,
+      "date": "2026-07-31",
+      "code": "usMETA",
+      "name": "Meta",
+      "action": "buy",
+      "price": 547.5,
+      "currency": "USD",
+      "qty": 4,
+      "settleCcy": "USD",
+      "settleAmount": 2190,
+      "cashImpact": true,
+      "reason": "左侧购入"
     }
   ],
   "cashFlows": [
