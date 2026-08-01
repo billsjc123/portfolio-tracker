@@ -6047,7 +6047,7 @@
     },
     {
       "date": "2026-07-31",
-      "dataTime": "2026-07-31T17:14:15.079Z",
+      "dataTime": "2026-07-31T23:59:59.000Z",
       "rates": {
         "USD_CNY": 6.765736,
         "HKD_CNY": 0.867402
@@ -6182,15 +6182,15 @@
         "hk03690": 92.5,
         "hk00506": 3.45,
         "hk06049": 28.1,
-        "usGOOG": 353.44,
-        "usMSFT": 461.61,
-        "usNVDA": 198.83,
-        "usINTU": 315.83,
-        "usISRG": 353.69,
-        "usMETA": 547.38,
-        "usSOFI": 16.24,
-        "usNFLX": 71.49,
-        "usRKLB": 64.76
+        "usGOOG": 356.65,
+        "usMSFT": 464.72,
+        "usNVDA": 200.75,
+        "usINTU": 316.07,
+        "usISRG": 353.33,
+        "usMETA": 556.71,
+        "usSOFI": 16.31,
+        "usNFLX": 71.71,
+        "usRKLB": 64.95
       },
       "changePct": {
         "sh518880": 0.87,
@@ -6201,16 +6201,17 @@
         "hk03690": -0.16,
         "hk00506": -1.71,
         "hk06049": -1.13,
-        "usGOOG": 5.92,
-        "usMSFT": 2.33,
-        "usNVDA": 1.94,
-        "usINTU": 0.1,
-        "usISRG": 0.2,
-        "usMETA": 1.55,
-        "usSOFI": -1.4,
-        "usNFLX": -2.3,
-        "usRKLB": 0.12
-      }
+        "usGOOG": 7.16,
+        "usMSFT": 3.91,
+        "usNVDA": 2.96,
+        "usINTU": 2.61,
+        "usISRG": 1.17,
+        "usMETA": 3.96,
+        "usSOFI": 2.45,
+        "usNFLX": 0.53,
+        "usRKLB": 2.75
+      },
+      "closeUpdate": true
     }
   ],
   "lastUpdated": "2026-07-31T17:14:15.089Z",
