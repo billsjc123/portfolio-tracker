@@ -93,28 +93,32 @@ async function fetchQuotes(codes) {
 }
 
 /**
- * 抓天天基金净值（fundgz.1234567.com.cn）
+ * 抓东方财富官方基金净值（api.fund.eastmoney.com/f10/lsjz）
  * 输入：fundCode 6 位数字字符串
  * 输出：{ nav: 1.3239, navDate: '2026-07-01', name: '...' } 或 null
+ *
+ * 注意：旧实现用 fundgz.1234567.com.cn（盘中估值接口），对部分基金返回 404
+ * "页面未找到"，导致净值长期取不到。官方 lsjz 接口稳定覆盖全部基金，
+ * 且净值一般 19:00-21:00 发布，晚间可拿到当日官方收盘净值。
  */
 async function fetchFundNav(fundCode) {
-  const url = `http://fundgz.1234567.com.cn/js/${fundCode}.js?rt=${Date.now()}`;
+  const url = `https://api.fund.eastmoney.com/f10/lsjz?fundCode=${fundCode}&pageIndex=1&pageSize=1&startDate=&endDate=`;
   try {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), TIMEOUT);
-    const res = await fetch(url, { signal: ctrl.signal });
+    // 官方接口要求 Referer 头，否则返回 -1 Unauthorized
+    const res = await fetch(url, { signal: ctrl.signal, headers: { Referer: 'https://fundf10.eastmoney.com/' } });
     clearTimeout(t);
     if (!res.ok) return null;
-    const text = await res.text();
-    // 格式：jsonpgz({"fundcode":"001512", ... "dwjz":"1.3934", ...});
-    const m = text.match(/jsonpgz\((.+)\);?/);
-    if (!m) return null;
-    const j = JSON.parse(m[1]);
+    const j = await res.json();
+    const list = j?.Data?.LSJZList;
+    if (!Array.isArray(list) || !list.length) return null;
+    const rec = list[0];
     return {
-      nav: parseFloat(j.dwjz) || 0,
-      navDate: j.jzrq || '',
-      name: j.name || '',
-      yesterdayNav: parseFloat(j.yesterdayDwJz) || 0
+      nav: parseFloat(rec.DWJZ) || 0,
+      navDate: rec.FSRQ || '',
+      name: rec.FUND_NAME || '',
+      yesterdayNav: 0 // lsjz 接口不含昨日净值字段，净值涨幅由 navDate/历史记录推算
     };
   } catch (e) {
     return null;
