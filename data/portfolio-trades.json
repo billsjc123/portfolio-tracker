@@ -785,7 +785,7 @@
   ],
   "realizedPnLSummary": {
     "mainCNY": 0,
-    "allweatherCNY": 212.77,
+    "allweatherCNY": 0,
     "note": "已实现盈亏(人民币)，按账户分别统计"
   }
 }

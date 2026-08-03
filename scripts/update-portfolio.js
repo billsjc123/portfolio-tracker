@@ -190,13 +190,14 @@ async function updateAllWeather(cfg) {
         HKD_CNY: fxRaw?.HKD_CNY || deriveHkdCny(fxRaw?.USD_CNY) || 0.9
     };
 
-    // 全天候已实现盈亏（默认 212.77 + 任何新增的）
-    let awRealized = 212.77;
-    // 兼容 config 中已有的 awRealizedPnL_CNY 字段（如有）
-    if (aw.awRealizedPnL_CNY) awRealized = aw.awRealizedPnL_CNY;
-    // 兼容 trades.realizedPnLSummary.allweatherCNY
-    // 注：trades 里的汇总需外部传入，简化处理：从 cfg.allweather 直接取
-    if (aw.allweatherCNY) awRealized = aw.allweatherCNY;
+    // 全天候已实现盈亏：仅完整清仓才计入。小账户长期不调仓、不清仓，默认为 0。
+    // 注意：必须用 !== undefined 判断，不能用 if(aw.awRealizedPnL_CNY)，否则显式设 0 会被忽略并回退到旧默认 212.77。
+    let awRealized = 0;
+    if (aw.awRealizedPnL_CNY !== undefined && aw.awRealizedPnL_CNY !== null) {
+        awRealized = aw.awRealizedPnL_CNY;
+    } else if (aw.allweatherCNY !== undefined && aw.allweatherCNY !== null) {
+        awRealized = aw.allweatherCNY;
+    }
 
     const today = todayISO();
     const snap = {
