@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-07-31",
+  "lastUpdated": "2026-08-03",
   "trades": [
     {
       "id": 11,
@@ -516,6 +516,123 @@
       "settleAmount": 2190,
       "cashImpact": true,
       "reason": "左侧购入"
+    },
+    {
+      "id": 40,
+      "date": "2026-08-03",
+      "code": "sh512890",
+      "name": "红利低波ETF华泰柏瑞",
+      "action": "buy",
+      "price": 1.205,
+      "currency": "CNY",
+      "qty": 1000,
+      "settleCcy": "CNY",
+      "settleAmount": 1205,
+      "reason": "全天候 8-3 调仓 加仓红利低波"
+    },
+    {
+      "id": 41,
+      "date": "2026-08-03",
+      "code": "sh518880",
+      "name": "黄金ETF华安",
+      "action": "buy",
+      "price": 8.397,
+      "currency": "CNY",
+      "qty": 100,
+      "settleCcy": "CNY",
+      "settleAmount": 839.7,
+      "reason": "全天候 8-3 调仓 加仓黄金"
+    },
+    {
+      "id": 42,
+      "date": "2026-08-03",
+      "code": "sz159985",
+      "name": "豆粕ETF华夏",
+      "action": "buy",
+      "price": 2.074,
+      "currency": "CNY",
+      "qty": 500,
+      "settleCcy": "CNY",
+      "settleAmount": 1037,
+      "reason": "全天候 8-3 调仓 加仓豆粕"
+    },
+    {
+      "id": 43,
+      "date": "2026-08-03",
+      "code": "sz159981",
+      "name": "能源化工ETF建信",
+      "action": "buy",
+      "price": 1.479,
+      "currency": "CNY",
+      "qty": 900,
+      "settleCcy": "CNY",
+      "settleAmount": 1331.1,
+      "reason": "全天候 8-3 调仓 加仓能源化工"
+    },
+    {
+      "id": 44,
+      "date": "2026-08-03",
+      "code": "sh512400",
+      "name": "有色金属ETF南方",
+      "action": "buy",
+      "price": 1.776,
+      "currency": "CNY",
+      "qty": 500,
+      "settleCcy": "CNY",
+      "settleAmount": 888,
+      "reason": "全天候 8-3 调仓 加仓有色"
+    },
+    {
+      "id": 45,
+      "date": "2026-08-03",
+      "code": "sz159632",
+      "name": "纳斯达克ETF华安",
+      "action": "sell",
+      "price": 2.354,
+      "currency": "CNY",
+      "qty": 4700,
+      "settleCcy": "CNY",
+      "settleAmount": 11063.8,
+      "reason": "全天候 8-3 调仓 大幅减仓纳指"
+    },
+    {
+      "id": 46,
+      "date": "2026-08-03",
+      "code": "sh513650",
+      "name": "标普500ETF南方",
+      "action": "sell",
+      "price": 1.911,
+      "currency": "CNY",
+      "qty": 6000,
+      "settleCcy": "CNY",
+      "settleAmount": 11466,
+      "reason": "全天候 8-3 调仓 减仓标普500"
+    },
+    {
+      "id": 47,
+      "date": "2026-08-03",
+      "code": "009803",
+      "name": "易方达中债7-10国开债C",
+      "action": "buy",
+      "price": 1.3284,
+      "currency": "CNY",
+      "qty": 903.34,
+      "settleCcy": "CNY",
+      "settleAmount": 1200,
+      "reason": "全天候 8-3 加仓长债"
+    },
+    {
+      "id": 48,
+      "date": "2026-08-03",
+      "code": "001512",
+      "name": "易方达中债3-5年国债",
+      "action": "buy",
+      "price": 1.3972,
+      "currency": "CNY",
+      "qty": 429.43,
+      "settleCcy": "CNY",
+      "settleAmount": 600,
+      "reason": "全天候 8-3 加仓中债"
     }
   ],
   "cashFlows": [
