@@ -273,6 +273,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     <button class="tab-btn" onclick="switchTab('overview')">&#x1F5FA;&#xFE0F; 持仓全景图</button>
     <button class="tab-btn" onclick="switchTab('allweather')">&#x2600;&#xFE0F; 全天候策略</button>
     <button class="tab-btn" onclick="switchTab('trades')">&#x1F4CB; 操作记录(主账户)</button>
+    <button class="tab-btn" onclick="switchTab('research')">&#x1F50E; 投研状态</button>
 </div>
 
 <!-- Shared rate bar -->
@@ -469,6 +470,32 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     </div>
 </div>
 
+<!-- ========== Public Research Status Page ========== -->
+<div class="tab-page" id="page-research">
+    <div class="cards">
+        <div class="card ct">
+            <div class="card-title">已批准投研</div>
+            <div class="card-value" id="rs-approvedCount">0</div>
+            <div class="card-sub">仅展示通过人工批准的公开摘要</div>
+        </div>
+        <div class="card ccn">
+            <div class="card-title">摘要更新时间</div>
+            <div class="card-value" id="rs-generatedAt" style="font-size:16px">--</div>
+            <div class="card-sub">估值、论点与事件原文保留在私有知识库</div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-header"><div class="section-title">&#x1F4DA; 公司投研发布状态</div></div>
+        <table>
+            <thead><tr><th>证券</th><th>研究状态</th><th>批准日期</th><th>估值新鲜度</th></tr></thead>
+            <tbody id="rs-body"></tbody>
+        </table>
+        <div id="rs-empty" style="display:none;padding:24px;color:var(--text-muted);text-align:center">
+            暂无已批准摘要。研究草稿不会自动发布；需在私有知识库人工批准后才会同步到这里。
+        </div>
+    </div>
+</div>
+
 <div class="footer">数据来源：腾讯自选股 · 仅供参考，不构成投资建议</div>
 
 <script>
@@ -481,6 +508,7 @@ var HISTORY_AW = {"snapshots":[{"date":"2026-06-15","dataTime":"2026-06-15T15:42
 
 // ==================== 工具 ====================
 var TRADES = {"version":1,"lastUpdated":"2026-07-02","trades":[{"id":11,"date":"2026-07-02","code":"sh513650","name":"标普500ETF南方","action":"buy","price":1.883,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1883,"reason":"全天候账户月度定投"},{"id":12,"date":"2026-07-02","code":"sh512890","name":"红利低波ETF华泰柏瑞","action":"buy","price":1.079,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1079,"reason":"全天候账户月度定投"},{"id":13,"date":"2026-07-02","code":"sh518880","name":"黄金ETF华安","action":"buy","price":8.446,"currency":"CNY","qty":100,"settleCcy":"CNY","settleAmount":844.6,"reason":"全天候账户月度定投"},{"id":14,"date":"2026-07-02","code":"sz159632","name":"纳斯达克ETF华安","action":"buy","price":2.445,"currency":"CNY","qty":600,"settleCcy":"CNY","settleAmount":1467,"reason":"全天候账户月度定投"},{"id":15,"date":"2026-07-02","code":"sz159985","name":"豆粕ETF华夏","action":"buy","price":2.042,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":1021,"reason":"全天候账户月度定投 - 豆粕超跌多加"},{"id":16,"date":"2026-07-02","code":"sz159981","name":"能源化工ETF建信","action":"buy","price":1.359,"currency":"CNY","qty":900,"settleCcy":"CNY","settleAmount":1223.1,"reason":"全天候账户月度定投 - 能源超跌多加"},{"id":17,"date":"2026-07-02","code":"sh512400","name":"有色金属ETF南方","action":"buy","price":1.901,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":950.5,"reason":"全天候账户月度定投 - 有色超跌多加"},{"id":1,"date":"2026-06-15","code":"hk00700","name":"腾讯控股","action":"buy","price":461,"currency":"HKD","qty":100,"settleCcy":"CNY","settleAmount":39826,"reason":"消息面驱动，短期做个波动"},{"id":3,"date":"2026-06-22","code":"sh513260","name":"恒生科技ETF汇添富","action":"sell","price":1.105,"currency":"CNY","qty":16300,"settleCcy":"CNY","settleAmount":18011.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"id":5,"date":"2026-06-24","code":"sh515080","name":"中证红利ETF招商","action":"dividend","price":0.02,"currency":"CNY","qty":10000,"settleCcy":"CNY","settleAmount":200,"reason":"股息发放，成本从1.437调整为1.417"},{"id":6,"date":"2026-06-26","code":"usINTU","name":"财捷","action":"buy","price":269.01,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":807.03,"reason":"左侧买入，大跌补仓压低成本"},{"id":7,"date":"2026-06-26","code":"usMSFT","name":"微软","action":"buy","price":371.38,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":1114.14,"reason":"左侧买入，大跌补仓压低成本"},{"id":8,"date":"2026-06-26","code":"usNVDA","name":"英伟达","action":"buy","price":194.56,"currency":"USD","qty":5,"settleCcy":"USD","settleAmount":972.8,"reason":"左侧买入，大跌补仓压低成本"},{"id":9,"date":"2026-07-01","code":"sh600036","name":"招商银行","action":"buy","price":35.87,"currency":"CNY","qty":200,"settleCcy":"CNY","settleAmount":7174,"reason":"优质老登股左侧加仓"},{"id":10,"date":"2026-07-01","code":"sz002027","name":"分众传媒","action":"buy","price":4.85,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":4850,"reason":"优质老登股左侧加仓"}],"dividends":[{"code":"009803","name":"易方达中债7-10国开债C","exDate":"2026-06-15","payDate":"2026-06-16","perShare":0.0165,"shares":12895,"amount":212.77,"type":"cash","navBefore":1.3362,"navAfter":1.3197}],"closedPositions":[{"code":"sh513260","name":"恒生科技ETF汇添富","date":"2026-06-22","qty":16300,"cost":1.27,"sellPrice":1.105,"totalCost":20701,"totalRevenue":18011.5,"realizedPnL_CNY":-2689.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"code":"sh513330","name":"恒生互联网ETF华夏","date":"2026-06-22","qty":54000,"cost":0.492,"sellPrice":0.361,"totalCost":26568,"totalRevenue":19494,"realizedPnL_CNY":-7074,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"}],"realizedPnLSummary":{"mainCNY":0,"allweatherCNY":212.77,"note":"已实现盈亏(人民币)，按账户分别统计"}};
+var RESEARCH_SUMMARIES = {"version":1,"generatedAt":null,"items":[]};
 var DR={USD_CNY:6.78,HKD_CNY:0.865};
 var COLORS=['#4f46e5','#8b5cf6','#ec4899','#f59e0b','#10b981'];
 var MC={cn:'#f97316',hk:'#3b82f6',us:'#22c55e',aw:'#8b5cf6',cash:'#94a3b8'};
@@ -494,7 +522,7 @@ function switchTab(name){
     document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
     document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active')});
     var btns=document.querySelectorAll('.tab-btn');
-    var idx={main:0,overview:1,allweather:2,trades:3}[name]||0;
+    var idx={main:0,overview:1,allweather:2,trades:3,research:4}[name]||0;
     btns[idx].classList.add('active');
     document.getElementById('page-'+name).classList.add('active');
 }
@@ -1362,6 +1390,25 @@ function renderAll(){
     if(mainSnap) renderMain(calcMain(mainSnap));
     if(awSnap) renderAW(calcAW(awSnap));
     renderTrades();
+    renderResearch();
+}
+
+function escapeHtml(value){
+    return String(value==null?'':value).replace(/[&<>"']/g,function(ch){
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+    });
+}
+
+function renderResearch(){
+    var data=RESEARCH_SUMMARIES||{items:[]};
+    var items=Array.isArray(data.items)?data.items:[];
+    document.getElementById('rs-approvedCount').textContent=String(items.length);
+    document.getElementById('rs-generatedAt').textContent=data.generatedAt?String(data.generatedAt).slice(0,10):'--';
+    var body=document.getElementById('rs-body'),empty=document.getElementById('rs-empty');
+    body.innerHTML=items.map(function(item){
+        return '<tr><td class="mono">'+escapeHtml(item.instrumentId)+'</td><td>'+escapeHtml(item.researchStatus)+'</td><td>'+escapeHtml(item.approvedAsOf||'--')+'</td><td>'+escapeHtml(item.valuationFreshness||'--')+'</td></tr>';
+    }).join('');
+    empty.style.display=items.length?'none':'block';
 }
 
 // ==================== 实时更新（浏览器直连公开 API） ====================
@@ -1565,6 +1612,7 @@ try{
     if(mainSnap) renderMain(calcMain(mainSnap));
     if(awSnap)  renderAW(calcAW(awSnap));
     renderTrades();
+    renderResearch();
     setupYieldFilters();
 
     // 2) 启用实时模式（无需服务器，浏览器直连公开 API）
