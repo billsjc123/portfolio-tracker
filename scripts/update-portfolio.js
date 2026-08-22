@@ -19,6 +19,7 @@ const TEMPLATE_FILE = path.join(DATA_DIR, 'dashboard.template.html');
 const HIST_MAIN = path.join(OUTPUT_DIR, 'portfolio-history-main.json');
 const HIST_AW = path.join(OUTPUT_DIR, 'portfolio-history-aw.json');
 const DASHBOARD_OUT = path.join(OUTPUT_DIR, 'portfolio-dashboard.html');
+const RESEARCH_FILE = path.join(ROOT, 'public-research', 'company-summaries.json');
 
 function readJSON(p) {
     return JSON.parse(fs.readFileSync(p, 'utf-8'));
@@ -280,11 +281,14 @@ async function main() {
 
     const cfg = readJSON(CFG_FILE);
     const trades = readJSON(TRADES_FILE);
+    const researchSummaries = fs.existsSync(RESEARCH_FILE)
+        ? readJSON(RESEARCH_FILE)
+        : { version: 1, generatedAt: null, items: [] };
 
     const mainRes = await updateMainAccount(cfg, trades);
     const awRes = await updateAllWeather(cfg);
 
-    // 渲染 dashboard：模板 + 注入 4 个数据块
+    // 渲染 dashboard：模板 + 注入持仓、历史、交易和经批准的公开投研摘要
     console.log('[render] 用模板渲染 dashboard.html...');
     const template = fs.readFileSync(TEMPLATE_FILE, 'utf-8');
     const html = renderDashboard({
@@ -292,7 +296,8 @@ async function main() {
         config: cfg,
         historyMain: mainRes.hist,
         historyAW: awRes.hist,
-        trades
+        trades,
+        researchSummaries
     });
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     fs.writeFileSync(DASHBOARD_OUT, html, 'utf-8');
