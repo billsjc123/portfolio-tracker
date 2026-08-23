@@ -134,6 +134,33 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .pnl-up { color: var(--danger); font-weight: 600; }
 .pnl-down { color: var(--success); font-weight: 600; }
 .footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 12px; }
+.research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; padding: 20px; }
+.research-card { border: 1px solid var(--border); border-radius: 14px; padding: 18px; background: #fff; }
+.research-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.research-name { font-size: 18px; font-weight: 700; }
+.research-meta { color: var(--text-muted); font-size: 11px; margin-top: 3px; }
+.research-status { padding: 4px 10px; border-radius: 9999px; background: #ecfdf5; color: #047857; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.research-spot { background: #f8fafc; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.research-spot-price { font-size: 22px; font-weight: 750; }
+.research-spot-sub { color: var(--text-muted); font-size: 11px; margin-top: 2px; }
+.research-zone { padding: 6px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-align: center; }
+.zone-buy { background: #ecfdf5; color: #047857; }
+.zone-value { background: #eff6ff; color: #1d4ed8; }
+.zone-neutral { background: #f1f5f9; color: #475569; }
+.zone-review { background: #fff7ed; color: #c2410c; }
+.zone-high { background: #fef2f2; color: #b91c1c; }
+.research-values { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+.research-value { background: #f8fafc; border-radius: 10px; padding: 10px; text-align: center; }
+.research-value-label { color: var(--text-muted); font-size: 10px; text-transform: uppercase; }
+.research-value-number { font-size: 16px; font-weight: 700; margin-top: 3px; }
+.research-zones { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 10px 0; margin-bottom: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: 11px; }
+.research-zones span { display: block; color: var(--text-muted); }
+.research-zones strong { display: block; margin-top: 2px; color: var(--text); }
+.research-risks { font-size: 12px; color: var(--text-muted); }
+.research-risks strong { color: var(--text); }
+.research-risks ul { margin: 7px 0 0 18px; }
+.research-risks li { margin-bottom: 5px; }
+.research-note { color: var(--text-muted); font-size: 10px; margin-top: 10px; }
 #liveIndicator { animation: pulse-live 2s infinite; }
 @keyframes pulse-live { 0%,100%{opacity:1} 50%{opacity:0.6} }
 .refresh-bar { background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#16a34a;display:none;align-items:center;gap:10px }
@@ -240,6 +267,12 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     .time-filter button { padding: 4px 8px; font-size: 11px; }
 
     .footer { padding: 16px 8px; font-size: 11px; }
+    .research-grid { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
+    .research-card { padding: 14px; }
+    .research-name { font-size: 16px; }
+    .research-spot { align-items: flex-start; }
+    .research-spot-price { font-size: 19px; }
+    .research-zones { grid-template-columns: 1fr; }
 
     /* 图表内边距 */
     .box > div[style*="display:flex"] { flex-wrap: wrap; gap: 8px !important; }
@@ -481,15 +514,12 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
         <div class="card ccn">
             <div class="card-title">摘要更新时间</div>
             <div class="card-value" id="rs-generatedAt" style="font-size:16px">--</div>
-            <div class="card-sub">估值、论点与事件原文保留在私有知识库</div>
+            <div class="card-sub">完整研报、证据和交易记录保留在私有知识库</div>
         </div>
     </div>
     <div class="section">
-        <div class="section-header"><div class="section-title">&#x1F4DA; 公司投研发布状态</div></div>
-        <table>
-            <thead><tr><th>证券</th><th>研究状态</th><th>批准日期</th><th>估值新鲜度</th></tr></thead>
-            <tbody id="rs-body"></tbody>
-        </table>
+        <div class="section-header"><div class="section-title">&#x1F4DA; 已批准公司研究</div></div>
+        <div class="research-grid" id="rs-grid"></div>
         <div id="rs-empty" style="display:none;padding:24px;color:var(--text-muted);text-align:center">
             暂无已批准摘要。研究草稿不会自动发布；需在私有知识库人工批准后才会同步到这里。
         </div>
@@ -1399,14 +1429,84 @@ function escapeHtml(value){
     });
 }
 
+function researchDashboardCode(instrumentId){
+    var match=String(instrumentId||'').match(/^(CN|HK|US):([^.]+)\.(XSHG|XSHE|XHKG|XNAS|XNYS)$/);
+    if(!match)return null;
+    if(match[1]==='HK')return 'hk'+match[2].padStart(5,'0');
+    if(match[1]==='US')return 'us'+match[2].toUpperCase();
+    if(match[1]==='CN')return (match[3]==='XSHG'?'sh':'sz')+match[2];
+    return null;
+}
+
+function researchPosition(item){
+    var snapshots=HISTORY_MAIN&&HISTORY_MAIN.snapshots||[];
+    var snap=snapshots[snapshots.length-1];
+    var code=researchDashboardCode(item.instrumentId);
+    if(!snap||!code)return null;
+    var portfolio=calcMain(snap),holding=null;
+    ['cn','hk','us'].some(function(market){
+        holding=(portfolio.markets[market]||[]).find(function(row){return row.code===code;})||null;
+        return Boolean(holding);
+    });
+    if(!holding)return null;
+    return {
+        code:code,
+        price:holding.price,
+        quantity:holding.qty,
+        weightPct:portfolio.totalValueCNY>0?holding.mv_cny/portfolio.totalValueCNY*100:0,
+        priceAsOf:snap.date
+    };
+}
+
+function researchZone(item,currentPrice){
+    var zones=item.priceZones||{};
+    if(!(currentPrice>0)||!Number.isFinite(zones.buyReview)||!Number.isFinite(zones.baseValue)){
+        return {label:'等待可用价格',className:'zone-neutral'};
+    }
+    if(currentPrice<=zones.buyReview)return {label:'进入买入复核区',className:'zone-buy'};
+    if(currentPrice<=zones.baseValue)return {label:'低于 Base，未达安全边际',className:'zone-value'};
+    if(currentPrice<zones.overvaluationReviewLow)return {label:'Base 以上，正常复核',className:'zone-neutral'};
+    if(currentPrice<=zones.overvaluationReviewHigh)return {label:'进入高估复核区',className:'zone-review'};
+    return {label:'高于高估复核区',className:'zone-high'};
+}
+
+function researchMoney(value,currency){
+    if(!Number.isFinite(value))return '--';
+    var prefix=currency==='HKD'?'HK$':currency==='USD'?'$':currency==='CNY'?'¥':currency+' ';
+    return prefix+fmt(value,2);
+}
+
+function researchLabel(kind,value){
+    var labels={
+        thesisStatus:{intact:'逻辑完整',watch:'重点观察',broken:'逻辑失效'},
+        confidence:{low:'低置信度',medium:'中置信度',high:'高置信度'},
+        freshness:{current:'估值有效',aging:'临近复核',stale:'估值过期',invalidated:'估值失效'}
+    };
+    return labels[kind]&&labels[kind][value]||String(value||'--');
+}
+
 function renderResearch(){
     var data=RESEARCH_SUMMARIES||{items:[]};
     var items=Array.isArray(data.items)?data.items:[];
     document.getElementById('rs-approvedCount').textContent=String(items.length);
     document.getElementById('rs-generatedAt').textContent=data.generatedAt?String(data.generatedAt).slice(0,10):'--';
-    var body=document.getElementById('rs-body'),empty=document.getElementById('rs-empty');
-    body.innerHTML=items.map(function(item){
-        return '<tr><td class="mono">'+escapeHtml(item.instrumentId)+'</td><td>'+escapeHtml(item.researchStatus)+'</td><td>'+escapeHtml(item.approvedAsOf||'--')+'</td><td>'+escapeHtml(item.valuationFreshness||'--')+'</td></tr>';
+    var grid=document.getElementById('rs-grid'),empty=document.getElementById('rs-empty');
+    grid.innerHTML=items.map(function(item){
+        var valuation=item.valuation||{},zones=item.priceZones||{},position=researchPosition(item);
+        var currency=valuation.currency||'',currentPrice=position&&position.price;
+        var zone=researchZone(item,currentPrice);
+        var positionText=position
+            ? '持仓 '+fmt(position.quantity,0)+' 股 · 组合 '+fmt(position.weightPct,2)+'% · 行情 '+escapeHtml(position.priceAsOf)
+            : '当前组合无可匹配持仓';
+        var risks=(item.topRisks||[]).map(function(risk){return '<li>'+escapeHtml(risk)+'</li>';}).join('');
+        return '<article class="research-card">'
+            +'<div class="research-head"><div><div class="research-name">'+escapeHtml(item.companyName||item.instrumentId)+'</div><div class="research-meta mono">'+escapeHtml(item.instrumentId)+' · 批准于 '+escapeHtml(item.approvedAsOf||'--')+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</div></div><span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('confidence',item.confidence))+'</span></div>'
+            +'<div class="research-spot"><div><div class="research-spot-sub">当前价格</div><div class="research-spot-price">'+researchMoney(currentPrice,currency)+'</div><div class="research-spot-sub">'+positionText+'</div></div><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span></div>'
+            +'<div class="research-values"><div class="research-value"><div class="research-value-label">Bear</div><div class="research-value-number">'+researchMoney(valuation.bear,currency)+'</div></div><div class="research-value"><div class="research-value-label">Base</div><div class="research-value-number">'+researchMoney(valuation.base,currency)+'</div></div><div class="research-value"><div class="research-value-label">Bull</div><div class="research-value-number">'+researchMoney(valuation.bull,currency)+'</div></div></div>'
+            +'<div class="research-zones"><div><span>买入复核</span><strong>'+researchMoney(zones.buyReview,currency)+'</strong></div><div><span>Base 价值</span><strong>'+researchMoney(zones.baseValue,currency)+'</strong></div><div><span>高估复核</span><strong>'+researchMoney(zones.overvaluationReviewLow,currency)+'–'+researchMoney(zones.overvaluationReviewHigh,currency)+'</strong></div></div>'
+            +'<div class="research-risks"><strong>主要风险</strong><ul>'+risks+'</ul></div>'
+            +'<div class="research-note">价格区间仅触发复核，不构成自动买卖指令；完整研报保留在私有投资知识库。</div>'
+            +'</article>';
     }).join('');
     empty.style.display=items.length?'none':'block';
 }

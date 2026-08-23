@@ -1,7 +1,34 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-22T17:02:54.664Z",
-  "sourceCommit": "687e91f693327a46d1a7584055e9f43dab014e7a",
-  "contentHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-  "items": []
+  "generatedAt": "2026-08-23T10:27:52.402Z",
+  "sourceCommit": "0747e9353ecd3a4657717724046948b4a1c30ca0",
+  "contentHash": "17665ad7022723479af66c30017670239a620129a145125cae11e337059bfc16",
+  "items": [
+    {
+      "instrumentId": "HK:00700.XHKG",
+      "companyName": "腾讯控股",
+      "researchStatus": "approved",
+      "approvedAsOf": "2026-08-23",
+      "thesisStatus": "intact",
+      "confidence": "medium",
+      "valuation": {
+        "currency": "HKD",
+        "bear": 275.69,
+        "base": 491.98,
+        "bull": 805.45
+      },
+      "priceZones": {
+        "buyReview": 393.58,
+        "baseValue": 491.98,
+        "overvaluationReviewLow": 590.38,
+        "overvaluationReviewHigh": 639.57
+      },
+      "valuationFreshness": "current",
+      "topRisks": [
+        "滚动四季度自由现金流低于1600亿元人民币，同时资本开支和算力预付款继续上升，且公司未披露可量化的新增收入或效率回报。",
+        "营销服务收入连续两个季度降至个位数增长并伴随毛利率下降。",
+        "国内与国际游戏合计收入连续两个季度同比下降，同时常青产品流水与新品储备弱化。"
+      ]
+    }
+  ]
 }
