@@ -128,6 +128,13 @@ tr:hover { background: #f8fafc; }
 tr.tot { background: #eef2ff !important; font-weight: 600; }
 .stock-name { font-weight: 600; color: var(--text); }
 .stock-code { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.stock-link { appearance: none; border: 0; background: none; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.stock-link:hover .stock-name { color: #4f46e5; text-decoration: underline; }
+.stock-link:focus-visible { outline: 2px solid #6366f1; outline-offset: 4px; border-radius: 4px; }
+.main-signal { min-width: 190px; }
+.main-signal .research-zone { display: inline-block; margin-bottom: 4px; }
+.main-signal-points { color: var(--text-muted); font-size: 10px; white-space: nowrap; }
+.main-signal-empty { color: var(--text-muted); font-size: 11px; }
 .mono { font-family: 'SF Mono', ui-monospace, monospace; font-weight: 500; }
 .up { color: var(--danger); }
 .down { color: var(--success); }
@@ -136,6 +143,8 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 12px; }
 .research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; padding: 20px; }
 .research-card { border: 1px solid var(--border); border-radius: 14px; padding: 18px; background: #fff; }
+.research-card-clickable { cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.research-card-clickable:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 .research-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
 .research-name { font-size: 18px; font-weight: 700; }
 .research-meta { color: var(--text-muted); font-size: 11px; margin-top: 3px; }
@@ -161,6 +170,16 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .research-risks ul { margin: 7px 0 0 18px; }
 .research-risks li { margin-bottom: 5px; }
 .research-note { color: var(--text-muted); font-size: 10px; margin-top: 10px; }
+.company-back { appearance: none; border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 9px; padding: 8px 12px; font-size: 12px; font-weight: 650; cursor: pointer; margin-bottom: 16px; }
+.company-hero { background: linear-gradient(135deg,#eef2ff,#f8fafc); border: 1px solid #e0e7ff; border-radius: 16px; padding: 22px; margin-bottom: 18px; }
+.company-hero-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.company-title { font-size: 24px; font-weight: 800; }
+.company-code { color: var(--text-muted); font-size: 12px; margin-top: 4px; }
+.company-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; margin-top: 18px; }
+.company-metric { background: rgba(255,255,255,0.82); border-radius: 11px; padding: 12px; }
+.company-metric-label { color: var(--text-muted); font-size: 10px; }
+.company-metric-value { font-size: 17px; font-weight: 750; margin-top: 4px; }
+.company-empty { padding: 36px 24px; text-align: center; color: var(--text-muted); }
 #liveIndicator { animation: pulse-live 2s infinite; }
 @keyframes pulse-live { 0%,100%{opacity:1} 50%{opacity:0.6} }
 .refresh-bar { background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#16a34a;display:none;align-items:center;gap:10px }
@@ -273,6 +292,10 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     .research-spot { align-items: flex-start; }
     .research-spot-price { font-size: 19px; }
     .research-zones { grid-template-columns: 1fr; }
+    .company-hero { padding: 16px; }
+    .company-title { font-size: 20px; }
+    .company-hero-head { flex-direction: column; }
+    .company-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
 
     /* 图表内边距 */
     .box > div[style*="display:flex"] { flex-wrap: wrap; gap: 8px !important; }
@@ -306,7 +329,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     <button class="tab-btn" onclick="switchTab('overview')">&#x1F5FA;&#xFE0F; 持仓全景图</button>
     <button class="tab-btn" onclick="switchTab('allweather')">&#x2600;&#xFE0F; 全天候策略</button>
     <button class="tab-btn" onclick="switchTab('trades')">&#x1F4CB; 操作记录(主账户)</button>
-    <button class="tab-btn" onclick="switchTab('research')">&#x1F50E; 投研状态</button>
+    <button class="tab-btn" onclick="switchTab('research')">&#x1F50E; 观察池</button>
 </div>
 
 <!-- Shared rate bar -->
@@ -503,13 +526,13 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     </div>
 </div>
 
-<!-- ========== Public Research Status Page ========== -->
+<!-- ========== Watchlist Page ========== -->
 <div class="tab-page" id="page-research">
     <div class="cards">
         <div class="card ct">
-            <div class="card-title">已批准投研</div>
+            <div class="card-title">观察池公司</div>
             <div class="card-value" id="rs-approvedCount">0</div>
-            <div class="card-sub">仅展示通过人工批准的公开摘要</div>
+            <div class="card-sub">已有批准研究、当前主账户未持有</div>
         </div>
         <div class="card ccn">
             <div class="card-title">摘要更新时间</div>
@@ -518,12 +541,18 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
         </div>
     </div>
     <div class="section">
-        <div class="section-header"><div class="section-title">&#x1F4DA; 已批准公司研究</div></div>
+        <div class="section-header"><div class="section-title">&#x1F4DA; 估值观察池</div></div>
         <div class="research-grid" id="rs-grid"></div>
         <div id="rs-empty" style="display:none;padding:24px;color:var(--text-muted);text-align:center">
-            暂无已批准摘要。研究草稿不会自动发布；需在私有知识库人工批准后才会同步到这里。
+            暂无观察池公司。公司研报经人工批准后，如果主账户未持有，会自动出现在这里；研究草稿不会公开。
         </div>
     </div>
+</div>
+
+<!-- ========== Company Detail Page ========== -->
+<div class="tab-page" id="page-company">
+    <button class="company-back" type="button" onclick="closeCompanyDetail()">← 返回</button>
+    <div id="company-detail"></div>
 </div>
 
 <div class="footer">数据来源：腾讯自选股 · 仅供参考，不构成投资建议</div>
@@ -549,12 +578,31 @@ function toCNY(v,m,r){if(m==='cn'||m==='aw')return v;if(m==='hk')return v*r.HKD_
 
 // ==================== Tab 切换 ====================
 function switchTab(name){
+    activeCompanyCode=null;
+    if(location.hash.indexOf('#company=')===0)history.replaceState(null,'',location.pathname+location.search);
     document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
     document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active')});
     var btns=document.querySelectorAll('.tab-btn');
     var idx={main:0,overview:1,allweather:2,trades:3,research:4}[name]||0;
     btns[idx].classList.add('active');
     document.getElementById('page-'+name).classList.add('active');
+}
+
+var companyReturnTab='main',activeCompanyCode=null;
+function openCompanyDetail(code,returnTab){
+    companyReturnTab=returnTab||'main';
+    activeCompanyCode=code;
+    renderCompanyDetail(code);
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+    document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active')});
+    document.getElementById('page-company').classList.add('active');
+    history.replaceState(null,'','#company='+encodeURIComponent(code));
+    window.scrollTo(0,0);
+}
+
+function closeCompanyDetail(){
+    switchTab(companyReturnTab);
+    window.scrollTo(0,0);
 }
 
 // ==================== 主账户计算 ====================
@@ -974,15 +1022,15 @@ function renderMain(d){
         var data=d.markets[m],c=cur[m];
         var stocks=data.filter(function(x){return x.code});
         stocks.sort(function(a,b){return b.mv_cny - a.mv_cny});
-        html+='<div class="section"><div class="section-header"><div class="section-title">'+labels[m]+'<span class="mkt-tag '+tags[m]+'">'+m.toUpperCase()+'</span></div></div><table><thead><tr><th>证券</th><th>持仓</th><th>现价</th><th>成本</th><th>日涨跌</th><th>市值</th><th>市值(¥)</th><th>占比</th><th>持仓盈亏(¥)</th></tr></thead><tbody>';
+        html+='<div class="section"><div class="section-header"><div class="section-title">'+labels[m]+'<span class="mkt-tag '+tags[m]+'">'+m.toUpperCase()+'</span></div></div><table><thead><tr><th>证券</th><th>持仓</th><th>现价</th><th>关键价位</th><th>成本</th><th>日涨跌</th><th>市值</th><th>市值(¥)</th><th>占比</th><th>持仓盈亏(¥)</th></tr></thead><tbody>';
         stocks.forEach(function(h){
             var pct=total>0?(h.mv_cny/total*100).toFixed(2):'0.00';
-            html+='<tr><td><div class="stock-name">'+h.name+'</div><div class="stock-code">'+h.code.toUpperCase()+'</div></td><td>'+fmt(h.qty,0)+'</td><td class="mono">'+c+fmt(h.price,3)+'</td><td class="mono">'+c+fmt(h.cost,3)+'</td><td class="'+clr(h.chgPct)+'">¥'+sgn(h.dayPnl_cny,0)+' <small>('+sgn(h.chgPct,2)+'%)</small></td><td class="mono">'+c+fmt(h.mv_orig,2)+'</td><td class="mono">¥'+fmt(h.mv_cny,2)+'</td><td class="mono">'+pct+'%</td><td class="pnl-'+clr(h.pnl_cny)+'">'+sgn(h.pnl_cny,2)+' <small>('+sgn(h.pnlPct_cny,2)+'%)</small></td></tr>';
+            html+='<tr><td><button type="button" class="stock-link" data-company-code="'+escapeHtml(h.code)+'" onclick="openCompanyDetail(this.dataset.companyCode,\'main\')"><div class="stock-name">'+escapeHtml(h.name)+'</div><div class="stock-code">'+escapeHtml(h.code.toUpperCase())+' →</div></button></td><td>'+fmt(h.qty,0)+'</td><td class="mono">'+c+fmt(h.price,3)+'</td><td>'+mainResearchSignal(h)+'</td><td class="mono">'+c+fmt(h.cost,3)+'</td><td class="'+clr(h.chgPct)+'">¥'+sgn(h.dayPnl_cny,0)+' <small>('+sgn(h.chgPct,2)+'%)</small></td><td class="mono">'+c+fmt(h.mv_orig,2)+'</td><td class="mono">¥'+fmt(h.mv_cny,2)+'</td><td class="mono">'+pct+'%</td><td class="pnl-'+clr(h.pnl_cny)+'">'+sgn(h.pnl_cny,2)+' <small>('+sgn(h.pnlPct_cny,2)+'%)</small></td></tr>';
         });
         var mp=total>0?(data.totalValueCNY/total*100).toFixed(1):'0.0';
         var dayClr=clr(data.dayPnlCNY);
         var daySign=data.dayPnlCNY>=0?'+':'';
-        html+='<tr class="tot"><td colspan="4">'+labels[m]+'合计</td><td class="mono '+dayClr+'" style="font-weight:600">¥'+daySign+fmt(data.dayPnlCNY,0)+' <small>('+sgn(data.dayPnlPctCNY,2)+'%)</small></td><td colspan="2" class="mono">¥'+fmt(data.totalValueCNY,2)+'</td><td class="mono">'+mp+'%</td><td class="pnl-'+clr(data.totalPnlCNY)+'">'+sgn(data.totalPnlCNY,2)+' ('+sgn(data.totalPnlPctCNY,2)+'%)</td></tr></tbody></table></div>';
+        html+='<tr class="tot"><td colspan="5">'+labels[m]+'合计</td><td class="mono '+dayClr+'" style="font-weight:600">¥'+daySign+fmt(data.dayPnlCNY,0)+' <small>('+sgn(data.dayPnlPctCNY,2)+'%)</small></td><td colspan="2" class="mono">¥'+fmt(data.totalValueCNY,2)+'</td><td class="mono">'+mp+'%</td><td class="pnl-'+clr(data.totalPnlCNY)+'">'+sgn(data.totalPnlCNY,2)+' ('+sgn(data.totalPnlPctCNY,2)+'%)</td></tr></tbody></table></div>';
     });
     // 现金
     html+='<div class="section"><div class="section-header"><div class="section-title">💵 现金<span class="mkt-tag" style="background:#f1f5f9;color:#64748b">CASH</span></div></div><table><thead><tr><th>币种</th><th>金额</th><th>折合(¥)</th><th>占比</th><th></th><th></th><th></th><th></th></tr></thead><tbody>';
@@ -1421,6 +1469,7 @@ function renderAll(){
     if(awSnap) renderAW(calcAW(awSnap));
     renderTrades();
     renderResearch();
+    if(activeCompanyCode&&document.getElementById('page-company').classList.contains('active'))renderCompanyDetail(activeCompanyCode);
 }
 
 function escapeHtml(value){
@@ -1458,6 +1507,24 @@ function researchPosition(item){
     };
 }
 
+function latestMainPortfolio(){
+    var snapshots=HISTORY_MAIN&&HISTORY_MAIN.snapshots||[];
+    var snap=snapshots[snapshots.length-1];
+    return snap?{snap:snap,portfolio:calcMain(snap)}:null;
+}
+
+function researchForDashboardCode(code){
+    var items=RESEARCH_SUMMARIES&&Array.isArray(RESEARCH_SUMMARIES.items)?RESEARCH_SUMMARIES.items:[];
+    return items.find(function(item){return researchDashboardCode(item.instrumentId)===code;})||null;
+}
+
+function researchMarketPrice(item){
+    var latest=latestMainPortfolio(),code=researchDashboardCode(item&&item.instrumentId);
+    if(!latest||!code)return null;
+    var price=latest.snap.prices&&latest.snap.prices[code];
+    return Number.isFinite(price)&&price>0?price:null;
+}
+
 function researchZone(item,currentPrice){
     var zones=item.priceZones||{};
     if(!(currentPrice>0)||!Number.isFinite(zones.buyReview)||!Number.isFinite(zones.baseValue)){
@@ -1485,28 +1552,76 @@ function researchLabel(kind,value){
     return labels[kind]&&labels[kind][value]||String(value||'--');
 }
 
+function mainResearchSignal(holding){
+    var item=researchForDashboardCode(holding.code);
+    if(!item)return '<div class="main-signal-empty">暂无批准估值</div>';
+    var zones=item.priceZones||{},currency=item.valuation&&item.valuation.currency||'';
+    var zone=researchZone(item,holding.price);
+    return '<div class="main-signal"><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span>'
+        +'<div class="main-signal-points">买入复核 '+researchMoney(zones.buyReview,currency)+' · 高估复核 '+researchMoney(zones.overvaluationReviewLow,currency)+'</div></div>';
+}
+
+function renderResearchSummary(item,currentPrice,positionText,clickable,returnTab){
+    var valuation=item.valuation||{},zones=item.priceZones||{},currency=valuation.currency||'';
+    var zone=researchZone(item,currentPrice);
+    var risks=(item.topRisks||[]).map(function(risk){return '<li>'+escapeHtml(risk)+'</li>';}).join('');
+    var code=researchDashboardCode(item.instrumentId)||'';
+    var attrs=' class="research-card'+(clickable?' research-card-clickable':'')+'"';
+    if(clickable){
+        attrs+=' role="button" tabindex="0" data-company-code="'+escapeHtml(code)+'"';
+        attrs+=' onclick="openCompanyDetail(this.dataset.companyCode,\''+returnTab+'\')"';
+        attrs+=' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCompanyDetail(this.dataset.companyCode,\''+returnTab+'\')}"';
+    }
+    return '<article'+attrs+'>'
+        +'<div class="research-head"><div><div class="research-name">'+escapeHtml(item.companyName||item.instrumentId)+'</div><div class="research-meta mono">'+escapeHtml(item.instrumentId)+' · 批准于 '+escapeHtml(item.approvedAsOf||'--')+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</div></div><span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('confidence',item.confidence))+'</span></div>'
+        +'<div class="research-spot"><div><div class="research-spot-sub">当前价格</div><div class="research-spot-price">'+researchMoney(currentPrice,currency)+'</div><div class="research-spot-sub">'+positionText+'</div></div><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span></div>'
+        +'<div class="research-values"><div class="research-value"><div class="research-value-label">Bear</div><div class="research-value-number">'+researchMoney(valuation.bear,currency)+'</div></div><div class="research-value"><div class="research-value-label">Base</div><div class="research-value-number">'+researchMoney(valuation.base,currency)+'</div></div><div class="research-value"><div class="research-value-label">Bull</div><div class="research-value-number">'+researchMoney(valuation.bull,currency)+'</div></div></div>'
+        +'<div class="research-zones"><div><span>买入复核</span><strong>'+researchMoney(zones.buyReview,currency)+'</strong></div><div><span>Base 价值</span><strong>'+researchMoney(zones.baseValue,currency)+'</strong></div><div><span>高估复核</span><strong>'+researchMoney(zones.overvaluationReviewLow,currency)+'–'+researchMoney(zones.overvaluationReviewHigh,currency)+'</strong></div></div>'
+        +'<div class="research-risks"><strong>主要风险</strong><ul>'+risks+'</ul></div>'
+        +'<div class="research-note">价格区间仅触发复核，不构成自动买卖指令；完整研报保留在私有投资知识库。</div>'
+        +'</article>';
+}
+
+function renderCompanyDetail(code){
+    var latest=latestMainPortfolio(),holding=null,market='';
+    if(latest){
+        ['cn','hk','us'].some(function(candidate){
+            holding=(latest.portfolio.markets[candidate]||[]).find(function(row){return row.code===code;})||null;
+            if(holding)market=candidate;
+            return Boolean(holding);
+        });
+    }
+    var item=researchForDashboardCode(code);
+    var name=holding&&holding.name||item&&item.companyName||code.toUpperCase();
+    var marketCurrency=market==='hk'?'HKD':market==='us'?'USD':'CNY';
+    var currency=item&&item.valuation&&item.valuation.currency||marketCurrency;
+    var currentPrice=holding?holding.price:item?researchMarketPrice(item):null;
+    var total=latest&&latest.portfolio.totalValueCNY||0;
+    var weight=holding&&total>0?holding.mv_cny/total*100:null;
+    var status=item
+        ? '<span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</span>'
+        : '<span class="research-zone zone-neutral">暂无批准研报</span>';
+    var hero='<div class="company-hero"><div class="company-hero-head"><div><div class="company-title">'+escapeHtml(name)+'</div><div class="company-code mono">'+escapeHtml(code.toUpperCase())+'</div></div>'+status+'</div>'
+        +'<div class="company-metrics"><div class="company-metric"><div class="company-metric-label">当前价格</div><div class="company-metric-value">'+researchMoney(currentPrice,currency)+'</div></div>'
+        +'<div class="company-metric"><div class="company-metric-label">持仓数量</div><div class="company-metric-value">'+(holding?fmt(holding.qty,0)+' 股':'未持有')+'</div></div>'
+        +'<div class="company-metric"><div class="company-metric-label">组合占比</div><div class="company-metric-value">'+(Number.isFinite(weight)?fmt(weight,2)+'%':'--')+'</div></div>'
+        +'<div class="company-metric"><div class="company-metric-label">持仓盈亏</div><div class="company-metric-value '+(holding?clr(holding.pnl_cny):'')+'">'+(holding?'¥'+sgn(holding.pnl_cny,2):'--')+'</div></div></div></div>';
+    var research=item
+        ? '<div class="section"><div class="section-header"><div class="section-title">估值与关注价位</div></div><div class="research-grid">'+renderResearchSummary(item,currentPrice,holding?'行情 '+escapeHtml(latest.snap.date):'观察池标的',false,'main')+'</div></div>'
+        : '<div class="section"><div class="section-header"><div class="section-title">公司研究</div></div><div class="company-empty">该标的暂无已批准的公开研究摘要。后续完成并批准标准化研报后，这里会自动显示估值、关注价位与主要风险。</div></div>';
+    document.getElementById('company-detail').innerHTML=hero+research;
+}
+
 function renderResearch(){
     var data=RESEARCH_SUMMARIES||{items:[]};
-    var items=Array.isArray(data.items)?data.items:[];
+    var items=(Array.isArray(data.items)?data.items:[]).filter(function(item){return !researchPosition(item);});
     document.getElementById('rs-approvedCount').textContent=String(items.length);
     document.getElementById('rs-generatedAt').textContent=data.generatedAt?String(data.generatedAt).slice(0,10):'--';
     var grid=document.getElementById('rs-grid'),empty=document.getElementById('rs-empty');
     grid.innerHTML=items.map(function(item){
-        var valuation=item.valuation||{},zones=item.priceZones||{},position=researchPosition(item);
-        var currency=valuation.currency||'',currentPrice=position&&position.price;
-        var zone=researchZone(item,currentPrice);
-        var positionText=position
-            ? '持仓 '+fmt(position.quantity,0)+' 股 · 组合 '+fmt(position.weightPct,2)+'% · 行情 '+escapeHtml(position.priceAsOf)
-            : '当前组合无可匹配持仓';
-        var risks=(item.topRisks||[]).map(function(risk){return '<li>'+escapeHtml(risk)+'</li>';}).join('');
-        return '<article class="research-card">'
-            +'<div class="research-head"><div><div class="research-name">'+escapeHtml(item.companyName||item.instrumentId)+'</div><div class="research-meta mono">'+escapeHtml(item.instrumentId)+' · 批准于 '+escapeHtml(item.approvedAsOf||'--')+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</div></div><span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('confidence',item.confidence))+'</span></div>'
-            +'<div class="research-spot"><div><div class="research-spot-sub">当前价格</div><div class="research-spot-price">'+researchMoney(currentPrice,currency)+'</div><div class="research-spot-sub">'+positionText+'</div></div><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span></div>'
-            +'<div class="research-values"><div class="research-value"><div class="research-value-label">Bear</div><div class="research-value-number">'+researchMoney(valuation.bear,currency)+'</div></div><div class="research-value"><div class="research-value-label">Base</div><div class="research-value-number">'+researchMoney(valuation.base,currency)+'</div></div><div class="research-value"><div class="research-value-label">Bull</div><div class="research-value-number">'+researchMoney(valuation.bull,currency)+'</div></div></div>'
-            +'<div class="research-zones"><div><span>买入复核</span><strong>'+researchMoney(zones.buyReview,currency)+'</strong></div><div><span>Base 价值</span><strong>'+researchMoney(zones.baseValue,currency)+'</strong></div><div><span>高估复核</span><strong>'+researchMoney(zones.overvaluationReviewLow,currency)+'–'+researchMoney(zones.overvaluationReviewHigh,currency)+'</strong></div></div>'
-            +'<div class="research-risks"><strong>主要风险</strong><ul>'+risks+'</ul></div>'
-            +'<div class="research-note">价格区间仅触发复核，不构成自动买卖指令；完整研报保留在私有投资知识库。</div>'
-            +'</article>';
+        var currentPrice=researchMarketPrice(item),latest=latestMainPortfolio();
+        var positionText=currentPrice&&latest?'观察价 · 行情 '+escapeHtml(latest.snap.date):'等待刷新观察价';
+        return renderResearchSummary(item,currentPrice,positionText,true,'research');
     }).join('');
     empty.style.display=items.length?'none':'block';
 }
@@ -1636,6 +1751,10 @@ function manualRefresh(){
     ['cn','hk','us'].forEach(function(m){
         (CONFIG.holdings[m]||[]).forEach(function(h){stockCodes.push(h.code);});
     });
+    (RESEARCH_SUMMARIES.items||[]).forEach(function(item){
+        var code=researchDashboardCode(item.instrumentId);
+        if(code&&stockCodes.indexOf(code)<0)stockCodes.push(code);
+    });
     (CONFIG.allweather.holdings||[]).forEach(function(h){stockCodes.push(h.code);});
     (CONFIG.allweather.funds||[]).forEach(function(f){fundCodes.push(f.code);});
 
@@ -1714,6 +1833,9 @@ try{
     renderTrades();
     renderResearch();
     setupYieldFilters();
+
+    var companyHash=location.hash.match(/^#company=(.+)$/);
+    if(companyHash)openCompanyDetail(decodeURIComponent(companyHash[1]),'main');
 
     // 2) 启用实时模式（无需服务器，浏览器直连公开 API）
     enableLiveMode();

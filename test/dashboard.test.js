@@ -33,12 +33,18 @@ test('renderer injects only the supplied public research payload', () => {
     assert.doesNotMatch(html, /privateThesis/);
 });
 
-test('template contains research tab and explicit empty-state gate', () => {
+test('template links holdings to company details and turns research into a watchlist', () => {
     const template = fs.readFileSync(path.join(ROOT, 'data/dashboard.template.html'), 'utf8');
     assert.match(template, /switchTab\('research'\)/);
-    assert.match(template, /研究草稿不会自动发布/);
+    assert.match(template, /观察池/);
+    assert.match(template, /openCompanyDetail/);
+    assert.match(template, /id="page-company"/);
+    assert.match(template, /关键价位/);
+    assert.match(template, /买入.*高估/);
+    assert.match(template, /filter\(function\(item\)\{return !researchPosition\(item\);\}\)/);
+    assert.match(template, /研究草稿不会公开/);
     assert.match(template, /进入买入复核区/);
-    assert.match(template, /组合.*行情/);
+    assert.match(template, /持仓数量/);
     assert.match(template, /价格区间仅触发复核/);
     assert.match(template, /逻辑完整/);
 });

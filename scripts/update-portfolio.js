@@ -31,6 +31,14 @@ function writeJSON(p, obj) {
 function todayISO() { return new Date().toISOString().slice(0, 10); }
 function nowISO() { return new Date().toISOString(); }
 
+function researchDashboardCode(instrumentId) {
+    const match = String(instrumentId || '').match(/^(CN|HK|US):([^.]+)\.(XSHG|XSHE|XHKG|XNAS|XNYS)$/);
+    if (!match) return null;
+    if (match[1] === 'HK') return 'hk' + match[2].padStart(5, '0');
+    if (match[1] === 'US') return 'us' + match[2].toUpperCase();
+    return (match[3] === 'XSHG' ? 'sh' : 'sz') + match[2];
+}
+
 function isWeekend(date) {
     const d = new Date(date);
     return d.getDay() === 0 || d.getDay() === 6;
@@ -101,12 +109,16 @@ function validateFullClosures(previousState, currentHoldings, closedPositions, a
 /**
  * 主账户快照
  */
-async function updateMainAccount(cfg, trades) {
-    const codes = [];
+async function updateMainAccount(cfg, trades, researchSummaries) {
+    const holdingCodes = [];
     for (const m of ['cn', 'hk', 'us']) {
-        for (const h of cfg.holdings[m]) codes.push(h.code);
+        for (const h of cfg.holdings[m]) holdingCodes.push(h.code);
     }
-    console.log(`[main] 抓取 ${codes.length} 只标的行情...`);
+    const researchCodes = (researchSummaries.items || [])
+        .map(item => researchDashboardCode(item.instrumentId))
+        .filter(Boolean);
+    const codes = [...new Set([...holdingCodes, ...researchCodes])];
+    console.log(`[main] 抓取 ${holdingCodes.length} 只持仓及 ${codes.length - holdingCodes.length} 只观察标的行情...`);
     const quotes = await fetchQuotes(codes);
 
     const today = todayISO();
@@ -139,12 +151,14 @@ async function updateMainAccount(cfg, trades) {
     };
 
     let successCount = 0;
+    let holdingSuccessCount = 0;
     for (const c of codes) {
         const q = quotes[c];
         if (q && q.price > 0) {
             snap.prices[c] = q.price;
             snap.changePct[c] = q.changePercent;
             successCount++;
+            if (holdingCodes.includes(c)) holdingSuccessCount++;
         } else {
             // 失败：回退到上一快照
             const prev = readHistoryLast(HIST_MAIN, c);
@@ -152,7 +166,7 @@ async function updateMainAccount(cfg, trades) {
             snap.changePct[c] = 0;
         }
     }
-    console.log(`[main] 成功 ${successCount}/${codes.length} (含 ETF 复权)`);
+    console.log(`[main] 成功 ${successCount}/${codes.length} (持仓及观察池，含 ETF 复权)`);
 
     const idx = hist.snapshots.findIndex(s => s.date === today);
     if (idx >= 0) hist.snapshots[idx] = snap; else hist.snapshots.push(snap);
@@ -161,7 +175,7 @@ async function updateMainAccount(cfg, trades) {
     writeJSON(HIST_MAIN, hist);
     console.log(`[main] 写入快照 ${today} (历史 ${hist.snapshots.length} 条)`);
 
-    return { snap, hist, successCount, total: codes.length };
+    return { snap, hist, successCount: holdingSuccessCount, total: holdingCodes.length };
 }
 
 /**
@@ -285,7 +299,7 @@ async function main() {
         ? readJSON(RESEARCH_FILE)
         : { version: 1, generatedAt: null, items: [] };
 
-    const mainRes = await updateMainAccount(cfg, trades);
+    const mainRes = await updateMainAccount(cfg, trades, researchSummaries);
     const awRes = await updateAllWeather(cfg);
 
     // 渲染 dashboard：模板 + 注入持仓、历史、交易和经批准的公开投研摘要
