@@ -1,9 +1,35 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-23T10:27:52.402Z",
-  "sourceCommit": "0747e9353ecd3a4657717724046948b4a1c30ca0",
-  "contentHash": "17665ad7022723479af66c30017670239a620129a145125cae11e337059bfc16",
+  "generatedAt": "2026-08-27T07:20:02.973Z",
+  "sourceCommit": "812ebb4fca3e46eb0d2b4d9b4d839e484e669ba2",
+  "contentHash": "eb172720fa3c02a4c78437a00e6ac6631be2951aca309f438c87d492b1bf66d8",
   "items": [
+    {
+      "instrumentId": "HK:00506.XHKG",
+      "companyName": "中国食品",
+      "researchStatus": "approved",
+      "approvedAsOf": "2026-08-26",
+      "thesisStatus": "intact",
+      "confidence": "medium",
+      "valuation": {
+        "currency": "HKD",
+        "bear": 2.5592,
+        "base": 6.7909,
+        "bull": 13.0656
+      },
+      "priceZones": {
+        "buyReview": 5.4327,
+        "baseValue": 6.7909,
+        "overvaluationReviewLow": 8.4886,
+        "overvaluationReviewHigh": 13.0656
+      },
+      "valuationFreshness": "current",
+      "topRisks": [
+        "降价、促销或低价产品组合推动销量，使单箱收入下降；若糖、铝和包装成本同时上升，毛利率和归母现金流受压。",
+        "当前EBIT增长依赖销售费用率下降；费用率存在下限，过度压缩也可能损害铺货、品牌投入和新品复购。",
+        "中粮可口可乐仅65%归上市公司，35%利润和现金属于少数股东；FY2025以归母利润比例构建的现金流代理已反映归属，但该代理不等同于母公司直接收到的现金。"
+      ]
+    },
     {
       "instrumentId": "HK:00700.XHKG",
       "companyName": "腾讯控股",
@@ -28,6 +54,32 @@
         "滚动四季度自由现金流低于1600亿元人民币，同时资本开支和算力预付款继续上升，且公司未披露可量化的新增收入或效率回报。",
         "营销服务收入连续两个季度降至个位数增长并伴随毛利率下降。",
         "国内与国际游戏合计收入连续两个季度同比下降，同时常青产品流水与新品储备弱化。"
+      ]
+    },
+    {
+      "instrumentId": "HK:06049.XHKG",
+      "companyName": "保利物业",
+      "researchStatus": "approved",
+      "approvedAsOf": "2026-08-26",
+      "thesisStatus": "intact",
+      "confidence": "medium",
+      "valuation": {
+        "currency": "HKD",
+        "bear": 25.6833,
+        "base": 43.3921,
+        "bull": 67.8971
+      },
+      "priceZones": {
+        "buyReview": 34.7137,
+        "baseValue": 43.3921,
+        "overvaluationReviewLow": 54.2401,
+        "overvaluationReviewHigh": 67.8971
+      },
+      "valuationFreshness": "current",
+      "topRisks": [
+        "应收款及票据增长快于收入，项目收入无法及时转化为现金并可能增加坏账减值。",
+        "低价外拓、人工成本和公共服务合同限制使基础物管毛利率继续下降，面积增长不能转化为利润。",
+        "地产开发活动和社区消费偏弱，使非业主及社区增值服务持续双位数收缩，高毛利利润池缩小。"
       ]
     }
   ]
