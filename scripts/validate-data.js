@@ -78,7 +78,7 @@ if (research) {
         if (finite(item.priceZones?.buyReview) && finite(item.priceZones?.baseValue) && item.priceZones.buyReview > item.priceZones.baseValue) errors.push(`public-research.items[${index}]: 买入复核价不能高于 Base`);
         if (finite(item.priceZones?.baseValue) && finite(item.priceZones?.overvaluationReviewLow) && item.priceZones.baseValue > item.priceZones.overvaluationReviewLow) errors.push(`public-research.items[${index}]: Base 不能高于高估复核下限`);
         if (finite(item.priceZones?.overvaluationReviewLow) && finite(item.priceZones?.overvaluationReviewHigh) && item.priceZones.overvaluationReviewLow > item.priceZones.overvaluationReviewHigh) errors.push(`public-research.items[${index}]: 高估复核区间顺序无效`);
-        if (!Array.isArray(item.topRisks) || item.topRisks.length > 3 || item.topRisks.some((risk) => typeof risk !== 'string')) errors.push(`public-research.items[${index}]: topRisks 无效`);
+        if (!Array.isArray(item.topRisks) || item.topRisks.some((risk) => typeof risk !== 'string' || !risk.trim())) errors.push(`public-research.items[${index}]: topRisks 无效`);
     }
 }
 
