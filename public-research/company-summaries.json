@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-28T09:08:19.538Z",
+  "generatedAt": "2026-08-28T09:08:27.673Z",
   "sourceCommit": "5b857c335055e041fbc1872c89b013fc24f6caf8",
-  "contentHash": "fca7b23c80185a4828e8d4f2402406488b6286f7b9d644b8841db13920dbb53a",
+  "contentHash": "34a28e46d8a809efcce21f8527ef063e7041744c71a00d16262db57262311e0f",
   "items": [
     {
       "instrumentId": "HK:00506.XHKG",
@@ -86,6 +86,34 @@
         "地产开发活动和社区消费偏弱，使非业主及社区增值服务持续双位数收缩，高毛利利润池缩小。",
         "账面现金可能需要用于工资、税费、供应商、项目保证金、受限账户和应收波动，不能全部分配。",
         "若经营现金流持续弱于利润或现金被运营占用，50%派息率可能无法持续增长。"
+      ]
+    },
+    {
+      "instrumentId": "US:INTU.XNAS",
+      "companyName": "Intuit（财捷）",
+      "researchStatus": "approved",
+      "approvedAsOf": "2026-08-26",
+      "thesisStatus": "intact",
+      "confidence": "medium",
+      "valuation": {
+        "currency": "USD",
+        "bear": 296.4066,
+        "base": 412.6,
+        "bull": 495.8002
+      },
+      "priceZones": {
+        "buyReview": 339.21,
+        "baseValue": 412.6,
+        "overvaluationReviewLow": 456.61,
+        "overvaluationReviewHigh": 520
+      },
+      "valuationFreshness": "current",
+      "topRisks": [
+        "低价DIY竞争、IRS免费报税或客户对价格敏感，使TurboTax单位数和e-file份额持续下降，高价值Live升级不足以抵消。",
+        "通用AI或新进入者降低报税、会计和营销软件使用门槛；Intuit自身AI投入也可能增加成本却无法提高留存或ARPU。",
+        "Mailchimp持续零增长、整合失败或竞争加剧，引发销售效率下降及商誉/无形资产减值。",
+        "Credit Karma和QuickBooks Capital依赖金融机构供给、信用表现和消费者/小企业需求；贷款扩张带来信用损失和资金需求。",
+        "高股份支付和高价回购可能消耗现金却不能持续减少完全稀释股数。"
       ]
     }
   ]
