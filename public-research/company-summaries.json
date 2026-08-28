@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-28T09:08:02.977Z",
+  "generatedAt": "2026-08-28T09:08:11.547Z",
   "sourceCommit": "5b857c335055e041fbc1872c89b013fc24f6caf8",
-  "contentHash": "84e893595947431e37206048e7da757f373c19479397e1e0fa76e63de773463a",
+  "contentHash": "640ffa76a0a27aef575f5662941628af9d574a349987d8caaa40dfa7bc8ae8ec",
   "items": [
     {
       "instrumentId": "HK:00506.XHKG",
@@ -13,15 +13,15 @@
       "confidence": "medium",
       "valuation": {
         "currency": "HKD",
-        "bear": 2.5592,
-        "base": 6.7909,
-        "bull": 13.0656
+        "bear": 3.5416,
+        "base": 5.0739,
+        "bull": 5.6844
       },
       "priceZones": {
-        "buyReview": 5.4327,
-        "baseValue": 6.7909,
-        "overvaluationReviewLow": 8.4886,
-        "overvaluationReviewHigh": 13.0656
+        "buyReview": 4.34,
+        "baseValue": 5.0739,
+        "overvaluationReviewLow": 5.45,
+        "overvaluationReviewHigh": 6
       },
       "valuationFreshness": "current",
       "topRisks": [
