@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-28T09:08:27.673Z",
-  "sourceCommit": "5b857c335055e041fbc1872c89b013fc24f6caf8",
-  "contentHash": "34a28e46d8a809efcce21f8527ef063e7041744c71a00d16262db57262311e0f",
+  "generatedAt": "2026-09-04T11:58:12.141Z",
+  "sourceCommit": "03d87f2e975ce7ce93a4b36221eb6a2043cc604c",
+  "contentHash": "2212930d4a5153d6c8e3555b81e2553a0cd39ce6e753d5a0266333187b7324f8",
   "items": [
     {
       "instrumentId": "HK:00506.XHKG",
@@ -13,15 +13,15 @@
       "confidence": "medium",
       "valuation": {
         "currency": "HKD",
-        "bear": 3.5416,
-        "base": 5.0739,
-        "bull": 5.6844
+        "bear": 2.5592,
+        "base": 6.7909,
+        "bull": 13.0656
       },
       "priceZones": {
-        "buyReview": 4.34,
-        "baseValue": 5.0739,
-        "overvaluationReviewLow": 5.45,
-        "overvaluationReviewHigh": 6
+        "buyReview": 5.4327,
+        "baseValue": 6.7909,
+        "overvaluationReviewLow": 8.4886,
+        "overvaluationReviewHigh": 13.0656
       },
       "valuationFreshness": "current",
       "topRisks": [
@@ -40,9 +40,9 @@
       "confidence": "medium",
       "valuation": {
         "currency": "HKD",
-        "bear": 334.06,
+        "bear": 275.69,
         "base": 491.98,
-        "bull": 656.25
+        "bull": 805.45
       },
       "priceZones": {
         "buyReview": 393.58,
@@ -54,10 +54,7 @@
       "topRisks": [
         "滚动四季度自由现金流低于1600亿元人民币，同时资本开支和算力预付款继续上升，且公司未披露可量化的新增收入或效率回报。",
         "营销服务收入连续两个季度降至个位数增长并伴随毛利率下降。",
-        "国内与国际游戏合计收入连续两个季度同比下降，同时常青产品流水与新品储备弱化。",
-        "微信生态总时长、视频号时长或小程序交易活跃连续两个季度明显弱于行业。",
-        "净股份数不再下降，股份奖励稀释持续抵消注销式回购。",
-        "重大监管、数据安全或治理事件永久削弱广告定向、支付、信贷、游戏发行或云业务的经济性。"
+        "国内与国际游戏合计收入连续两个季度同比下降，同时常青产品流水与新品储备弱化。"
       ]
     },
     {
@@ -69,15 +66,15 @@
       "confidence": "medium",
       "valuation": {
         "currency": "HKD",
-        "bear": 31.2766,
+        "bear": 25.6833,
         "base": 43.3921,
-        "bull": 47.8079
+        "bull": 67.8971
       },
       "priceZones": {
-        "buyReview": 31.28,
+        "buyReview": 34.7137,
         "baseValue": 43.3921,
-        "overvaluationReviewLow": 46,
-        "overvaluationReviewHigh": 50
+        "overvaluationReviewLow": 54.2401,
+        "overvaluationReviewHigh": 67.8971
       },
       "valuationFreshness": "current",
       "topRisks": [
@@ -86,34 +83,6 @@
         "地产开发活动和社区消费偏弱，使非业主及社区增值服务持续双位数收缩，高毛利利润池缩小。",
         "账面现金可能需要用于工资、税费、供应商、项目保证金、受限账户和应收波动，不能全部分配。",
         "若经营现金流持续弱于利润或现金被运营占用，50%派息率可能无法持续增长。"
-      ]
-    },
-    {
-      "instrumentId": "US:INTU.XNAS",
-      "companyName": "Intuit（财捷）",
-      "researchStatus": "approved",
-      "approvedAsOf": "2026-08-26",
-      "thesisStatus": "intact",
-      "confidence": "medium",
-      "valuation": {
-        "currency": "USD",
-        "bear": 296.4066,
-        "base": 412.6,
-        "bull": 495.8002
-      },
-      "priceZones": {
-        "buyReview": 339.21,
-        "baseValue": 412.6,
-        "overvaluationReviewLow": 456.61,
-        "overvaluationReviewHigh": 520
-      },
-      "valuationFreshness": "current",
-      "topRisks": [
-        "低价DIY竞争、IRS免费报税或客户对价格敏感，使TurboTax单位数和e-file份额持续下降，高价值Live升级不足以抵消。",
-        "通用AI或新进入者降低报税、会计和营销软件使用门槛；Intuit自身AI投入也可能增加成本却无法提高留存或ARPU。",
-        "Mailchimp持续零增长、整合失败或竞争加剧，引发销售效率下降及商誉/无形资产减值。",
-        "Credit Karma和QuickBooks Capital依赖金融机构供给、信用表现和消费者/小企业需求；贷款扩张带来信用损失和资金需求。",
-        "高股份支付和高价回购可能消耗现金却不能持续减少完全稀释股数。"
       ]
     }
   ]
