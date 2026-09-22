@@ -8,7 +8,15 @@ set -e
 
 PROJECT_DIR="/Users/bill/Projects/portfolio-tracker"
 LOG_FILE="$PROJECT_DIR/docs/automation.log"
+# 优先用精确版本，缺失时回退到任意已安装的受管 22.x node（受管 node 版本号可能带 -N 后缀变化）
 NODE_BIN="/Users/bill/.workbuddy/binaries/node/versions/22.22.2/bin/node"
+if [ ! -x "$NODE_BIN" ]; then
+  NODE_BIN=$(ls /Users/bill/.workbuddy/binaries/node/versions/22*/bin/node 2>/dev/null | sort -V | tail -n1)
+fi
+if [ -z "$NODE_BIN" ] || [ ! -x "$NODE_BIN" ]; then
+  echo "[$TIMESTAMP] ❌ 找不到可用的 node 二进制" >> "$LOG_FILE"
+  exit 1
+fi
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
 
 mkdir -p "$PROJECT_DIR/docs"
