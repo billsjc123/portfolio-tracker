@@ -170,6 +170,37 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .research-risks ul { margin: 7px 0 0 18px; }
 .research-risks li { margin-bottom: 5px; }
 .research-note { color: var(--text-muted); font-size: 10px; margin-top: 10px; }
+.research-reader { display: grid; grid-template-columns: 210px minmax(0,960px); gap: 18px; align-items: start; }
+.research-reader-standalone { grid-template-columns: minmax(0,960px); }
+.research-toc { position: sticky; top: 12px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+.research-toc-title { color: var(--text-muted); font-size: 10px; font-weight: 750; letter-spacing: .08em; margin: 2px 8px 8px; }
+.research-toc button { display: block; width: 100%; appearance: none; border: 0; background: transparent; border-radius: 8px; color: #475569; cursor: pointer; font-size: 12px; padding: 7px 8px; text-align: left; }
+.research-toc button:hover { background: #f1f5f9; color: var(--primary); }
+.company-view-tabs { display: flex; gap: 6px; margin: 0 0 16px; padding: 4px; width: fit-content; background: #e2e8f0; border-radius: 10px; }
+.company-view-tab { appearance: none; border: 0; background: transparent; color: #64748b; cursor: pointer; border-radius: 7px; padding: 8px 13px; font-size: 12px; font-weight: 650; }
+.company-view-tab.active { background: #fff; color: var(--primary); box-shadow: 0 1px 3px rgba(15,23,42,.12); }
+.one-page { padding: 22px 28px; max-width: 960px; line-height: 1.8; color: var(--text); overflow-x: auto; }
+.one-page h1 { font-size: 25px; line-height: 1.35; margin: 0 0 18px; }
+.one-page h2 { font-size: 19px; margin: 30px 0 10px; border-top: 1px solid var(--border); padding-top: 18px; }
+.one-page h3 { font-size: 15px; margin: 18px 0 8px; }
+.one-page p { margin: 0 0 13px; }
+.one-page ul { margin: 0 0 16px 22px; padding: 0; }
+.one-page ol { margin: 0 0 16px 24px; padding: 0; }
+.one-page li { margin: 4px 0; }
+.one-page a { color: #4f46e5; text-decoration: underline; }
+.one-page table { width: 100%; min-width: 620px; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; border-collapse: separate; border-spacing: 0; overflow: hidden; font-size: 12px; }
+.one-page th { background: #f8fafc; color: #475569; font-weight: 700; }
+.one-page th,.one-page td { border-bottom: 1px solid var(--border); padding: 9px 11px; text-align: left; vertical-align: top; }
+.one-page tr:last-child td { border-bottom: 0; }
+.one-page blockquote { margin: 12px 0 18px; border-left: 3px solid #818cf8; background: #f8fafc; color: #475569; padding: 10px 14px; }
+.one-page-date { color: var(--text-muted); font-size: 12px; margin-bottom: 16px; }
+.one-page-standalone h2:first-of-type { border-top: 0; margin-top: 2px; padding-top: 0; }
+.one-page-watch ul { display: grid; gap: 12px; list-style: none; margin: 0; }
+.one-page-watch li { background: #f8fafc; border: 1px solid var(--border); border-left: 4px solid var(--primary-light); border-radius: 12px; margin: 0; padding: 16px 18px; }
+.one-page-watch li strong:first-child { color: #312e81; }
+.one-page-changes ul { display: grid; gap: 12px; list-style: none; margin: 0; }
+.one-page-changes li { background: #fff; border: 1px solid var(--border); border-left: 4px solid #0ea5e9; border-radius: 12px; margin: 0; padding: 16px 18px; }
+.one-page-changes li strong:first-child { color: #075985; }
 .company-back { appearance: none; border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 9px; padding: 8px 12px; font-size: 12px; font-weight: 650; cursor: pointer; margin-bottom: 16px; }
 .company-hero { background: linear-gradient(135deg,#eef2ff,#f8fafc); border: 1px solid #e0e7ff; border-radius: 16px; padding: 22px; margin-bottom: 18px; }
 .company-hero-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
@@ -296,6 +327,12 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     .company-title { font-size: 20px; }
     .company-hero-head { flex-direction: column; }
     .company-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .research-reader { grid-template-columns: 1fr; }
+    .research-toc { position: static; display: flex; gap: 4px; overflow-x: auto; padding: 6px; }
+    .research-toc-title { display: none; }
+    .research-toc button { width: auto; white-space: nowrap; }
+    .company-view-tabs { width: 100%; }
+    .company-view-tab { flex: 1; padding: 8px 6px; }
 
     /* 图表内边距 */
     .box > div[style*="display:flex"] { flex-wrap: wrap; gap: 8px !important; }
@@ -532,19 +569,19 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
         <div class="card ct">
             <div class="card-title">观察池公司</div>
             <div class="card-value" id="rs-approvedCount">0</div>
-            <div class="card-sub">已有批准研究、当前主账户未持有</div>
+            <div class="card-sub">已有公司研报、当前主账户未持有</div>
         </div>
         <div class="card ccn">
-            <div class="card-title">摘要更新时间</div>
+            <div class="card-title">研报更新时间</div>
             <div class="card-value" id="rs-generatedAt" style="font-size:16px">--</div>
-            <div class="card-sub">完整研报、证据和交易记录保留在私有知识库</div>
+            <div class="card-sub">一页纸正文直接来自唯一研报源；证据和交易记录仍私有</div>
         </div>
     </div>
     <div class="section">
         <div class="section-header"><div class="section-title">&#x1F4DA; 估值观察池</div></div>
         <div class="research-grid" id="rs-grid"></div>
         <div id="rs-empty" style="display:none;padding:24px;color:var(--text-muted);text-align:center">
-            暂无观察池公司。公司研报经人工批准后，如果主账户未持有，会自动出现在这里；研究草稿不会公开。
+            暂无观察池公司。完成一页纸并同步到看板仓库后，未持有的公司会显示在这里。
         </div>
     </div>
 </div>
@@ -567,7 +604,7 @@ var HISTORY_AW = {"snapshots":[{"date":"2026-06-15","dataTime":"2026-06-15T15:42
 
 // ==================== 工具 ====================
 var TRADES = {"version":2,"lastUpdated":"2026-08-03","trades":[{"id":11,"date":"2026-07-02","code":"sh513650","name":"标普500ETF南方","action":"buy","price":1.883,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1883,"reason":"全天候账户月度定投"},{"id":12,"date":"2026-07-02","code":"sh512890","name":"红利低波ETF华泰柏瑞","action":"buy","price":1.079,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1079,"reason":"全天候账户月度定投"},{"id":13,"date":"2026-07-02","code":"sh518880","name":"黄金ETF华安","action":"buy","price":8.446,"currency":"CNY","qty":100,"settleCcy":"CNY","settleAmount":844.6,"reason":"全天候账户月度定投"},{"id":14,"date":"2026-07-02","code":"sz159632","name":"纳斯达克ETF华安","action":"buy","price":2.445,"currency":"CNY","qty":600,"settleCcy":"CNY","settleAmount":1467,"reason":"全天候账户月度定投"},{"id":15,"date":"2026-07-02","code":"sz159985","name":"豆粕ETF华夏","action":"buy","price":2.042,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":1021,"reason":"全天候账户月度定投 - 豆粕超跌多加"},{"id":16,"date":"2026-07-02","code":"sz159981","name":"能源化工ETF建信","action":"buy","price":1.359,"currency":"CNY","qty":900,"settleCcy":"CNY","settleAmount":1223.1,"reason":"全天候账户月度定投 - 能源超跌多加"},{"id":17,"date":"2026-07-02","code":"sh512400","name":"有色金属ETF南方","action":"buy","price":1.901,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":950.5,"reason":"全天候账户月度定投 - 有色超跌多加"},{"id":1,"date":"2026-06-15","code":"hk00700","name":"腾讯控股","action":"buy","price":461,"currency":"HKD","qty":100,"settleCcy":"CNY","settleAmount":39826,"reason":"消息面驱动，短期做个波动"},{"id":3,"date":"2026-06-22","code":"sh513260","name":"恒生科技ETF汇添富","action":"sell","price":1.105,"currency":"CNY","qty":16300,"settleCcy":"CNY","settleAmount":18011.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"id":5,"date":"2026-06-24","code":"sh515080","name":"中证红利ETF招商","action":"dividend","price":0.02,"currency":"CNY","qty":10000,"settleCcy":"CNY","settleAmount":200,"reason":"股息发放，成本从1.437调整为1.417"},{"id":6,"date":"2026-06-26","code":"usINTU","name":"财捷","action":"buy","price":269.01,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":807.03,"reason":"左侧买入，大跌补仓压低成本"},{"id":7,"date":"2026-06-26","code":"usMSFT","name":"微软","action":"buy","price":371.38,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":1114.14,"reason":"左侧买入，大跌补仓压低成本"},{"id":8,"date":"2026-06-26","code":"usNVDA","name":"英伟达","action":"buy","price":194.56,"currency":"USD","qty":5,"settleCcy":"USD","settleAmount":972.8,"reason":"左侧买入，大跌补仓压低成本"},{"id":9,"date":"2026-07-01","code":"sh600036","name":"招商银行","action":"buy","price":35.87,"currency":"CNY","qty":200,"settleCcy":"CNY","settleAmount":7174,"reason":"优质老登股左侧加仓"},{"id":10,"date":"2026-07-01","code":"sz002027","name":"分众传媒","action":"buy","price":4.85,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":4850,"reason":"优质老登股左侧加仓"},{"id":18,"date":"2026-07-02","code":"usNFLX","name":"奈飞","action":"buy","price":77.53,"currency":"USD","qty":15,"settleCcy":"USD","settleAmount":1162.95,"reason":"奈飞首次建仓（左侧试探）"},{"id":19,"date":"2026-07-09","code":"usRKLB","name":"Rocket Lab","action":"buy","price":83.919,"currency":"USD","qty":25,"settleCcy":"USD","settleAmount":2097.975,"reason":"新建仓 RKLB（火箭实验室），左侧试探"},{"id":20,"date":"2026-07-01","code":"usASML","name":"阿斯麦","action":"sell","price":1864,"currency":"USD","qty":1,"settleCcy":"USD","settleAmount":1864,"reason":"清仓卖出"},{"id":21,"date":"2026-07-17","code":"sh515080","name":"中证红利ETF招商","action":"sell","price":1.504,"currency":"CNY","qty":10000,"settleCcy":"CNY","settleAmount":15040,"reason":"调仓：卖出红利ETF，转投高股息优质个股"},{"id":22,"date":"2026-07-17","code":"sz159263","name":"价值ETF易方达","action":"sell","price":1.105,"currency":"CNY","qty":20000,"settleCcy":"CNY","settleAmount":22100,"reason":"调仓：卖出价值ETF，转投高股息优质个股"},{"id":23,"date":"2026-07-17","code":"sh520550","name":"港股红利低波ETF招商","action":"sell","price":1.068,"currency":"CNY","qty":16600,"settleCcy":"CNY","settleAmount":17728.8,"reason":"调仓：卖出港股红利低波ETF，转投高股息优质个股"},{"id":24,"date":"2026-07-17","code":"hk00506","name":"中国食品","action":"buy","price":3.24,"currency":"HKD","qty":10000,"settleCcy":"HKD","settleAmount":32400,"reason":"调仓：ETF清仓后买入高股息消费股"},{"id":25,"date":"2026-07-17","code":"hk06049","name":"保利物业","action":"buy","price":28.14,"currency":"HKD","qty":800,"settleCcy":"HKD","settleAmount":22512,"reason":"调仓：ETF清仓后买入高股息物业股"},{"id":26,"date":"2026-07-21","code":"usISRG","name":"直觉外科","action":"buy","price":354,"currency":"USD","qty":8,"settleCcy":"USD","settleAmount":2832,"reason":"新建仓 ISRG（直觉外科）"},{"id":27,"date":"2026-06-14","code":"usMETA","name":"Meta","action":"buy","price":609.803,"currency":"USD","qty":4,"settleCcy":"USD","settleAmount":2439.212,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有持仓成本初始化买入流水，待券商成交单核验"},{"id":28,"date":"2026-06-14","code":"usSOFI","name":"SoFi Tech","action":"buy","price":17.263,"currency":"USD","qty":120,"settleCcy":"USD","settleAmount":2071.56,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有持仓成本初始化买入流水，待券商成交单核验"},{"id":29,"date":"2026-06-14","code":"usSPCX","name":"SpaceX","action":"buy","price":150,"currency":"USD","qty":15,"settleCcy":"USD","settleAmount":2250,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有持仓成本初始化买入流水，待券商成交单核验"},{"id":30,"date":"2026-06-14","code":"hk00883","name":"中国海洋石油","action":"buy","price":16.694,"currency":"HKD","qty":1000,"settleCcy":"HKD","settleAmount":16694,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有持仓成本初始化买入流水，待券商成交单核验"},{"id":31,"date":"2026-06-14","code":"hk03690","name":"美团-W","action":"buy","price":95.467,"currency":"HKD","qty":300,"settleCcy":"HKD","settleAmount":28640.1,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有持仓成本初始化买入流水，待券商成交单核验"},{"id":32,"date":"2026-06-14","code":"usGOOG","name":"谷歌-C","action":"buy","price":138.325,"currency":"USD","qty":17,"settleCcy":"USD","settleAmount":2351.525,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有持仓成本初始化买入流水，待券商成交单核验"},{"id":33,"date":"2026-06-14","code":"sh513260","name":"恒生科技ETF汇添富","action":"buy","price":1.27,"currency":"CNY","qty":16300,"settleCcy":"CNY","settleAmount":20701,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有平仓成本初始化买入流水，待券商成交单核验"},{"id":34,"date":"2026-06-14","code":"sh513330","name":"恒生互联网ETF华夏","action":"buy","price":0.492,"currency":"CNY","qty":54000,"settleCcy":"CNY","settleAmount":26568,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有平仓成本初始化买入流水，待券商成交单核验"},{"id":35,"date":"2026-06-14","code":"sh515080","name":"中证红利ETF招商","action":"buy","price":1.417,"currency":"CNY","qty":10000,"settleCcy":"CNY","settleAmount":14170,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有平仓成本初始化买入流水，待券商成交单核验"},{"id":36,"date":"2026-06-14","code":"sz159263","name":"价值ETF易方达","action":"buy","price":1.059,"currency":"CNY","qty":20000,"settleCcy":"CNY","settleAmount":21180,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有平仓成本初始化买入流水，待券商成交单核验"},{"id":37,"date":"2026-06-14","code":"sh520550","name":"港股红利低波ETF招商","action":"buy","price":1.059,"currency":"CNY","qty":16600,"settleCcy":"CNY","settleAmount":17579.4,"isInitialization":true,"cashImpact":false,"evidenceStatus":"inferred_from_existing_cost","reason":"期初建账：按已有平仓成本初始化买入流水，待券商成交单核验"},{"id":38,"date":"2026-07-30","code":"usNVDA","name":"英伟达","action":"buy","price":192.949,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":578.847,"reason":"当前价格处于低估，持续加仓"},{"id":39,"date":"2026-07-31","code":"usMETA","name":"Meta","action":"buy","price":547.5,"currency":"USD","qty":4,"settleCcy":"USD","settleAmount":2190,"cashImpact":true,"reason":"左侧购入"},{"id":40,"date":"2026-08-03","code":"sh512890","name":"红利低波ETF华泰柏瑞","action":"buy","price":1.205,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1205,"reason":"全天候 8-3 调仓 加仓红利低波"},{"id":41,"date":"2026-08-03","code":"sh518880","name":"黄金ETF华安","action":"buy","price":8.397,"currency":"CNY","qty":100,"settleCcy":"CNY","settleAmount":839.7,"reason":"全天候 8-3 调仓 加仓黄金"},{"id":42,"date":"2026-08-03","code":"sz159985","name":"豆粕ETF华夏","action":"buy","price":2.074,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":1037,"reason":"全天候 8-3 调仓 加仓豆粕"},{"id":43,"date":"2026-08-03","code":"sz159981","name":"能源化工ETF建信","action":"buy","price":1.479,"currency":"CNY","qty":900,"settleCcy":"CNY","settleAmount":1331.1,"reason":"全天候 8-3 调仓 加仓能源化工"},{"id":44,"date":"2026-08-03","code":"sh512400","name":"有色金属ETF南方","action":"buy","price":1.776,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":888,"reason":"全天候 8-3 调仓 加仓有色"},{"id":45,"date":"2026-08-03","code":"sz159632","name":"纳斯达克ETF华安","action":"sell","price":2.354,"currency":"CNY","qty":4700,"settleCcy":"CNY","settleAmount":11063.8,"reason":"全天候 8-3 调仓 大幅减仓纳指"},{"id":46,"date":"2026-08-03","code":"sh513650","name":"标普500ETF南方","action":"sell","price":1.911,"currency":"CNY","qty":6000,"settleCcy":"CNY","settleAmount":11466,"reason":"全天候 8-3 调仓 减仓标普500"},{"id":47,"date":"2026-08-03","code":"009803","name":"易方达中债7-10国开债C","action":"buy","price":1.3284,"currency":"CNY","qty":903.34,"settleCcy":"CNY","settleAmount":1200,"reason":"全天候 8-3 加仓长债"},{"id":48,"date":"2026-08-03","code":"001512","name":"易方达中债3-5年国债","action":"buy","price":1.3972,"currency":"CNY","qty":429.43,"settleCcy":"CNY","settleAmount":600,"reason":"全天候 8-3 加仓中债"}],"cashFlows":[{"date":"2026-07-31","type":"deposit","currency":"USD","amount":665.1,"account":"main","note":"入金 665.1 美元"}],"dividends":[{"code":"009803","name":"易方达中债7-10国开债C","exDate":"2026-06-15","payDate":"2026-06-16","perShare":0.0165,"shares":12895,"amount":212.77,"type":"cash","navBefore":1.3362,"navAfter":1.3197},{"code":"sh600036","name":"招商银行","exDate":"2026-07-10","payDate":"2026-07-10","per10Share":10.03,"perShare":1.003,"shares":900,"amount":902.7,"type":"cash","taxNote":"每10股派10.03元含税，持股超1年免征个税，实收=宣告额"},{"code":"sz002027","name":"分众传媒","exDate":"2026-07-09","payDate":"2026-07-09","per10Share":1.9,"perShare":0.19,"shares":5000,"amount":950,"type":"cash","taxNote":"每10股派1.9元含税，持股超1年免征个税，实收=宣告额"},{"code":"hk00883","name":"中国海洋石油","exDate":"2026-07-13","payDate":"2026-07-13","perShare":0.495,"shares":1000,"amount":495,"currency":"HKD","type":"cash","taxNote":"港股现金分红，实收 495 HKD（每股 0.495 HKD）；日期为用户给定派息日"}],"closedPositions":[{"code":"sh513260","name":"恒生科技ETF汇添富","date":"2026-06-22","qty":16300,"cost":1.27,"sellPrice":1.105,"totalCost":20701,"totalRevenue":18011.5,"realizedPnL_CNY":-2689.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"code":"sh513330","name":"恒生互联网ETF华夏","date":"2026-06-22","qty":54000,"cost":0.492,"sellPrice":0.361,"totalCost":26568,"totalRevenue":19494,"realizedPnL_CNY":-7074,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"code":"usASML","name":"阿斯麦","date":"2026-07-01","qty":1,"cost":-202.21,"sellPrice":1864,"totalCost":-202.21,"totalRevenue":1864,"realizedPnL_USD":2066.21,"realizedPnL_CNY":14043,"reason":"清仓卖出"},{"code":"sh515080","name":"中证红利ETF招商","date":"2026-07-17","qty":10000,"cost":1.417,"sellPrice":1.504,"totalCost":14170,"totalRevenue":15040,"realizedPnL_CNY":870,"reason":"调仓：卖出红利ETF，转投高股息优质个股"},{"code":"sz159263","name":"价值ETF易方达","date":"2026-07-17","qty":20000,"cost":1.059,"sellPrice":1.105,"totalCost":21180,"totalRevenue":22100,"realizedPnL_CNY":920,"reason":"调仓：卖出价值ETF，转投高股息优质个股"},{"code":"sh520550","name":"港股红利低波ETF招商","date":"2026-07-17","qty":16600,"cost":1.059,"sellPrice":1.068,"totalCost":17579.4,"totalRevenue":17728.8,"realizedPnL_CNY":149.4,"reason":"调仓：卖出港股红利低波ETF，转投高股息优质个股"},{"code":"usSPCX","name":"SpaceX","date":"2026-07-24","qty":15,"cost":150,"sellPrice":114.03,"totalCost":2250,"totalRevenue":1710.45,"realizedPnL_USD":-539.55,"realizedPnL_CNY":-3658.97,"reason":"清仓卖出"}],"realizedPnLSummary":{"mainCNY":0,"allweatherCNY":0,"note":"已实现盈亏(人民币)，按账户分别统计"}};
-var RESEARCH_SUMMARIES = {"schemaVersion":1,"generatedAt":"2026-09-04T11:58:12.141Z","sourceCommit":"03d87f2e975ce7ce93a4b36221eb6a2043cc604c","contentHash":"2212930d4a5153d6c8e3555b81e2553a0cd39ce6e753d5a0266333187b7324f8","items":[{"instrumentId":"HK:00506.XHKG","companyName":"中国食品","researchStatus":"approved","approvedAsOf":"2026-08-26","thesisStatus":"intact","confidence":"medium","valuation":{"currency":"HKD","bear":2.5592,"base":6.7909,"bull":13.0656},"priceZones":{"buyReview":5.4327,"baseValue":6.7909,"overvaluationReviewLow":8.4886,"overvaluationReviewHigh":13.0656},"valuationFreshness":"current","topRisks":["降价、促销或低价产品组合推动销量，使单箱收入下降；若糖、铝和包装成本同时上升，毛利率和归母现金流受压。","当前EBIT增长依赖销售费用率下降；费用率存在下限，过度压缩也可能损害铺货、品牌投入和新品复购。","中粮可口可乐仅65%归上市公司，35%利润和现金属于少数股东；FY2025以归母利润比例构建的现金流代理已反映归属，但该代理不等同于母公司直接收到的现金。","汽水占收入约四分之三且依赖可口可乐体系；能量饮料和营养健康食品虽高增但基数小、营销投入和复购尚未证明。"]},{"instrumentId":"HK:00700.XHKG","companyName":"腾讯控股","researchStatus":"approved","approvedAsOf":"2026-08-23","thesisStatus":"intact","confidence":"medium","valuation":{"currency":"HKD","bear":275.69,"base":491.98,"bull":805.45},"priceZones":{"buyReview":393.58,"baseValue":491.98,"overvaluationReviewLow":590.38,"overvaluationReviewHigh":639.57},"valuationFreshness":"current","topRisks":["滚动四季度自由现金流低于1600亿元人民币，同时资本开支和算力预付款继续上升，且公司未披露可量化的新增收入或效率回报。","营销服务收入连续两个季度降至个位数增长并伴随毛利率下降。","国内与国际游戏合计收入连续两个季度同比下降，同时常青产品流水与新品储备弱化。"]},{"instrumentId":"HK:06049.XHKG","companyName":"保利物业","researchStatus":"approved","approvedAsOf":"2026-08-26","thesisStatus":"intact","confidence":"medium","valuation":{"currency":"HKD","bear":25.6833,"base":43.3921,"bull":67.8971},"priceZones":{"buyReview":34.7137,"baseValue":43.3921,"overvaluationReviewLow":54.2401,"overvaluationReviewHigh":67.8971},"valuationFreshness":"current","topRisks":["应收款及票据增长快于收入，项目收入无法及时转化为现金并可能增加坏账减值。","低价外拓、人工成本和公共服务合同限制使基础物管毛利率继续下降，面积增长不能转化为利润。","地产开发活动和社区消费偏弱，使非业主及社区增值服务持续双位数收缩，高毛利利润池缩小。","账面现金可能需要用于工资、税费、供应商、项目保证金、受限账户和应收波动，不能全部分配。","若经营现金流持续弱于利润或现金被运营占用，50%派息率可能无法持续增长。"]}]};
+var RESEARCH_PAGES = [{"instrumentId":"HK:00506.XHKG","companyName":"中国食品","updatedAt":"2026-08-26","markdown":"# 中国食品：量增快于收入，费用效率暂时守住利润\n\n## 一句话判断\n\n中国食品拥有区域装瓶和终端配送网络，是偏稳定现金回报的饮料企业，不是高增长品牌公司。2026 上半年销量增长 9.6%，收入却仅增长 4.0%；投资判断的核心是单箱收入能否止跌，以及费用节约能否在不损害渠道的前提下持续。资料与估值截至 2026 年 8 月 26 日，不代表今天的实时价格。\n\n## 公司做什么\n\n公司通过持有 65% 的中粮可口可乐，在获授权的 19 个省级行政区域生产、配送和销售可口可乐体系饮料。它把品牌产品送到经销商、零售和餐饮终端，靠销量、产品组合和单箱收入赚钱；装瓶厂和配送网络提供规模效率。另有 35% 权益属于少数股东，所以不能把集团全部利润和现金都算成上市公司股东的回报。\n\n## 业务拆解\n\n- **汽水**是基本盘。2026 上半年收入 95.81 亿元人民币，占集团约 75.1%，同比增长 2.1%。无糖及功能化汽水有新品机会，但公司未单独披露其收入和利润。该业务要看销量是否靠促销换来，以及单箱收入、毛利和终端覆盖的变化。\n- **果汁**覆盖大众果汁与营养消费，2026 上半年收入 17.81 亿元人民币。较汽水规模小，产品升级和渠道执行决定利润弹性。公司未单独披露可核查的品类利润率，不能用集团利润率代替。\n- **饮用水和能量饮料**提供第二增长曲线的可能。2026 上半年水收入 6.14 亿元人民币；能量饮料收入增速超过 50%，但基数较小。观察重点不是增速本身，而是绝对收入、复购、渠道投入和可持续利润。\n\n## 行业与竞争\n\n饮料装瓶的利润池来自品牌授权、规模采购、产能利用率和高密度终端配送。公司有区域网络优势，但不能自主决定所有品牌与产品；面对成熟汽水需求、渠道竞争及糖、铝、包装成本，它并不具备无限提价权。新品能否放大，取决于渠道覆盖之后能否形成复购，而不是一次性铺货。\n\n## 管理层与资本配置\n\n资本配置的关键不是单纯扩大合并报表现金，而是维持装瓶产能、支持有效新品、向上市公司股东分配可归属现金。65% 持股结构要求持续检查子公司分红、母公司实际收到的现金和少数股东权益。现有估值对集团现金采取保守折价，不将 45.495 亿元人民币合并现金全部计入股东价值。\n\n## 财务质量\n\n2025 年经营现金流约 32.293 亿元人民币，长期资产购置约 10.605 亿元，合并自由现金流约 21.688 亿元。按当年归母净利占总净利的 60.36% 估算，归母现金流代理约 15.13 亿港元；这只是代理，不等于母公司实际可分配现金。2026 上半年毛利率 36.7%，同比下降 1.4 个百分点；销售费用率下降 1.7 个百分点，使经调整 EBIT 仍增长 5.4%。若费用率无法继续下降，量价压力会更直接传到利润。\n\n## 市场在定价什么\n\n2026 年 8 月 26 日收盘价 3.625 港元，对应较低盈利倍数和较高股息率。市场折价可能反映低增长、单箱收入下降和 65% 控股结构。这些担忧有依据；我们的不同判断是费用效率和现金流缓冲可能被低估。但若单位变现继续下降、母公司上划现金低于代理，这个折价也可能完全合理。\n\n## 估值与操作\n\n主方法是折价后的归母所有者自由现金流 DCF，而非直接套同业市盈率。模型以约 15.13 亿港元历史现金流代理为锚，对 Base 起点折价约 18% 至 12.5 亿港元；显性预测十年，Base 年复合增长约 3.40%、资本成本 9.75%、永续增长 2.0%，另计约 6.5 亿港元保守净现金。更低的现金流起点、更高资本成本及更低长期增长构成 Bear。该方法特别依赖归属代理、单箱收入修复和终值假设，不能把模型数值当成已验证的成交目标。\n\n- Bear 约 **2.56 港元**：7.5 亿港元现金流起点、约 0.60% 十年复合增长、12.0% 资本成本、0.5% 永续增长。\n- Conservative 约 **4.25 港元**：10 亿港元起点、约 1.90% 增长、10.75% 资本成本、1.5% 永续增长。\n- Base 约 **6.79 港元**：12.5 亿港元起点、约 3.40% 增长、9.75% 资本成本、2.0% 永续增长。\n- 买入复核价约 **4.75 港元**。价格到线只要求重新检查证据、仓位和风险，不构成自动加仓。以上价位均为 2026 年 8 月 26 日模型值，若关键输入变化，必须重估。\n\n## 反方与风险\n\n最强反论点是销量靠促销拉动、毛利受原料和包装成本挤压，费用下降只是暂时缓冲；小品类的高增速不足以弥补汽水基本盘的单位收入下滑。另一个关键风险是合并现金流不等于上市公司可分配现金。若这些情况持续，Base 现金流起点和净现金都应下调，估值向 Conservative 或 Bear 靠拢。\n\n## 观察清单\n\n- **量价**：2026 上半年销量 +9.6%、收入 +4.0%，反推综合单箱收入约 -5.1%。Base 希望后续收入增速逐步接近销量增速；若连续两个报告期差距仍超过 5 个百分点，复核定价与现金流增长路径。半年度查看业绩公告。\n- **毛利与费用**：2026 上半年毛利率 -1.4 个百分点，销售费用率 -1.7 个百分点。若毛利继续下滑且费用率反弹、经调整 EBIT 转负，降低 Base 利润假设。半年度查看业绩公告。\n- **股东可得现金**：2025 年归母现金流代理约 15.13 亿港元，Base 起点 12.5 亿港元。每年重算同口径合并现金流、少数股东归属及母公司实际收款；若持续低于起点，重估。\n- **第二曲线**：跟踪能量饮料和水的绝对收入、复购与利润。若只有销量和高百分比增速、没有利润/现金证据，不提高长期增长率。\n- **净现金缓冲**：模型取 6.5 亿港元。若净流动资产减租赁负债持续低于该值，先下修净现金，不再沿用旧目标价。\n\n## 最近变化\n\n- **2026-08-25｜2026 年中期业绩**：[公司披露](https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0825/2026082500238_c.pdf)销量增长 9.6%、收入增长 4.0%，毛利率下降 1.4 个百分点，销售费用率下降 1.7 个百分点，经调整 EBIT 仍增长 5.4%。**影响**：增长质量的主要矛盾由销量转向单箱收入，费用效率暂时抵消了毛利压力，但不能证明利润改善可持续。**研究处理**：局部更新量价、毛利与费用观察项；当前模型暂不重跑，下一次中报或年报若单箱收入继续下降且费用率反弹，则下修 Base 现金流路径。"},{"instrumentId":"US:INTU.XNAS","companyName":"财捷（Intuit）","updatedAt":"2026-09-23","markdown":"# 财捷：降价能否换回客户，决定便宜还是价值陷阱\n\n## 一句话判断\n\n财捷拥有中小企业财务工作流和美国报税生态，客户黏性强；眼前的矛盾是 TurboTax 主动降价争取客户，而企业软件能否维持增长。以 2026 年 9 月 18 日的 303.19 美元收盘价及 9 月 20 日模型为参照，独立基准价值约 306 美元，几乎没有预测误差缓冲。研究立场是观察客户与利润能否同时兑现，而不是仅因估值倍数下降就断言利空出尽。本文是原有研究的格式迁移，资料与模型截至 2026 年 9 月 20 日，**没有按 9 月 23 日行情重新估值**。\n\n## 公司做什么\n\n财捷主要赚两类钱。其一，QuickBooks 帮中小企业记账、发工资、收付款和融资；客户从基础版升级到 Advanced、Intuit Enterprise Suite 后，支付更高的软件与服务费用。账目、银行、员工和会计师协作嵌在同一工作流里，形成迁移成本。其二，TurboTax 让个人自行或在专家协助下报税，ProTax 为专业报税人员提供工具；Credit Karma 根据消费者信用档案匹配金融产品，从合作机构获得导流收入。Mailchimp 则为企业提供邮件营销工具。软件订阅、交易服务和金融导流的收入质量及周期性不同，不能都当作同一种订阅收入。\n\n## 业务拆解\n\n公司预计 2027 财年总收入约 232.79 亿至 235.12 亿美元，同比增长 9%–10%，整体增速放缓。下列规模是公司分业务指引的中点，**不是已实现收入**；占比以五项合计约 233.96 亿美元计算。公司未按这五个相同口径披露可直接比较的产品级利润率，因此不把集团利润率分摊为虚构的业务利润。\n\n- **企业业务（不含 Mailchimp）**：QuickBooks 在线、支付、薪资及高阶企业产品；企业付软件和服务费。2027 财年指引中点 131.13 亿美元，约占 56%，增长 13%–14%。同口径产品利润率未披露；需区分新增客户、提价和内部升级。桌面版预计低个位数下滑，部分是向线上迁移。\n- **TurboTax**：个人自助及专家辅助报税。指引中点 54.15 亿美元，约占 23%，增长 2%–3%。降低入门客单价后，关键是客户和份额回升能否抵消价格下降；税季季节性强。\n- **Credit Karma**：信用、贷款和信用卡匹配。指引中点 29.46 亿美元，约占 13%，增长 11%–13%。受合作金融机构信贷供给影响，不能按纯软件收入外推。\n- **ProTax**：专业报税人员工具。指引中点 6.61 亿美元，约占 3%，增长约 2%；这是成熟业务，增长有限。\n- **Mailchimp**：企业邮件营销。指引中点 12.61 亿美元，约占 5%，持平至下降 1%。提价被客户流失抵消，暂不能假设高利润增长。\n\n公司在 [2026 年投资者日](https://investors.intuit.com/_assets/_1600dcf5d024a28739f5190ddda8d1c7/intuit/db/923/10406/pdf/Investor+Day+2026+Presenatation+FINAL.pdf) 更新了客户定义：在线付费客户 790 万、同比增长 4%，不含 Mailchimp 和桌面；美国 QuickBooks Online 核心付费客户 530 万、增长 4%，不含 Advanced 与 Enterprise Suite。新旧定义不可直接相减。指引见[公司公告](https://investors.intuit.com/news-events/press-releases/detail/1323/intuit-hosts-investor-day-reaffirms-first-quarter-and-fiscal-2027-guidance)。\n\n## 行业与竞争\n\n企业软件的护城河来自流程嵌入和数据积累，而不是单一的 AI 功能；如果低价产品能接住记账、支付和会计师协作，迁移成本就可能下降。个人报税市场更成熟，也更价格敏感：财捷主动降价说明高客单价策略遇到约束。作为外部参照，[Sage 截至 2026 年 6 月的九个月有机收入增长 10%](https://www.sage.com/investors/investor-downloads/press-releases/2026/07/trading-update-for-the-nine-months-ended-30-june-2026/)，表明财务软件仍可双位数增长；[H&R Block 2026 财年收入增长 4.9%](https://investors.hrblock.com/news-releases/news-release-details/hr-block-reports-fiscal-2026-results-and-enters-fiscal-2027)，提示报税不宜套用高增长软件假设。这是有针对性的业务对照，并非完整行业样本或增长概率分布。\n\n## 管理层与资本配置\n\n管理层选择用较低报税客单价争取客户，再由专家辅助和金融服务提高客户终身价值。逻辑可理解，但 2027 年完整税季尚未证明它能成功。回购不能自动算作免费每股增长：模型用 2.72 亿稀释股作近端代理，股份支付保留在营业费用中，不额外加上未来回购收益。收购形成的无形资产摊销也没有直接加回为可永续分配的现金；这偏谨慎，但提醒读者客户关系和技术仍需持续维护。\n\n## 财务质量\n\n[2026 财年 10-K](https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-26-000037/intu-20260731.htm) 披露经营现金流 88.38 亿美元、设备与软件投入合计 2.21 亿美元。不能直接把两者之差资本化：公司称约 12 亿美元研发税务影响提高了当年现金流，贷款资金占用也部分体现在投资活动。模型改从包含股份支付的营业利润重建“经济经营现金流”，并扣除贷款资本和营运资本需求；这是估值代理，不等于与报表自由现金流逐项对账完成。投资者日调整后每股收益口径已包含股份支付，2026 财年为 18.63 美元，2027 财年指引中点约 23 美元；不能再拿旧的 24.27 美元口径直接比较。\n\n## 市场在定价什么\n\n303.19 美元相当于 2027 财年 GAAP 每股收益指引中点 20.24 美元的约 15 倍，但低倍数以盈利指引兑现为前提。按下述基准现金流反解，该价格对应约 10.07% 的**价格匹配折现率**；若经营仅走谨慎路径，则约为 8.77%。这两个数字不是保证实现的持有回报。市场似乎在同时定价增长放缓、报税降价和竞争压力；我们的待验证差异是企业工作流和报税获客能否支撑约 32% 的集团营业利润率。若降价后客户仍流失，当前折价可能合理。\n\n## 估值与操作\n\n主方法是按业务收入和集团利润率推导现金流的十年 DCF，倍数仅作市场定价校验。2027 财年以[管理层指引](https://investors.intuit.com/news-events/press-releases/detail/1323/intuit-hosts-investor-day-reaffirms-first-quarter-and-fiscal-2027-guidance)为锚，之后是独立分析假设，不把管理层目标当成 Base。基准首年：收入 233.955 亿美元 × 31.839% 营业利润率 = 74.49 亿美元营业利润；按 27% 税率得税后营业利润 54.38 亿美元，再扣约 0.37 亿美元净设备/软件投入、约 1.56 亿美元贷款资本、约 0.39 亿美元其他营运资本，经济经营现金流约 52.06 亿美元。贷款资本按新增收入 8%、其他营运资本按 2% 配置，均属分析假设，不是管理层承诺。\n\n五条经营路径统一用 10% 比较折现要求、2.5% 永续增长、2.72 亿稀释股和约 9.08 亿美元净负债调整；路径差异来自收入与利润，而非给弱情景再机械提高折现率。长期假设稳定资本回报率 20%，因此永续增长 2.5% 需要约 12.5% 再投资率。10% 是本次选定的比较要求，**不是已验证的精确资本成本**。\n\n- **受损，约 169 美元/股**：报税降价未换回客户、企业业务失速；2027 财年收入在指引下限上再施压，2031 财年集团营业利润率降至 25%。\n- **谨慎，约 253 美元/股**：指引下限起步，企业增长逐步从 8% 降至 6%，报税修复偏弱，2031 财年利润率约 30%。\n- **基准，约 306 美元/股**：指引中点起步，企业增长从 12% 逐步降至 9%，TurboTax 低个位数修复，2031 财年利润率约 32%。\n- **温和改善，约 351 美元/股**：新客户与升级共同增长，企业增速由 14% 逐步降至 11%，2031 财年利润率约 34%。\n- **强改善，约 402 美元/股**：外部获客更成功，企业增速由 15% 逐步降至 13%，2031 财年利润率约 36%。\n\n**306 美元是模型中心，不是精确目标价。** 基准价值约一半来自终值。永续增长调至 2%–3%，基准值约 298–315 美元；稳定资本回报率调至 15%–25%，约 297–311 美元；折现要求改为 9% / 11% / 12%，约为 355 / 269 / 239 美元。受损情景的额外降幅是竞争与信用压力测试，不是已发生事实；谨慎情景也仍假设企业持续增长。模型与输入日期均为 2026 年 9 月 20 日；这些价位只用于复核判断，**不是买卖指令**。\n\n## 反方与风险\n\n最强反论点是报税降价未能止住份额流失，同时企业增长主要靠提价和内部升级，客户数仅低速增长。这样收入不一定立刻崩塌，利润却可能先被获客、服务和贷款损失侵蚀。模型的 2% 营运资本系数、8% 贷款资本系数及长期 20% 资本回报率缺少完整行业分布验证；如果资本占用更重，306 美元会高估价值。反过来，模型未加回收购无形资产摊销，也可能低估轻资产现金能力。必须用客户、利润及现金三条线共同排除路径，不能只挑一个好指标。\n\n## 观察清单\n\n- **企业客户**：新口径在线付费客户及美国 QuickBooks Online 核心客户均同比增长 4%。基准要求同口径客户增长至少稳定，并有企业收入兑现；若降价后客户增速继续走低、收入更多依赖提价，复核基准收入路径。每季看公司披露，不能混用旧口径。\n- **企业收入**：2027 财年指引增长 13%–14%。先验证公司能否兑现；若下调到 10% 以下且客户也恶化，转向谨慎或受损路径复算，而不是沿用 306 美元。\n- **报税份额与收入**：投资者日口径美国电子申报份额 24.9%，下降约 1 个百分点；TurboTax 2027 财年指引增长 2%–3%。完整 2027 年税季后看份额是否止跌，以及客户增加能否抵消客单价下降；若两者都弱于基准，重估报税收入和利润。\n- **利润与现金**：2027 财年基准 GAAP 营业利润率约 31.8%；模型另扣贷款资本与营运资本。若收入达标但全年利润率落向 30% 或以下，或现金改善主要来自税务时点、贷款损失及占用上升，复核经济现金流而非仅看调整后每股收益。\n- **Mailchimp 与股份支付**：2027 财年 Mailchimp 指引持平至下降 1%，调整后每股收益口径包含股份支付。若营销业务仍流失或稀释上升，不把回购当成无成本的每股增长。\n\n## 最近变化\n\n- **2026-09-17｜投资者日**：[公司重申 FY2027 指引](https://investors.intuit.com/news-events/press-releases/detail/1323/intuit-hosts-investor-day-reaffirms-first-quarter-and-fiscal-2027-guidance)，并更新在线付费客户和美国 QuickBooks Online 核心客户口径，两者均同比增长 4%。**影响**：企业业务仍有增长，但客户增速明显低于收入增速，提价和升级仍是重要贡献；TurboTax 降价能否换回份额尚未得到完整税季验证。**研究处理**：不改变当前论点和 2026-09-20 模型，把同口径客户增长、企业收入与利润率列为下一次财报的联合验证项。\n- **2026-08-25｜FY2026 财报与 FY2027 指引**：[公司披露 FY2026 收入增长 14%](https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-26-000029/fy26q4earningspressrelease.htm)，Global Business Solutions 收入增长 16%，TurboTax 美国总报税单位数下降 2%；同时给出 FY2027 总收入增长 9%–10%、企业业务增长 13%–14%、TurboTax 增长 2%–3%的指引，并把股份支付纳入新的非 GAAP 口径。**影响**：增长中枢下移已成为正式前瞻，报税客户压力得到量化，旧的 24.27 美元非 GAAP 每股收益不再适合作为直接比较基准。**研究处理**：该指引已进入 2026-09-20 DCF；只有指引、客户路径或利润率发生实质变化才重估。"}];
 var DR={USD_CNY:6.78,HKD_CNY:0.865};
 var COLORS=['#4f46e5','#8b5cf6','#ec4899','#f59e0b','#10b981'];
 var MC={cn:'#f97316',hk:'#3b82f6',us:'#22c55e',aw:'#8b5cf6',cash:'#94a3b8'};
@@ -588,10 +625,11 @@ function switchTab(name){
     document.getElementById('page-'+name).classList.add('active');
 }
 
-var companyReturnTab='main',activeCompanyCode=null;
+var companyReturnTab='main',activeCompanyCode=null,activeCompanyView='report';
 function openCompanyDetail(code,returnTab){
     companyReturnTab=returnTab||'main';
     activeCompanyCode=code;
+    activeCompanyView='report';
     renderCompanyDetail(code);
     document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
     document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active')});
@@ -602,6 +640,13 @@ function openCompanyDetail(code,returnTab){
 
 function closeCompanyDetail(){
     switchTab(companyReturnTab);
+    window.scrollTo(0,0);
+}
+
+function setCompanyResearchView(view){
+    if(!['report','watch','changes'].includes(view))return;
+    activeCompanyView=view;
+    renderCompanyDetail(activeCompanyCode);
     window.scrollTo(0,0);
 }
 
@@ -1513,28 +1558,84 @@ function latestMainPortfolio(){
     return snap?{snap:snap,portfolio:calcMain(snap)}:null;
 }
 
-function researchForDashboardCode(code){
-    var items=RESEARCH_SUMMARIES&&Array.isArray(RESEARCH_SUMMARIES.items)?RESEARCH_SUMMARIES.items:[];
-    return items.find(function(item){return researchDashboardCode(item.instrumentId)===code;})||null;
+function researchPageForDashboardCode(code){
+    return RESEARCH_PAGES.find(function(page){return researchDashboardCode(page.instrumentId)===code;})||null;
 }
 
-function researchMarketPrice(item){
-    var latest=latestMainPortfolio(),code=researchDashboardCode(item&&item.instrumentId);
-    if(!latest||!code)return null;
-    var price=latest.snap.prices&&latest.snap.prices[code];
-    return Number.isFinite(price)&&price>0?price:null;
+function markdownInline(value){
+    return escapeHtml(value)
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+        .replace(/`([^`]+)`/g,'<code>$1</code>');
 }
 
-function researchZone(item,currentPrice){
-    var zones=item.priceZones||{};
-    if(!(currentPrice>0)||!Number.isFinite(zones.buyReview)||!Number.isFinite(zones.baseValue)){
-        return {label:'等待可用价格',className:'zone-neutral'};
+function markdownAnchor(value,index){
+    var slug=String(value||'').toLowerCase().replace(/<[^>]*>/g,'').replace(/[^\w\u3400-\u9fff]+/g,'-').replace(/^-|-$/g,'');
+    return 'research-'+(slug||'section')+'-'+index;
+}
+
+function markdownCells(line){
+    return line.trim().replace(/^\||\|$/g,'').split('|').map(function(cell){return cell.trim();});
+}
+
+function renderOnePageMarkdown(markdown){
+    var lines=String(markdown||'').split(/\r?\n/),parts=[],listType='',headingIndex=0;
+    function closeList(){if(listType){parts.push('</'+listType+'>');listType='';}}
+    function openList(type){if(listType!==type){closeList();parts.push('<'+type+'>');listType=type;}}
+    for(var index=0;index<lines.length;index++){
+        var line=lines[index],heading=line.match(/^(#{1,3})\s+(.+)$/),bullet=line.match(/^[-*]\s+(.+)$/),ordered=line.match(/^\d+[.)]\s+(.+)$/);
+        var next=lines[index+1]||'';
+        var isTable=/^\s*\|.*\|\s*$/.test(line)&&/^\s*\|?(?:\s*:?-{3,}:?\s*\|)+\s*:?-{3,}:?\s*\|?\s*$/.test(next);
+        if(heading){
+            closeList();
+            var level=heading[1].length,id=markdownAnchor(heading[2],headingIndex++);
+            parts.push('<h'+level+' id="'+id+'">'+markdownInline(heading[2])+'</h'+level+'>');
+        }else if(isTable){
+            closeList();
+            var headers=markdownCells(line),rows=[];index+=2;
+            while(index<lines.length&&/^\s*\|.*\|\s*$/.test(lines[index])){rows.push(markdownCells(lines[index]));index++;}
+            index--;
+            parts.push('<table><thead><tr>'+headers.map(function(cell){return '<th>'+markdownInline(cell)+'</th>';}).join('')+'</tr></thead><tbody>'+rows.map(function(row){return '<tr>'+headers.map(function(_,cellIndex){return '<td>'+markdownInline(row[cellIndex]||'')+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table>');
+        }else if(bullet){
+            openList('ul');parts.push('<li>'+markdownInline(bullet[1])+'</li>');
+        }else if(ordered){
+            openList('ol');parts.push('<li>'+markdownInline(ordered[1])+'</li>');
+        }else if(/^>\s?/.test(line)){
+            closeList();parts.push('<blockquote>'+markdownInline(line.replace(/^>\s?/,''))+'</blockquote>');
+        }else if(!line.trim()){
+            closeList();
+        }else{
+            closeList();parts.push('<p>'+markdownInline(line.trim())+'</p>');
+        }
     }
-    if(currentPrice<=zones.buyReview)return {label:'进入买入复核区',className:'zone-buy'};
-    if(currentPrice<=zones.baseValue)return {label:'低于 Base，未达安全边际',className:'zone-value'};
-    if(currentPrice<zones.overvaluationReviewLow)return {label:'Base 以上，正常复核',className:'zone-neutral'};
-    if(currentPrice<=zones.overvaluationReviewHigh)return {label:'进入高估复核区',className:'zone-review'};
-    return {label:'高于高估复核区',className:'zone-high'};
+    closeList();return parts.join('');
+}
+
+function researchHeadings(markdown){
+    return [...String(markdown||'').matchAll(/^## (.+)$/gm)].map(function(match,index){return {title:match[1].trim(),id:markdownAnchor(match[1].trim(),index+1)};});
+}
+
+function researchSection(markdown,title){
+    var sections=String(markdown||'').split(/(?=^## )/m);
+    return sections.find(function(section){return section.indexOf('## '+title)===0;})||'';
+}
+
+function researchViewTabs(){
+    var labels={report:'公司一页纸',watch:'观察清单',changes:'最近变化'};
+    return '<div class="company-view-tabs">'+Object.keys(labels).map(function(view){return '<button type="button" class="company-view-tab '+(activeCompanyView===view?'active':'')+'" onclick="setCompanyResearchView(\''+view+'\')">'+labels[view]+'</button>';}).join('')+'</div>';
+}
+
+function researchReader(page){
+    var markdown=page.markdown,toc='';
+    if(activeCompanyView==='watch')markdown=researchSection(page.markdown,'观察清单');
+    if(activeCompanyView==='changes')markdown=researchSection(page.markdown,'最近变化');
+    if(activeCompanyView==='report'){
+        toc='<nav class="research-toc" aria-label="研报章节"><div class="research-toc-title">文章章节</div>'+researchHeadings(page.markdown).map(function(item){return '<button type="button" onclick="document.getElementById(\''+item.id+'\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">'+escapeHtml(item.title)+'</button>';}).join('')+'</nav>';
+    }
+    var standalone=activeCompanyView!=='report';
+    var readerClass='research-reader'+(standalone?' research-reader-standalone':'');
+    var articleClass='one-page'+(standalone?' one-page-standalone':'')+(activeCompanyView==='watch'?' one-page-watch':'')+(activeCompanyView==='changes'?' one-page-changes':'');
+    return researchViewTabs()+'<div class="'+readerClass+'">'+toc+'<div class="section"><article class="'+articleClass+'"><div class="one-page-date">资料更新：'+escapeHtml(page.updatedAt)+' · 三个视图均来自同一份研报正文</div>'+renderOnePageMarkdown(markdown)+'</article></div></div>';
 }
 
 function researchMoney(value,currency){
@@ -1543,43 +1644,9 @@ function researchMoney(value,currency){
     return prefix+fmt(value,2);
 }
 
-function researchLabel(kind,value){
-    var labels={
-        thesisStatus:{intact:'逻辑完整',watch:'重点观察',broken:'逻辑失效'},
-        confidence:{low:'低置信度',medium:'中置信度',high:'高置信度'},
-        freshness:{current:'估值有效',aging:'临近复核',stale:'估值过期',invalidated:'估值失效'}
-    };
-    return labels[kind]&&labels[kind][value]||String(value||'--');
-}
-
 function mainResearchSignal(holding){
-    var item=researchForDashboardCode(holding.code);
-    if(!item)return '<div class="main-signal-empty">暂无批准估值</div>';
-    var zones=item.priceZones||{},currency=item.valuation&&item.valuation.currency||'';
-    var zone=researchZone(item,holding.price);
-    return '<div class="main-signal"><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span>'
-        +'<div class="main-signal-points">买入复核 '+researchMoney(zones.buyReview,currency)+' · 高估复核 '+researchMoney(zones.overvaluationReviewLow,currency)+'</div></div>';
-}
-
-function renderResearchSummary(item,currentPrice,positionText,clickable,returnTab){
-    var valuation=item.valuation||{},zones=item.priceZones||{},currency=valuation.currency||'';
-    var zone=researchZone(item,currentPrice);
-    var risks=(item.topRisks||[]).map(function(risk){return '<li>'+escapeHtml(risk)+'</li>';}).join('');
-    var code=researchDashboardCode(item.instrumentId)||'';
-    var attrs=' class="research-card'+(clickable?' research-card-clickable':'')+'"';
-    if(clickable){
-        attrs+=' role="button" tabindex="0" data-company-code="'+escapeHtml(code)+'"';
-        attrs+=' onclick="openCompanyDetail(this.dataset.companyCode,\''+returnTab+'\')"';
-        attrs+=' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCompanyDetail(this.dataset.companyCode,\''+returnTab+'\')}"';
-    }
-    return '<article'+attrs+'>'
-        +'<div class="research-head"><div><div class="research-name">'+escapeHtml(item.companyName||item.instrumentId)+'</div><div class="research-meta mono">'+escapeHtml(item.instrumentId)+' · 批准于 '+escapeHtml(item.approvedAsOf||'--')+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</div></div><span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('confidence',item.confidence))+'</span></div>'
-        +'<div class="research-spot"><div><div class="research-spot-sub">当前价格</div><div class="research-spot-price">'+researchMoney(currentPrice,currency)+'</div><div class="research-spot-sub">'+positionText+'</div></div><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span></div>'
-        +'<div class="research-values"><div class="research-value"><div class="research-value-label">Bear</div><div class="research-value-number">'+researchMoney(valuation.bear,currency)+'</div></div><div class="research-value"><div class="research-value-label">Base</div><div class="research-value-number">'+researchMoney(valuation.base,currency)+'</div></div><div class="research-value"><div class="research-value-label">Bull</div><div class="research-value-number">'+researchMoney(valuation.bull,currency)+'</div></div></div>'
-        +'<div class="research-zones"><div><span>买入复核</span><strong>'+researchMoney(zones.buyReview,currency)+'</strong></div><div><span>Base 价值</span><strong>'+researchMoney(zones.baseValue,currency)+'</strong></div><div><span>高估复核</span><strong>'+researchMoney(zones.overvaluationReviewLow,currency)+'–'+researchMoney(zones.overvaluationReviewHigh,currency)+'</strong></div></div>'
-        +'<div class="research-risks"><strong>主要风险</strong><ul>'+risks+'</ul></div>'
-        +'<div class="research-note">价格区间仅触发复核，不构成自动买卖指令；完整研报保留在私有投资知识库。</div>'
-        +'</article>';
+    if(researchPageForDashboardCode(holding.code))return '<div class="main-signal"><span class="research-zone zone-value">查看完整研报</span></div>';
+    return '<div class="main-signal-empty">暂无一页纸研报</div>';
 }
 
 function renderCompanyDetail(code){
@@ -1591,39 +1658,39 @@ function renderCompanyDetail(code){
             return Boolean(holding);
         });
     }
-    var item=researchForDashboardCode(code);
-    var name=holding&&holding.name||item&&item.companyName||code.toUpperCase();
-    var marketCurrency=market==='hk'?'HKD':market==='us'?'USD':'CNY';
-    var currency=item&&item.valuation&&item.valuation.currency||marketCurrency;
-    var currentPrice=holding?holding.price:item?researchMarketPrice(item):null;
+    var page=researchPageForDashboardCode(code);
+    var name=holding&&holding.name||page&&page.companyName||code.toUpperCase();
+    var reportMarket=page&&page.instrumentId.slice(0,2);
+    var marketCurrency=(market==='hk'||reportMarket==='HK')?'HKD':(market==='us'||reportMarket==='US')?'USD':'CNY';
+    var currency=marketCurrency;
+    var observedPrice=page&&latest&&latest.snap.prices&&latest.snap.prices[code];
+    var currentPrice=holding?holding.price:Number.isFinite(observedPrice)?observedPrice:null;
     var total=latest&&latest.portfolio.totalValueCNY||0;
     var weight=holding&&total>0?holding.mv_cny/total*100:null;
-    var status=item
-        ? '<span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</span>'
-        : '<span class="research-zone zone-neutral">暂无批准研报</span>';
+    var status=page
+        ? '<span class="research-status">一页纸 · 更新于 '+escapeHtml(page.updatedAt)+'</span>'
+        : '<span class="research-zone zone-neutral">暂无一页纸研报</span>';
     var hero='<div class="company-hero"><div class="company-hero-head"><div><div class="company-title">'+escapeHtml(name)+'</div><div class="company-code mono">'+escapeHtml(code.toUpperCase())+'</div></div>'+status+'</div>'
         +'<div class="company-metrics"><div class="company-metric"><div class="company-metric-label">当前价格</div><div class="company-metric-value">'+researchMoney(currentPrice,currency)+'</div></div>'
         +'<div class="company-metric"><div class="company-metric-label">持仓数量</div><div class="company-metric-value">'+(holding?fmt(holding.qty,0)+' 股':'未持有')+'</div></div>'
         +'<div class="company-metric"><div class="company-metric-label">组合占比</div><div class="company-metric-value">'+(Number.isFinite(weight)?fmt(weight,2)+'%':'--')+'</div></div>'
         +'<div class="company-metric"><div class="company-metric-label">持仓盈亏</div><div class="company-metric-value '+(holding?clr(holding.pnl_cny):'')+'">'+(holding?'¥'+sgn(holding.pnl_cny,2):'--')+'</div></div></div></div>';
-    var research=item
-        ? '<div class="section"><div class="section-header"><div class="section-title">估值与关注价位</div></div><div class="research-grid">'+renderResearchSummary(item,currentPrice,holding?'行情 '+escapeHtml(latest.snap.date):'观察池标的',false,'main')+'</div></div>'
-        : '<div class="section"><div class="section-header"><div class="section-title">公司研究</div></div><div class="company-empty">该标的暂无已批准的公开研究摘要。后续完成并批准标准化研报后，这里会自动显示估值、关注价位与主要风险。</div></div>';
+    var research=page
+        ? researchReader(page)
+        : '<div class="section"><div class="section-header"><div class="section-title">公司研究</div></div><div class="company-empty">该标的尚未迁移为一页纸研报。已有研究底稿仍保留在私有知识库。</div></div>';
     document.getElementById('company-detail').innerHTML=hero+research;
 }
 
 function renderResearch(){
-    var data=RESEARCH_SUMMARIES||{items:[]};
-    var items=(Array.isArray(data.items)?data.items:[]).filter(function(item){return !researchPosition(item);});
-    document.getElementById('rs-approvedCount').textContent=String(items.length);
-    document.getElementById('rs-generatedAt').textContent=data.generatedAt?String(data.generatedAt).slice(0,10):'--';
+    var pages=RESEARCH_PAGES.filter(function(page){return !researchPosition(page);});
+    document.getElementById('rs-approvedCount').textContent=String(pages.length);
+    document.getElementById('rs-generatedAt').textContent=pages.length?pages.map(function(page){return page.updatedAt;}).sort().at(-1):'--';
     var grid=document.getElementById('rs-grid'),empty=document.getElementById('rs-empty');
-    grid.innerHTML=items.map(function(item){
-        var currentPrice=researchMarketPrice(item),latest=latestMainPortfolio();
-        var positionText=currentPrice&&latest?'观察价 · 行情 '+escapeHtml(latest.snap.date):'等待刷新观察价';
-        return renderResearchSummary(item,currentPrice,positionText,true,'research');
+    grid.innerHTML=pages.map(function(page){
+        var code=researchDashboardCode(page.instrumentId)||'';
+        return '<article class="research-card research-card-clickable" role="button" tabindex="0" data-company-code="'+escapeHtml(code)+'" onclick="openCompanyDetail(this.dataset.companyCode,\'research\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCompanyDetail(this.dataset.companyCode,\'research\')}"><div class="research-name">'+escapeHtml(page.companyName)+'</div><div class="research-meta">更新于 '+escapeHtml(page.updatedAt)+'</div><p>查看完整一页纸、估值与观察清单 →</p></article>';
     }).join('');
-    empty.style.display=items.length?'none':'block';
+    empty.style.display=pages.length?'none':'block';
 }
 
 // ==================== 实时更新（浏览器直连公开 API） ====================
@@ -1751,7 +1818,7 @@ function manualRefresh(){
     ['cn','hk','us'].forEach(function(m){
         (CONFIG.holdings[m]||[]).forEach(function(h){stockCodes.push(h.code);});
     });
-    (RESEARCH_SUMMARIES.items||[]).forEach(function(item){
+    RESEARCH_PAGES.forEach(function(item){
         var code=researchDashboardCode(item.instrumentId);
         if(code&&stockCodes.indexOf(code)<0)stockCodes.push(code);
     });
