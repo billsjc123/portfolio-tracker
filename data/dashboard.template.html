@@ -170,6 +170,37 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .research-risks ul { margin: 7px 0 0 18px; }
 .research-risks li { margin-bottom: 5px; }
 .research-note { color: var(--text-muted); font-size: 10px; margin-top: 10px; }
+.research-reader { display: grid; grid-template-columns: 210px minmax(0,960px); gap: 18px; align-items: start; }
+.research-reader-standalone { grid-template-columns: minmax(0,960px); }
+.research-toc { position: sticky; top: 12px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+.research-toc-title { color: var(--text-muted); font-size: 10px; font-weight: 750; letter-spacing: .08em; margin: 2px 8px 8px; }
+.research-toc button { display: block; width: 100%; appearance: none; border: 0; background: transparent; border-radius: 8px; color: #475569; cursor: pointer; font-size: 12px; padding: 7px 8px; text-align: left; }
+.research-toc button:hover { background: #f1f5f9; color: var(--primary); }
+.company-view-tabs { display: flex; gap: 6px; margin: 0 0 16px; padding: 4px; width: fit-content; background: #e2e8f0; border-radius: 10px; }
+.company-view-tab { appearance: none; border: 0; background: transparent; color: #64748b; cursor: pointer; border-radius: 7px; padding: 8px 13px; font-size: 12px; font-weight: 650; }
+.company-view-tab.active { background: #fff; color: var(--primary); box-shadow: 0 1px 3px rgba(15,23,42,.12); }
+.one-page { padding: 22px 28px; max-width: 960px; line-height: 1.8; color: var(--text); overflow-x: auto; }
+.one-page h1 { font-size: 25px; line-height: 1.35; margin: 0 0 18px; }
+.one-page h2 { font-size: 19px; margin: 30px 0 10px; border-top: 1px solid var(--border); padding-top: 18px; }
+.one-page h3 { font-size: 15px; margin: 18px 0 8px; }
+.one-page p { margin: 0 0 13px; }
+.one-page ul { margin: 0 0 16px 22px; padding: 0; }
+.one-page ol { margin: 0 0 16px 24px; padding: 0; }
+.one-page li { margin: 4px 0; }
+.one-page a { color: #4f46e5; text-decoration: underline; }
+.one-page table { width: 100%; min-width: 620px; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; border-collapse: separate; border-spacing: 0; overflow: hidden; font-size: 12px; }
+.one-page th { background: #f8fafc; color: #475569; font-weight: 700; }
+.one-page th,.one-page td { border-bottom: 1px solid var(--border); padding: 9px 11px; text-align: left; vertical-align: top; }
+.one-page tr:last-child td { border-bottom: 0; }
+.one-page blockquote { margin: 12px 0 18px; border-left: 3px solid #818cf8; background: #f8fafc; color: #475569; padding: 10px 14px; }
+.one-page-date { color: var(--text-muted); font-size: 12px; margin-bottom: 16px; }
+.one-page-standalone h2:first-of-type { border-top: 0; margin-top: 2px; padding-top: 0; }
+.one-page-watch ul { display: grid; gap: 12px; list-style: none; margin: 0; }
+.one-page-watch li { background: #f8fafc; border: 1px solid var(--border); border-left: 4px solid var(--primary-light); border-radius: 12px; margin: 0; padding: 16px 18px; }
+.one-page-watch li strong:first-child { color: #312e81; }
+.one-page-changes ul { display: grid; gap: 12px; list-style: none; margin: 0; }
+.one-page-changes li { background: #fff; border: 1px solid var(--border); border-left: 4px solid #0ea5e9; border-radius: 12px; margin: 0; padding: 16px 18px; }
+.one-page-changes li strong:first-child { color: #075985; }
 .company-back { appearance: none; border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 9px; padding: 8px 12px; font-size: 12px; font-weight: 650; cursor: pointer; margin-bottom: 16px; }
 .company-hero { background: linear-gradient(135deg,#eef2ff,#f8fafc); border: 1px solid #e0e7ff; border-radius: 16px; padding: 22px; margin-bottom: 18px; }
 .company-hero-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
@@ -296,6 +327,12 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     .company-title { font-size: 20px; }
     .company-hero-head { flex-direction: column; }
     .company-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .research-reader { grid-template-columns: 1fr; }
+    .research-toc { position: static; display: flex; gap: 4px; overflow-x: auto; padding: 6px; }
+    .research-toc-title { display: none; }
+    .research-toc button { width: auto; white-space: nowrap; }
+    .company-view-tabs { width: 100%; }
+    .company-view-tab { flex: 1; padding: 8px 6px; }
 
     /* 图表内边距 */
     .box > div[style*="display:flex"] { flex-wrap: wrap; gap: 8px !important; }
@@ -532,19 +569,19 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
         <div class="card ct">
             <div class="card-title">观察池公司</div>
             <div class="card-value" id="rs-approvedCount">0</div>
-            <div class="card-sub">已有批准研究、当前主账户未持有</div>
+            <div class="card-sub">已有公司研报、当前主账户未持有</div>
         </div>
         <div class="card ccn">
-            <div class="card-title">摘要更新时间</div>
+            <div class="card-title">研报更新时间</div>
             <div class="card-value" id="rs-generatedAt" style="font-size:16px">--</div>
-            <div class="card-sub">完整研报、证据和交易记录保留在私有知识库</div>
+            <div class="card-sub">一页纸正文直接来自唯一研报源；证据和交易记录仍私有</div>
         </div>
     </div>
     <div class="section">
         <div class="section-header"><div class="section-title">&#x1F4DA; 估值观察池</div></div>
         <div class="research-grid" id="rs-grid"></div>
         <div id="rs-empty" style="display:none;padding:24px;color:var(--text-muted);text-align:center">
-            暂无观察池公司。公司研报经人工批准后，如果主账户未持有，会自动出现在这里；研究草稿不会公开。
+            暂无观察池公司。完成一页纸并同步到看板仓库后，未持有的公司会显示在这里。
         </div>
     </div>
 </div>
@@ -567,7 +604,7 @@ var HISTORY_AW = {"snapshots":[{"date":"2026-06-15","dataTime":"2026-06-15T15:42
 
 // ==================== 工具 ====================
 var TRADES = {"version":1,"lastUpdated":"2026-07-02","trades":[{"id":11,"date":"2026-07-02","code":"sh513650","name":"标普500ETF南方","action":"buy","price":1.883,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1883,"reason":"全天候账户月度定投"},{"id":12,"date":"2026-07-02","code":"sh512890","name":"红利低波ETF华泰柏瑞","action":"buy","price":1.079,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":1079,"reason":"全天候账户月度定投"},{"id":13,"date":"2026-07-02","code":"sh518880","name":"黄金ETF华安","action":"buy","price":8.446,"currency":"CNY","qty":100,"settleCcy":"CNY","settleAmount":844.6,"reason":"全天候账户月度定投"},{"id":14,"date":"2026-07-02","code":"sz159632","name":"纳斯达克ETF华安","action":"buy","price":2.445,"currency":"CNY","qty":600,"settleCcy":"CNY","settleAmount":1467,"reason":"全天候账户月度定投"},{"id":15,"date":"2026-07-02","code":"sz159985","name":"豆粕ETF华夏","action":"buy","price":2.042,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":1021,"reason":"全天候账户月度定投 - 豆粕超跌多加"},{"id":16,"date":"2026-07-02","code":"sz159981","name":"能源化工ETF建信","action":"buy","price":1.359,"currency":"CNY","qty":900,"settleCcy":"CNY","settleAmount":1223.1,"reason":"全天候账户月度定投 - 能源超跌多加"},{"id":17,"date":"2026-07-02","code":"sh512400","name":"有色金属ETF南方","action":"buy","price":1.901,"currency":"CNY","qty":500,"settleCcy":"CNY","settleAmount":950.5,"reason":"全天候账户月度定投 - 有色超跌多加"},{"id":1,"date":"2026-06-15","code":"hk00700","name":"腾讯控股","action":"buy","price":461,"currency":"HKD","qty":100,"settleCcy":"CNY","settleAmount":39826,"reason":"消息面驱动，短期做个波动"},{"id":3,"date":"2026-06-22","code":"sh513260","name":"恒生科技ETF汇添富","action":"sell","price":1.105,"currency":"CNY","qty":16300,"settleCcy":"CNY","settleAmount":18011.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"id":5,"date":"2026-06-24","code":"sh515080","name":"中证红利ETF招商","action":"dividend","price":0.02,"currency":"CNY","qty":10000,"settleCcy":"CNY","settleAmount":200,"reason":"股息发放，成本从1.437调整为1.417"},{"id":6,"date":"2026-06-26","code":"usINTU","name":"财捷","action":"buy","price":269.01,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":807.03,"reason":"左侧买入，大跌补仓压低成本"},{"id":7,"date":"2026-06-26","code":"usMSFT","name":"微软","action":"buy","price":371.38,"currency":"USD","qty":3,"settleCcy":"USD","settleAmount":1114.14,"reason":"左侧买入，大跌补仓压低成本"},{"id":8,"date":"2026-06-26","code":"usNVDA","name":"英伟达","action":"buy","price":194.56,"currency":"USD","qty":5,"settleCcy":"USD","settleAmount":972.8,"reason":"左侧买入，大跌补仓压低成本"},{"id":9,"date":"2026-07-01","code":"sh600036","name":"招商银行","action":"buy","price":35.87,"currency":"CNY","qty":200,"settleCcy":"CNY","settleAmount":7174,"reason":"优质老登股左侧加仓"},{"id":10,"date":"2026-07-01","code":"sz002027","name":"分众传媒","action":"buy","price":4.85,"currency":"CNY","qty":1000,"settleCcy":"CNY","settleAmount":4850,"reason":"优质老登股左侧加仓"}],"dividends":[{"code":"009803","name":"易方达中债7-10国开债C","exDate":"2026-06-15","payDate":"2026-06-16","perShare":0.0165,"shares":12895,"amount":212.77,"type":"cash","navBefore":1.3362,"navAfter":1.3197}],"closedPositions":[{"code":"sh513260","name":"恒生科技ETF汇添富","date":"2026-06-22","qty":16300,"cost":1.27,"sellPrice":1.105,"totalCost":20701,"totalRevenue":18011.5,"realizedPnL_CNY":-2689.5,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"},{"code":"sh513330","name":"恒生互联网ETF华夏","date":"2026-06-22","qty":54000,"cost":0.492,"sellPrice":0.361,"totalCost":26568,"totalRevenue":19494,"realizedPnL_CNY":-7074,"reason":"恒科相似标的仓位过重，集中仓位到优质标的"}],"realizedPnLSummary":{"mainCNY":0,"allweatherCNY":212.77,"note":"已实现盈亏(人民币)，按账户分别统计"}};
-var RESEARCH_SUMMARIES = {"version":1,"generatedAt":null,"items":[]};
+var RESEARCH_PAGES = [];
 var DR={USD_CNY:6.78,HKD_CNY:0.865};
 var COLORS=['#4f46e5','#8b5cf6','#ec4899','#f59e0b','#10b981'];
 var MC={cn:'#f97316',hk:'#3b82f6',us:'#22c55e',aw:'#8b5cf6',cash:'#94a3b8'};
@@ -588,10 +625,11 @@ function switchTab(name){
     document.getElementById('page-'+name).classList.add('active');
 }
 
-var companyReturnTab='main',activeCompanyCode=null;
+var companyReturnTab='main',activeCompanyCode=null,activeCompanyView='report';
 function openCompanyDetail(code,returnTab){
     companyReturnTab=returnTab||'main';
     activeCompanyCode=code;
+    activeCompanyView='report';
     renderCompanyDetail(code);
     document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
     document.querySelectorAll('.tab-page').forEach(function(p){p.classList.remove('active')});
@@ -602,6 +640,13 @@ function openCompanyDetail(code,returnTab){
 
 function closeCompanyDetail(){
     switchTab(companyReturnTab);
+    window.scrollTo(0,0);
+}
+
+function setCompanyResearchView(view){
+    if(!['report','watch','changes'].includes(view))return;
+    activeCompanyView=view;
+    renderCompanyDetail(activeCompanyCode);
     window.scrollTo(0,0);
 }
 
@@ -1513,28 +1558,84 @@ function latestMainPortfolio(){
     return snap?{snap:snap,portfolio:calcMain(snap)}:null;
 }
 
-function researchForDashboardCode(code){
-    var items=RESEARCH_SUMMARIES&&Array.isArray(RESEARCH_SUMMARIES.items)?RESEARCH_SUMMARIES.items:[];
-    return items.find(function(item){return researchDashboardCode(item.instrumentId)===code;})||null;
+function researchPageForDashboardCode(code){
+    return RESEARCH_PAGES.find(function(page){return researchDashboardCode(page.instrumentId)===code;})||null;
 }
 
-function researchMarketPrice(item){
-    var latest=latestMainPortfolio(),code=researchDashboardCode(item&&item.instrumentId);
-    if(!latest||!code)return null;
-    var price=latest.snap.prices&&latest.snap.prices[code];
-    return Number.isFinite(price)&&price>0?price:null;
+function markdownInline(value){
+    return escapeHtml(value)
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+        .replace(/`([^`]+)`/g,'<code>$1</code>');
 }
 
-function researchZone(item,currentPrice){
-    var zones=item.priceZones||{};
-    if(!(currentPrice>0)||!Number.isFinite(zones.buyReview)||!Number.isFinite(zones.baseValue)){
-        return {label:'等待可用价格',className:'zone-neutral'};
+function markdownAnchor(value,index){
+    var slug=String(value||'').toLowerCase().replace(/<[^>]*>/g,'').replace(/[^\w\u3400-\u9fff]+/g,'-').replace(/^-|-$/g,'');
+    return 'research-'+(slug||'section')+'-'+index;
+}
+
+function markdownCells(line){
+    return line.trim().replace(/^\||\|$/g,'').split('|').map(function(cell){return cell.trim();});
+}
+
+function renderOnePageMarkdown(markdown){
+    var lines=String(markdown||'').split(/\r?\n/),parts=[],listType='',headingIndex=0;
+    function closeList(){if(listType){parts.push('</'+listType+'>');listType='';}}
+    function openList(type){if(listType!==type){closeList();parts.push('<'+type+'>');listType=type;}}
+    for(var index=0;index<lines.length;index++){
+        var line=lines[index],heading=line.match(/^(#{1,3})\s+(.+)$/),bullet=line.match(/^[-*]\s+(.+)$/),ordered=line.match(/^\d+[.)]\s+(.+)$/);
+        var next=lines[index+1]||'';
+        var isTable=/^\s*\|.*\|\s*$/.test(line)&&/^\s*\|?(?:\s*:?-{3,}:?\s*\|)+\s*:?-{3,}:?\s*\|?\s*$/.test(next);
+        if(heading){
+            closeList();
+            var level=heading[1].length,id=markdownAnchor(heading[2],headingIndex++);
+            parts.push('<h'+level+' id="'+id+'">'+markdownInline(heading[2])+'</h'+level+'>');
+        }else if(isTable){
+            closeList();
+            var headers=markdownCells(line),rows=[];index+=2;
+            while(index<lines.length&&/^\s*\|.*\|\s*$/.test(lines[index])){rows.push(markdownCells(lines[index]));index++;}
+            index--;
+            parts.push('<table><thead><tr>'+headers.map(function(cell){return '<th>'+markdownInline(cell)+'</th>';}).join('')+'</tr></thead><tbody>'+rows.map(function(row){return '<tr>'+headers.map(function(_,cellIndex){return '<td>'+markdownInline(row[cellIndex]||'')+'</td>';}).join('')+'</tr>';}).join('')+'</tbody></table>');
+        }else if(bullet){
+            openList('ul');parts.push('<li>'+markdownInline(bullet[1])+'</li>');
+        }else if(ordered){
+            openList('ol');parts.push('<li>'+markdownInline(ordered[1])+'</li>');
+        }else if(/^>\s?/.test(line)){
+            closeList();parts.push('<blockquote>'+markdownInline(line.replace(/^>\s?/,''))+'</blockquote>');
+        }else if(!line.trim()){
+            closeList();
+        }else{
+            closeList();parts.push('<p>'+markdownInline(line.trim())+'</p>');
+        }
     }
-    if(currentPrice<=zones.buyReview)return {label:'进入买入复核区',className:'zone-buy'};
-    if(currentPrice<=zones.baseValue)return {label:'低于 Base，未达安全边际',className:'zone-value'};
-    if(currentPrice<zones.overvaluationReviewLow)return {label:'Base 以上，正常复核',className:'zone-neutral'};
-    if(currentPrice<=zones.overvaluationReviewHigh)return {label:'进入高估复核区',className:'zone-review'};
-    return {label:'高于高估复核区',className:'zone-high'};
+    closeList();return parts.join('');
+}
+
+function researchHeadings(markdown){
+    return [...String(markdown||'').matchAll(/^## (.+)$/gm)].map(function(match,index){return {title:match[1].trim(),id:markdownAnchor(match[1].trim(),index+1)};});
+}
+
+function researchSection(markdown,title){
+    var sections=String(markdown||'').split(/(?=^## )/m);
+    return sections.find(function(section){return section.indexOf('## '+title)===0;})||'';
+}
+
+function researchViewTabs(){
+    var labels={report:'公司一页纸',watch:'观察清单',changes:'最近变化'};
+    return '<div class="company-view-tabs">'+Object.keys(labels).map(function(view){return '<button type="button" class="company-view-tab '+(activeCompanyView===view?'active':'')+'" onclick="setCompanyResearchView(\''+view+'\')">'+labels[view]+'</button>';}).join('')+'</div>';
+}
+
+function researchReader(page){
+    var markdown=page.markdown,toc='';
+    if(activeCompanyView==='watch')markdown=researchSection(page.markdown,'观察清单');
+    if(activeCompanyView==='changes')markdown=researchSection(page.markdown,'最近变化');
+    if(activeCompanyView==='report'){
+        toc='<nav class="research-toc" aria-label="研报章节"><div class="research-toc-title">文章章节</div>'+researchHeadings(page.markdown).map(function(item){return '<button type="button" onclick="document.getElementById(\''+item.id+'\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">'+escapeHtml(item.title)+'</button>';}).join('')+'</nav>';
+    }
+    var standalone=activeCompanyView!=='report';
+    var readerClass='research-reader'+(standalone?' research-reader-standalone':'');
+    var articleClass='one-page'+(standalone?' one-page-standalone':'')+(activeCompanyView==='watch'?' one-page-watch':'')+(activeCompanyView==='changes'?' one-page-changes':'');
+    return researchViewTabs()+'<div class="'+readerClass+'">'+toc+'<div class="section"><article class="'+articleClass+'"><div class="one-page-date">资料更新：'+escapeHtml(page.updatedAt)+' · 三个视图均来自同一份研报正文</div>'+renderOnePageMarkdown(markdown)+'</article></div></div>';
 }
 
 function researchMoney(value,currency){
@@ -1543,43 +1644,9 @@ function researchMoney(value,currency){
     return prefix+fmt(value,2);
 }
 
-function researchLabel(kind,value){
-    var labels={
-        thesisStatus:{intact:'逻辑完整',watch:'重点观察',broken:'逻辑失效'},
-        confidence:{low:'低置信度',medium:'中置信度',high:'高置信度'},
-        freshness:{current:'估值有效',aging:'临近复核',stale:'估值过期',invalidated:'估值失效'}
-    };
-    return labels[kind]&&labels[kind][value]||String(value||'--');
-}
-
 function mainResearchSignal(holding){
-    var item=researchForDashboardCode(holding.code);
-    if(!item)return '<div class="main-signal-empty">暂无批准估值</div>';
-    var zones=item.priceZones||{},currency=item.valuation&&item.valuation.currency||'';
-    var zone=researchZone(item,holding.price);
-    return '<div class="main-signal"><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span>'
-        +'<div class="main-signal-points">买入复核 '+researchMoney(zones.buyReview,currency)+' · 高估复核 '+researchMoney(zones.overvaluationReviewLow,currency)+'</div></div>';
-}
-
-function renderResearchSummary(item,currentPrice,positionText,clickable,returnTab){
-    var valuation=item.valuation||{},zones=item.priceZones||{},currency=valuation.currency||'';
-    var zone=researchZone(item,currentPrice);
-    var risks=(item.topRisks||[]).map(function(risk){return '<li>'+escapeHtml(risk)+'</li>';}).join('');
-    var code=researchDashboardCode(item.instrumentId)||'';
-    var attrs=' class="research-card'+(clickable?' research-card-clickable':'')+'"';
-    if(clickable){
-        attrs+=' role="button" tabindex="0" data-company-code="'+escapeHtml(code)+'"';
-        attrs+=' onclick="openCompanyDetail(this.dataset.companyCode,\''+returnTab+'\')"';
-        attrs+=' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCompanyDetail(this.dataset.companyCode,\''+returnTab+'\')}"';
-    }
-    return '<article'+attrs+'>'
-        +'<div class="research-head"><div><div class="research-name">'+escapeHtml(item.companyName||item.instrumentId)+'</div><div class="research-meta mono">'+escapeHtml(item.instrumentId)+' · 批准于 '+escapeHtml(item.approvedAsOf||'--')+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</div></div><span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('confidence',item.confidence))+'</span></div>'
-        +'<div class="research-spot"><div><div class="research-spot-sub">当前价格</div><div class="research-spot-price">'+researchMoney(currentPrice,currency)+'</div><div class="research-spot-sub">'+positionText+'</div></div><span class="research-zone '+zone.className+'">'+escapeHtml(zone.label)+'</span></div>'
-        +'<div class="research-values"><div class="research-value"><div class="research-value-label">Bear</div><div class="research-value-number">'+researchMoney(valuation.bear,currency)+'</div></div><div class="research-value"><div class="research-value-label">Base</div><div class="research-value-number">'+researchMoney(valuation.base,currency)+'</div></div><div class="research-value"><div class="research-value-label">Bull</div><div class="research-value-number">'+researchMoney(valuation.bull,currency)+'</div></div></div>'
-        +'<div class="research-zones"><div><span>买入复核</span><strong>'+researchMoney(zones.buyReview,currency)+'</strong></div><div><span>Base 价值</span><strong>'+researchMoney(zones.baseValue,currency)+'</strong></div><div><span>高估复核</span><strong>'+researchMoney(zones.overvaluationReviewLow,currency)+'–'+researchMoney(zones.overvaluationReviewHigh,currency)+'</strong></div></div>'
-        +'<div class="research-risks"><strong>主要风险</strong><ul>'+risks+'</ul></div>'
-        +'<div class="research-note">价格区间仅触发复核，不构成自动买卖指令；完整研报保留在私有投资知识库。</div>'
-        +'</article>';
+    if(researchPageForDashboardCode(holding.code))return '<div class="main-signal"><span class="research-zone zone-value">查看完整研报</span></div>';
+    return '<div class="main-signal-empty">暂无一页纸研报</div>';
 }
 
 function renderCompanyDetail(code){
@@ -1591,39 +1658,39 @@ function renderCompanyDetail(code){
             return Boolean(holding);
         });
     }
-    var item=researchForDashboardCode(code);
-    var name=holding&&holding.name||item&&item.companyName||code.toUpperCase();
-    var marketCurrency=market==='hk'?'HKD':market==='us'?'USD':'CNY';
-    var currency=item&&item.valuation&&item.valuation.currency||marketCurrency;
-    var currentPrice=holding?holding.price:item?researchMarketPrice(item):null;
+    var page=researchPageForDashboardCode(code);
+    var name=holding&&holding.name||page&&page.companyName||code.toUpperCase();
+    var reportMarket=page&&page.instrumentId.slice(0,2);
+    var marketCurrency=(market==='hk'||reportMarket==='HK')?'HKD':(market==='us'||reportMarket==='US')?'USD':'CNY';
+    var currency=marketCurrency;
+    var observedPrice=page&&latest&&latest.snap.prices&&latest.snap.prices[code];
+    var currentPrice=holding?holding.price:Number.isFinite(observedPrice)?observedPrice:null;
     var total=latest&&latest.portfolio.totalValueCNY||0;
     var weight=holding&&total>0?holding.mv_cny/total*100:null;
-    var status=item
-        ? '<span class="research-status">'+escapeHtml(researchLabel('thesisStatus',item.thesisStatus))+' · '+escapeHtml(researchLabel('freshness',item.valuationFreshness))+'</span>'
-        : '<span class="research-zone zone-neutral">暂无批准研报</span>';
+    var status=page
+        ? '<span class="research-status">一页纸 · 更新于 '+escapeHtml(page.updatedAt)+'</span>'
+        : '<span class="research-zone zone-neutral">暂无一页纸研报</span>';
     var hero='<div class="company-hero"><div class="company-hero-head"><div><div class="company-title">'+escapeHtml(name)+'</div><div class="company-code mono">'+escapeHtml(code.toUpperCase())+'</div></div>'+status+'</div>'
         +'<div class="company-metrics"><div class="company-metric"><div class="company-metric-label">当前价格</div><div class="company-metric-value">'+researchMoney(currentPrice,currency)+'</div></div>'
         +'<div class="company-metric"><div class="company-metric-label">持仓数量</div><div class="company-metric-value">'+(holding?fmt(holding.qty,0)+' 股':'未持有')+'</div></div>'
         +'<div class="company-metric"><div class="company-metric-label">组合占比</div><div class="company-metric-value">'+(Number.isFinite(weight)?fmt(weight,2)+'%':'--')+'</div></div>'
         +'<div class="company-metric"><div class="company-metric-label">持仓盈亏</div><div class="company-metric-value '+(holding?clr(holding.pnl_cny):'')+'">'+(holding?'¥'+sgn(holding.pnl_cny,2):'--')+'</div></div></div></div>';
-    var research=item
-        ? '<div class="section"><div class="section-header"><div class="section-title">估值与关注价位</div></div><div class="research-grid">'+renderResearchSummary(item,currentPrice,holding?'行情 '+escapeHtml(latest.snap.date):'观察池标的',false,'main')+'</div></div>'
-        : '<div class="section"><div class="section-header"><div class="section-title">公司研究</div></div><div class="company-empty">该标的暂无已批准的公开研究摘要。后续完成并批准标准化研报后，这里会自动显示估值、关注价位与主要风险。</div></div>';
+    var research=page
+        ? researchReader(page)
+        : '<div class="section"><div class="section-header"><div class="section-title">公司研究</div></div><div class="company-empty">该标的尚未迁移为一页纸研报。已有研究底稿仍保留在私有知识库。</div></div>';
     document.getElementById('company-detail').innerHTML=hero+research;
 }
 
 function renderResearch(){
-    var data=RESEARCH_SUMMARIES||{items:[]};
-    var items=(Array.isArray(data.items)?data.items:[]).filter(function(item){return !researchPosition(item);});
-    document.getElementById('rs-approvedCount').textContent=String(items.length);
-    document.getElementById('rs-generatedAt').textContent=data.generatedAt?String(data.generatedAt).slice(0,10):'--';
+    var pages=RESEARCH_PAGES.filter(function(page){return !researchPosition(page);});
+    document.getElementById('rs-approvedCount').textContent=String(pages.length);
+    document.getElementById('rs-generatedAt').textContent=pages.length?pages.map(function(page){return page.updatedAt;}).sort().at(-1):'--';
     var grid=document.getElementById('rs-grid'),empty=document.getElementById('rs-empty');
-    grid.innerHTML=items.map(function(item){
-        var currentPrice=researchMarketPrice(item),latest=latestMainPortfolio();
-        var positionText=currentPrice&&latest?'观察价 · 行情 '+escapeHtml(latest.snap.date):'等待刷新观察价';
-        return renderResearchSummary(item,currentPrice,positionText,true,'research');
+    grid.innerHTML=pages.map(function(page){
+        var code=researchDashboardCode(page.instrumentId)||'';
+        return '<article class="research-card research-card-clickable" role="button" tabindex="0" data-company-code="'+escapeHtml(code)+'" onclick="openCompanyDetail(this.dataset.companyCode,\'research\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCompanyDetail(this.dataset.companyCode,\'research\')}"><div class="research-name">'+escapeHtml(page.companyName)+'</div><div class="research-meta">更新于 '+escapeHtml(page.updatedAt)+'</div><p>查看完整一页纸、估值与观察清单 →</p></article>';
     }).join('');
-    empty.style.display=items.length?'none':'block';
+    empty.style.display=pages.length?'none':'block';
 }
 
 // ==================== 实时更新（浏览器直连公开 API） ====================
@@ -1751,7 +1818,7 @@ function manualRefresh(){
     ['cn','hk','us'].forEach(function(m){
         (CONFIG.holdings[m]||[]).forEach(function(h){stockCodes.push(h.code);});
     });
-    (RESEARCH_SUMMARIES.items||[]).forEach(function(item){
+    RESEARCH_PAGES.forEach(function(item){
         var code=researchDashboardCode(item.instrumentId);
         if(code&&stockCodes.indexOf(code)<0)stockCodes.push(code);
     });

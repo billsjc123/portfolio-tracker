@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * render-dashboard.js
- * 把 5 个数据块（CONFIG / HISTORY_MAIN / HISTORY_AW / TRADES / RESEARCH_SUMMARIES）打补丁式注入到 dashboard.template.html，
+ * 把持仓数据及唯一研报正文注入 dashboard.template.html，
  * 输出 portfolio-dashboard.html。
  *
  * 设计原则：模板是一份完整的 HTML（含所有 CSS / SVG / 交互 JS），
@@ -10,14 +10,17 @@
 
 const fs = require('fs');
 const path = require('path');
+const { readReports } = require('./company-research');
 
-function renderDashboard({ template, config, historyMain, historyAW, trades, researchSummaries = { version: 1, generatedAt: null, items: [] } }) {
+function renderDashboard({ template, config, historyMain, historyAW, trades, researchPages }) {
+    if (!Array.isArray(researchPages)) throw new Error('缺少唯一研报源 researchPages');
+    if (!/var RESEARCH_PAGES = \[[\s\S]*?\];/.test(template)) throw new Error('看板模板缺少研报注入位置');
     let html = template;
     html = html.replace(/var CONFIG = \{[\s\S]*?\};/, 'var CONFIG = ' + JSON.stringify(config) + ';');
     html = html.replace(/var HISTORY_MAIN = \{[\s\S]*?\};/, 'var HISTORY_MAIN = ' + JSON.stringify(historyMain) + ';');
     html = html.replace(/var HISTORY_AW = \{[\s\S]*?\};/, 'var HISTORY_AW = ' + JSON.stringify(historyAW) + ';');
     html = html.replace(/var TRADES = \{[\s\S]*?\};/, 'var TRADES = ' + JSON.stringify(trades) + ';');
-    html = html.replace(/var RESEARCH_SUMMARIES = \{[\s\S]*?\};/, 'var RESEARCH_SUMMARIES = ' + JSON.stringify(researchSummaries) + ';');
+    html = html.replace(/var RESEARCH_PAGES = \[[\s\S]*?\];/, 'var RESEARCH_PAGES = ' + JSON.stringify(researchPages).replace(/</g, '\\u003c') + ';');
     return html;
 }
 
@@ -34,12 +37,7 @@ if (require.main === module) {
     const historyMain = JSON.parse(fs.readFileSync(path.join(OUT, 'portfolio-history-main.json'), 'utf-8'));
     const historyAW = JSON.parse(fs.readFileSync(path.join(OUT, 'portfolio-history-aw.json'), 'utf-8'));
     const trades = JSON.parse(fs.readFileSync(path.join(DATA, 'portfolio-trades.json'), 'utf-8'));
-    const researchPath = path.join(ROOT, 'public-research', 'company-summaries.json');
-    const researchSummaries = fs.existsSync(researchPath)
-        ? JSON.parse(fs.readFileSync(researchPath, 'utf-8'))
-        : { version: 1, generatedAt: null, items: [] };
-
-    const html = renderDashboard({ template: tpl, config, historyMain, historyAW, trades, researchSummaries });
+    const html = renderDashboard({ template: tpl, config, historyMain, historyAW, trades, researchPages: readReports() });
     if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
     const dashPath = path.join(OUT, 'portfolio-dashboard.html');
     const indexPath = path.join(OUT, 'index.html');

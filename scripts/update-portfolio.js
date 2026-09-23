@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const { fetchQuotes, fetchFundNav, fetchUsdCny, deriveHkdCny } = require('./fetch-quote');
 const { renderDashboard } = require('./render-dashboard');
+const { readReports } = require('./company-research');
 
 const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'data');
@@ -19,7 +20,6 @@ const TEMPLATE_FILE = path.join(DATA_DIR, 'dashboard.template.html');
 const HIST_MAIN = path.join(OUTPUT_DIR, 'portfolio-history-main.json');
 const HIST_AW = path.join(OUTPUT_DIR, 'portfolio-history-aw.json');
 const DASHBOARD_OUT = path.join(OUTPUT_DIR, 'portfolio-dashboard.html');
-const RESEARCH_FILE = path.join(ROOT, 'public-research', 'company-summaries.json');
 
 function readJSON(p) {
     return JSON.parse(fs.readFileSync(p, 'utf-8'));
@@ -109,12 +109,12 @@ function validateFullClosures(previousState, currentHoldings, closedPositions, a
 /**
  * 主账户快照
  */
-async function updateMainAccount(cfg, trades, researchSummaries) {
+async function updateMainAccount(cfg, trades, researchPages) {
     const holdingCodes = [];
     for (const m of ['cn', 'hk', 'us']) {
         for (const h of cfg.holdings[m]) holdingCodes.push(h.code);
     }
-    const researchCodes = (researchSummaries.items || [])
+    const researchCodes = researchPages
         .map(item => researchDashboardCode(item.instrumentId))
         .filter(Boolean);
     const codes = [...new Set([...holdingCodes, ...researchCodes])];
@@ -295,14 +295,12 @@ async function main() {
 
     const cfg = readJSON(CFG_FILE);
     const trades = readJSON(TRADES_FILE);
-    const researchSummaries = fs.existsSync(RESEARCH_FILE)
-        ? readJSON(RESEARCH_FILE)
-        : { version: 1, generatedAt: null, items: [] };
+    const researchPages = readReports();
 
-    const mainRes = await updateMainAccount(cfg, trades, researchSummaries);
+    const mainRes = await updateMainAccount(cfg, trades, researchPages);
     const awRes = await updateAllWeather(cfg);
 
-    // 渲染 dashboard：模板 + 注入持仓、历史、交易和经批准的公开投研摘要
+    // 渲染 dashboard：模板 + 注入持仓、历史、交易和唯一研报正文
     console.log('[render] 用模板渲染 dashboard.html...');
     const template = fs.readFileSync(TEMPLATE_FILE, 'utf-8');
     const html = renderDashboard({
@@ -311,7 +309,7 @@ async function main() {
         historyMain: mainRes.hist,
         historyAW: awRes.hist,
         trades,
-        researchSummaries
+        researchPages
     });
     fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     fs.writeFileSync(DASHBOARD_OUT, html, 'utf-8');

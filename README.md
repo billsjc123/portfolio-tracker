@@ -183,12 +183,11 @@ portfolio-tracker/
 
 ## 🔎 与 Investment OS 的联动
 
-投研、事件知识库、估值、交易前检查和 Daily Inbox 保存在私有 `investment-os` 仓库；本公开仓库只负责持仓与展示。
+私有 `investment-os` 保留原始证据、估值计算底稿、交易前检查和 Daily Inbox。用户可读的一页纸研报以本公开仓库的 `docs/research/<stable-id>.md` 为唯一正文源；估值、操作价位和观察清单写在同一文件里，看板不维护另一份摘要。公开研报不应包含账户、仓位、交易意图、个人笔记或凭据。
 
-- 数据流为单向：私有知识库 → 字段白名单导出 → `public-research/company-summaries.json` → 看板“投研状态”页签。
-- 草稿不会发布。只有用户明确批准的研究才会进入公开看板。
-- 看板不读取私有仓库、原始证据、完整研报、账户备注或交易意图。
-- `public-research/company-summaries.json` 为空时，看板会显示明确的空状态，不影响持仓功能。
+修改一页纸后运行 `npm run render && npm run check` 即可本地核对。公司详情页将同一 Markdown 渲染为完整一页纸，并提供章节目录；“观察清单”和“最近变化”只是对同一正文相应章节的只读视图，不生成或保存第二份数据。Markdown 表格、列表、引用和外链均由本地渲染器处理。推送到 `main` 会触发 `publish-research.yml` 自动渲染看板，GitHub Pages 部署完成后生效；无需研究批准或手工导出字段。本地尚未推送的修改不会出现在手机上。尚未迁移的公司在详情页明确显示“暂无一页纸研报”，旧研究底稿仍保留在私有仓库。
+
+私人笔记不属于公开研报，也不在看板展示或编辑。它们保存在私有 `investment-os/01-companies/<stable-id>/notes.md`，通过 Git、Obsidian 或 Codex 维护；看板始终只读，不需要笔记服务或页面写入令牌。
 
 旧快照的一次性回填可执行：
 

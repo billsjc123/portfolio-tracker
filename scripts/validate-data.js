@@ -1,10 +1,22 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const { readReports } = require('./company-research');
 
 const ROOT = path.resolve(__dirname, '..');
 const errors = [];
 const warnings = [];
+
+try {
+    const reports = readReports();
+    const ids = new Set();
+    for (const report of reports) {
+        if (ids.has(report.instrumentId)) errors.push(`研报重复：${report.instrumentId}`);
+        ids.add(report.instrumentId);
+    }
+} catch (error) {
+    errors.push(error.message);
+}
 
 function read(relativePath) {
     try {
@@ -58,27 +70,6 @@ for (const relativePath of ['docs/portfolio-history-main.json', 'docs/portfolio-
         for (const [code, price] of Object.entries(snapshot.prices || {})) {
             if (!finite(price) || price < 0) errors.push(`${relativePath}: ${snapshot.date} ${code} 价格无效`);
         }
-    }
-}
-
-const research = read('public-research/company-summaries.json');
-if (research) {
-    if (research.schemaVersion !== 1 || !Array.isArray(research.items)) errors.push('public-research: schemaVersion/items 无效');
-    const allowed = new Set(['instrumentId', 'companyName', 'researchStatus', 'approvedAsOf', 'thesisStatus', 'confidence', 'valuation', 'priceZones', 'topRisks', 'valuationFreshness']);
-    const required = [...allowed];
-    for (const [index, item] of (research.items || []).entries()) {
-        for (const key of Object.keys(item)) if (!allowed.has(key)) errors.push(`public-research.items[${index}]: 禁止公开字段 ${key}`);
-        for (const key of required) if (!(key in item)) errors.push(`public-research.items[${index}]: 缺少字段 ${key}`);
-        if (item.researchStatus !== 'approved') errors.push(`public-research.items[${index}]: 只允许 approved 状态`);
-        if (!['intact', 'watch', 'broken'].includes(item.thesisStatus)) errors.push(`public-research.items[${index}]: thesisStatus 无效`);
-        if (!['low', 'medium', 'high'].includes(item.confidence)) errors.push(`public-research.items[${index}]: confidence 无效`);
-        if (!['HKD', 'USD', 'CNY'].includes(item.valuation?.currency)) errors.push(`public-research.items[${index}].valuation.currency: 无效`);
-        for (const key of ['bear', 'base', 'bull']) if (!finite(item.valuation?.[key])) errors.push(`public-research.items[${index}].valuation.${key}: 必须是有限数值`);
-        for (const key of ['buyReview', 'baseValue', 'overvaluationReviewLow', 'overvaluationReviewHigh']) if (!finite(item.priceZones?.[key])) errors.push(`public-research.items[${index}].priceZones.${key}: 必须是有限数值`);
-        if (finite(item.priceZones?.buyReview) && finite(item.priceZones?.baseValue) && item.priceZones.buyReview > item.priceZones.baseValue) errors.push(`public-research.items[${index}]: 买入复核价不能高于 Base`);
-        if (finite(item.priceZones?.baseValue) && finite(item.priceZones?.overvaluationReviewLow) && item.priceZones.baseValue > item.priceZones.overvaluationReviewLow) errors.push(`public-research.items[${index}]: Base 不能高于高估复核下限`);
-        if (finite(item.priceZones?.overvaluationReviewLow) && finite(item.priceZones?.overvaluationReviewHigh) && item.priceZones.overvaluationReviewLow > item.priceZones.overvaluationReviewHigh) errors.push(`public-research.items[${index}]: 高估复核区间顺序无效`);
-        if (!Array.isArray(item.topRisks) || item.topRisks.some((risk) => typeof risk !== 'string' || !risk.trim())) errors.push(`public-research.items[${index}]: topRisks 无效`);
     }
 }
 
