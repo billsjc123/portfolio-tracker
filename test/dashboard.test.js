@@ -34,7 +34,7 @@ test('template links holdings to company details and turns research into a watch
     assert.match(template, /观察池/);
     assert.match(template, /openCompanyDetail/);
     assert.match(template, /id="page-company"/);
-    assert.match(template, /关键价位/);
+    assert.doesNotMatch(template, /关键价位/);
     assert.match(template, /查看完整一页纸、估值与观察清单/);
     assert.match(template, /RESEARCH_PAGES\.filter\(function\(page\)\{return !researchPosition\(page\);\}\)/);
     assert.match(template, /researchReader\(page\)/);

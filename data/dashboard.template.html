@@ -1067,15 +1067,15 @@ function renderMain(d){
         var data=d.markets[m],c=cur[m];
         var stocks=data.filter(function(x){return x.code});
         stocks.sort(function(a,b){return b.mv_cny - a.mv_cny});
-        html+='<div class="section"><div class="section-header"><div class="section-title">'+labels[m]+'<span class="mkt-tag '+tags[m]+'">'+m.toUpperCase()+'</span></div></div><table><thead><tr><th>证券</th><th>持仓</th><th>现价</th><th>关键价位</th><th>成本</th><th>日涨跌</th><th>市值</th><th>市值(¥)</th><th>占比</th><th>持仓盈亏(¥)</th></tr></thead><tbody>';
+        html+='<div class="section"><div class="section-header"><div class="section-title">'+labels[m]+'<span class="mkt-tag '+tags[m]+'">'+m.toUpperCase()+'</span></div></div><table><thead><tr><th>证券</th><th>持仓</th><th>现价</th><th>成本</th><th>日涨跌</th><th>市值</th><th>市值(¥)</th><th>占比</th><th>持仓盈亏(¥)</th></tr></thead><tbody>';
         stocks.forEach(function(h){
             var pct=total>0?(h.mv_cny/total*100).toFixed(2):'0.00';
-            html+='<tr><td><button type="button" class="stock-link" data-company-code="'+escapeHtml(h.code)+'" onclick="openCompanyDetail(this.dataset.companyCode,\'main\')"><div class="stock-name">'+escapeHtml(h.name)+'</div><div class="stock-code">'+escapeHtml(h.code.toUpperCase())+' →</div></button></td><td>'+fmt(h.qty,0)+'</td><td class="mono">'+c+fmt(h.price,3)+'</td><td>'+mainResearchSignal(h)+'</td><td class="mono">'+c+fmt(h.cost,3)+'</td><td class="'+clr(h.chgPct)+'">¥'+sgn(h.dayPnl_cny,0)+' <small>('+sgn(h.chgPct,2)+'%)</small></td><td class="mono">'+c+fmt(h.mv_orig,2)+'</td><td class="mono">¥'+fmt(h.mv_cny,2)+'</td><td class="mono">'+pct+'%</td><td class="pnl-'+clr(h.pnl_cny)+'">'+sgn(h.pnl_cny,2)+' <small>('+sgn(h.pnlPct_cny,2)+'%)</small></td></tr>';
+            html+='<tr><td><button type="button" class="stock-link" data-company-code="'+escapeHtml(h.code)+'" onclick="openCompanyDetail(this.dataset.companyCode,\'main\')"><div class="stock-name">'+escapeHtml(h.name)+'</div><div class="stock-code">'+escapeHtml(h.code.toUpperCase())+' →</div></button></td><td>'+fmt(h.qty,0)+'</td><td class="mono">'+c+fmt(h.price,3)+'</td><td class="mono">'+c+fmt(h.cost,3)+'</td><td class="'+clr(h.chgPct)+'">¥'+sgn(h.dayPnl_cny,0)+' <small>('+sgn(h.chgPct,2)+'%)</small></td><td class="mono">'+c+fmt(h.mv_orig,2)+'</td><td class="mono">¥'+fmt(h.mv_cny,2)+'</td><td class="mono">'+pct+'%</td><td class="pnl-'+clr(h.pnl_cny)+'">'+sgn(h.pnl_cny,2)+' <small>('+sgn(h.pnlPct_cny,2)+'%)</small></td></tr>';
         });
         var mp=total>0?(data.totalValueCNY/total*100).toFixed(1):'0.0';
         var dayClr=clr(data.dayPnlCNY);
         var daySign=data.dayPnlCNY>=0?'+':'';
-        html+='<tr class="tot"><td colspan="5">'+labels[m]+'合计</td><td class="mono '+dayClr+'" style="font-weight:600">¥'+daySign+fmt(data.dayPnlCNY,0)+' <small>('+sgn(data.dayPnlPctCNY,2)+'%)</small></td><td colspan="2" class="mono">¥'+fmt(data.totalValueCNY,2)+'</td><td class="mono">'+mp+'%</td><td class="pnl-'+clr(data.totalPnlCNY)+'">'+sgn(data.totalPnlCNY,2)+' ('+sgn(data.totalPnlPctCNY,2)+'%)</td></tr></tbody></table></div>';
+        html+='<tr class="tot"><td colspan="4">'+labels[m]+'合计</td><td class="mono '+dayClr+'" style="font-weight:600">¥'+daySign+fmt(data.dayPnlCNY,0)+' <small>('+sgn(data.dayPnlPctCNY,2)+'%)</small></td><td colspan="2" class="mono">¥'+fmt(data.totalValueCNY,2)+'</td><td class="mono">'+mp+'%</td><td class="pnl-'+clr(data.totalPnlCNY)+'">'+sgn(data.totalPnlCNY,2)+' ('+sgn(data.totalPnlPctCNY,2)+'%)</td></tr></tbody></table></div>';
     });
     // 现金
     html+='<div class="section"><div class="section-header"><div class="section-title">💵 现金<span class="mkt-tag" style="background:#f1f5f9;color:#64748b">CASH</span></div></div><table><thead><tr><th>币种</th><th>金额</th><th>折合(¥)</th><th>占比</th><th></th><th></th><th></th><th></th></tr></thead><tbody>';
@@ -1642,11 +1642,6 @@ function researchMoney(value,currency){
     if(!Number.isFinite(value))return '--';
     var prefix=currency==='HKD'?'HK$':currency==='USD'?'$':currency==='CNY'?'¥':currency+' ';
     return prefix+fmt(value,2);
-}
-
-function mainResearchSignal(holding){
-    if(researchPageForDashboardCode(holding.code))return '<div class="main-signal"><span class="research-zone zone-value">查看完整研报</span></div>';
-    return '<div class="main-signal-empty">暂无一页纸研报</div>';
 }
 
 function renderCompanyDetail(code){
