@@ -31,12 +31,14 @@ test('renderer injects the one-page source without a second research summary', (
 test('template links holdings to company details and turns research into a watchlist', () => {
     const template = fs.readFileSync(path.join(ROOT, 'data/dashboard.template.html'), 'utf8');
     assert.match(template, /switchTab\('research'\)/);
-    assert.match(template, /观察池/);
+    assert.match(template, /观察仓/);
     assert.match(template, /openCompanyDetail/);
     assert.match(template, /id="page-company"/);
     assert.doesNotMatch(template, /关键价位/);
     assert.match(template, /查看完整一页纸、估值与观察清单/);
     assert.match(template, /RESEARCH_PAGES\.filter\(function\(page\)\{return !researchPosition\(page\);\}\)/);
+    assert.match(template, /未持有 · 研报更新于/);
+    assert.match(template, /快照价 · /);
     assert.match(template, /researchReader\(page\)/);
     assert.match(template, /三个视图均来自同一份研报正文/);
     assert.match(template, /暂无一页纸研报/);

@@ -145,6 +145,9 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .research-card { border: 1px solid var(--border); border-radius: 14px; padding: 18px; background: #fff; }
 .research-card-clickable { cursor: pointer; transition: transform 0.18s ease, box-shadow 0.18s ease; }
 .research-card-clickable:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.research-card-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+.research-card-price { font-size: 20px; font-weight: 750; text-align: right; white-space: nowrap; }
+.research-card-price span { display: block; font-size: 10px; font-weight: 500; color: var(--text-muted); }
 .research-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
 .research-name { font-size: 18px; font-weight: 700; }
 .research-meta { color: var(--text-muted); font-size: 11px; margin-top: 3px; }
@@ -366,7 +369,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     <button class="tab-btn" onclick="switchTab('overview')">&#x1F5FA;&#xFE0F; 持仓全景图</button>
     <button class="tab-btn" onclick="switchTab('allweather')">&#x2600;&#xFE0F; 全天候策略</button>
     <button class="tab-btn" onclick="switchTab('trades')">&#x1F4CB; 操作记录(主账户)</button>
-    <button class="tab-btn" onclick="switchTab('research')">&#x1F50E; 观察池</button>
+    <button class="tab-btn" onclick="switchTab('research')">&#x1F50E; 观察仓</button>
 </div>
 
 <!-- Shared rate bar -->
@@ -567,7 +570,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 <div class="tab-page" id="page-research">
     <div class="cards">
         <div class="card ct">
-            <div class="card-title">观察池公司</div>
+            <div class="card-title">观察仓公司</div>
             <div class="card-value" id="rs-approvedCount">0</div>
             <div class="card-sub">已有公司研报、当前主账户未持有</div>
         </div>
@@ -578,10 +581,10 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
         </div>
     </div>
     <div class="section">
-        <div class="section-header"><div class="section-title">&#x1F4DA; 估值观察池</div></div>
+        <div class="section-header"><div class="section-title">&#x1F4DA; 观察仓 · 一页纸研报</div></div>
         <div class="research-grid" id="rs-grid"></div>
         <div id="rs-empty" style="display:none;padding:24px;color:var(--text-muted);text-align:center">
-            暂无观察池公司。完成一页纸并同步到看板仓库后，未持有的公司会显示在这里。
+            暂无观察仓公司。完成一页纸并同步到看板仓库后，未持有的公司会显示在这里。
         </div>
     </div>
 </div>
@@ -1678,12 +1681,18 @@ function renderCompanyDetail(code){
 
 function renderResearch(){
     var pages=RESEARCH_PAGES.filter(function(page){return !researchPosition(page);});
+    var snapshots=HISTORY_MAIN&&HISTORY_MAIN.snapshots||[];
+    var snapshot=snapshots[snapshots.length-1];
     document.getElementById('rs-approvedCount').textContent=String(pages.length);
     document.getElementById('rs-generatedAt').textContent=pages.length?pages.map(function(page){return page.updatedAt;}).sort().at(-1):'--';
     var grid=document.getElementById('rs-grid'),empty=document.getElementById('rs-empty');
     grid.innerHTML=pages.map(function(page){
         var code=researchDashboardCode(page.instrumentId)||'';
-        return '<article class="research-card research-card-clickable" role="button" tabindex="0" data-company-code="'+escapeHtml(code)+'" onclick="openCompanyDetail(this.dataset.companyCode,\'research\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCompanyDetail(this.dataset.companyCode,\'research\')}"><div class="research-name">'+escapeHtml(page.companyName)+'</div><div class="research-meta">更新于 '+escapeHtml(page.updatedAt)+'</div><p>查看完整一页纸、估值与观察清单 →</p></article>';
+        var currency=page.instrumentId.slice(0,2)==='US'?'USD':page.instrumentId.slice(0,2)==='HK'?'HKD':'CNY';
+        var quote=snapshot&&snapshot.prices&&snapshot.prices[code];
+        var quoteLabel=Number.isFinite(quote)?researchMoney(quote,currency):'--';
+        var quoteNote=Number.isFinite(quote)?'快照价 · '+snapshot.date:'行情待更新';
+        return '<article class="research-card research-card-clickable" role="button" tabindex="0" data-company-code="'+escapeHtml(code)+'" onclick="openCompanyDetail(this.dataset.companyCode,\'research\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openCompanyDetail(this.dataset.companyCode,\'research\')}"><div class="research-card-top"><div><div class="research-name">'+escapeHtml(page.companyName)+'</div><div class="research-meta">未持有 · 研报更新于 '+escapeHtml(page.updatedAt)+'</div></div><div class="research-card-price">'+quoteLabel+'<span>'+escapeHtml(quoteNote)+'</span></div></div><p>查看完整一页纸、估值与观察清单 →</p></article>';
     }).join('');
     empty.style.display=pages.length?'none':'block';
 }
