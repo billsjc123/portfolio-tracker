@@ -204,6 +204,9 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 .one-page-changes ul { display: grid; gap: 12px; list-style: none; margin: 0; }
 .one-page-changes li { background: #fff; border: 1px solid var(--border); border-left: 4px solid #0ea5e9; border-radius: 12px; margin: 0; padding: 16px 18px; }
 .one-page-changes li strong:first-child { color: #075985; }
+.one-page-actions h3 { margin: 0 0 12px; color: #312e81; font-size: 20px; }
+.one-page-actions p { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.one-page-actions strong { color: #312e81; }
 .company-back { appearance: none; border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 9px; padding: 8px 12px; font-size: 12px; font-weight: 650; cursor: pointer; margin-bottom: 16px; }
 .company-hero { background: linear-gradient(135deg,#eef2ff,#f8fafc); border: 1px solid #e0e7ff; border-radius: 16px; padding: 22px; margin-bottom: 18px; }
 .company-hero-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
@@ -647,7 +650,7 @@ function closeCompanyDetail(){
 }
 
 function setCompanyResearchView(view){
-    if(!['report','watch','changes'].includes(view))return;
+    if(!['report','actions','watch','changes'].includes(view))return;
     activeCompanyView=view;
     renderCompanyDetail(activeCompanyCode);
     window.scrollTo(0,0);
@@ -1623,13 +1626,26 @@ function researchSection(markdown,title){
     return sections.find(function(section){return section.indexOf('## '+title)===0;})||'';
 }
 
-function researchViewTabs(){
-    var labels={report:'公司一页纸',watch:'观察清单',changes:'最近变化'};
+function researchSubsection(markdown,parent,title){
+    var section=researchSection(markdown,parent);
+    var marker='### '+title;
+    var start=section.indexOf(marker);
+    if(start<0)return '';
+    var content=section.slice(start);
+    var next=content.slice(marker.length).search(/^### /m);
+    return next<0?content:content.slice(0,marker.length+next);
+}
+
+function researchViewTabs(page){
+    var labels={report:'公司一页纸'};
+    if(researchSubsection(page.markdown,'估值与操作','操作计划'))labels.actions='操作建议';
+    labels.watch='观察清单';labels.changes='最近变化';
     return '<div class="company-view-tabs">'+Object.keys(labels).map(function(view){return '<button type="button" class="company-view-tab '+(activeCompanyView===view?'active':'')+'" onclick="setCompanyResearchView(\''+view+'\')">'+labels[view]+'</button>';}).join('')+'</div>';
 }
 
 function researchReader(page){
     var markdown=page.markdown,toc='';
+    if(activeCompanyView==='actions')markdown=researchSubsection(page.markdown,'估值与操作','操作计划');
     if(activeCompanyView==='watch')markdown=researchSection(page.markdown,'观察清单');
     if(activeCompanyView==='changes')markdown=researchSection(page.markdown,'最近变化');
     if(activeCompanyView==='report'){
@@ -1637,8 +1653,8 @@ function researchReader(page){
     }
     var standalone=activeCompanyView!=='report';
     var readerClass='research-reader'+(standalone?' research-reader-standalone':'');
-    var articleClass='one-page'+(standalone?' one-page-standalone':'')+(activeCompanyView==='watch'?' one-page-watch':'')+(activeCompanyView==='changes'?' one-page-changes':'');
-    return researchViewTabs()+'<div class="'+readerClass+'">'+toc+'<div class="section"><article class="'+articleClass+'"><div class="one-page-date">资料更新：'+escapeHtml(page.updatedAt)+' · 三个视图均来自同一份研报正文</div>'+renderOnePageMarkdown(markdown)+'</article></div></div>';
+    var articleClass='one-page'+(standalone?' one-page-standalone':'')+(activeCompanyView==='watch'?' one-page-watch':'')+(activeCompanyView==='changes'?' one-page-changes':'')+(activeCompanyView==='actions'?' one-page-actions':'');
+    return researchViewTabs(page)+'<div class="'+readerClass+'">'+toc+'<div class="section"><article class="'+articleClass+'"><div class="one-page-date">资料更新：'+escapeHtml(page.updatedAt)+' · 所有视图共用同一份研报正文</div>'+renderOnePageMarkdown(markdown)+'</article></div></div>';
 }
 
 function researchMoney(value,currency){

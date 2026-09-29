@@ -40,13 +40,15 @@ test('template links holdings to company details and turns research into a watch
     assert.match(template, /未持有 · 研报更新于/);
     assert.match(template, /快照价 · /);
     assert.match(template, /researchReader\(page\)/);
-    assert.match(template, /三个视图均来自同一份研报正文/);
+    assert.match(template, /所有视图共用同一份研报正文/);
     assert.match(template, /暂无一页纸研报/);
     assert.match(template, /持仓数量/);
     assert.match(template, /renderOnePageMarkdown/);
     assert.match(template, /function researchSection/);
     assert.match(template, /function researchReader/);
     assert.match(template, /公司一页纸/);
+    assert.match(template, /labels\.actions='操作建议'/);
+    assert.match(template, /researchSubsection\(page\.markdown,'估值与操作','操作计划'\)/);
     assert.match(template, /观察清单/);
     assert.match(template, /最近变化/);
     assert.match(template, /research-toc/);
@@ -54,5 +56,5 @@ test('template links holdings to company details and turns research into a watch
     assert.match(template, /one-page-watch/);
     assert.match(template, /one-page-changes/);
     assert.match(template, /<table><thead><tr>/);
-    assert.match(template, /三个视图均来自同一份研报正文/);
+    assert.match(template, /所有视图共用同一份研报正文/);
 });
