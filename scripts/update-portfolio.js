@@ -220,6 +220,7 @@ async function updateAllWeather(cfg) {
         dataTime: nowISO(),
         rates,
         awRealizedPnL_CNY: +awRealized.toFixed(2),
+        portfolioState: { funds: structuredClone(funds) },
         prices: {},
         changePct: {},
         funds: {}

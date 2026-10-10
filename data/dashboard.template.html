@@ -366,6 +366,19 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     </div>
 </div>
 
+<section class="box" aria-label="总资产概览">
+    <h3>总资产概览（已登记资产，非净资产）</h3>
+    <div class="cards">
+        <div class="card ct"><div class="card-title">总资产估算（含账户外资产）</div><div class="card-value" id="assets-total">--</div><div class="card-sub">不作为投资收益或收益率计算依据</div></div>
+        <div class="card"><div class="card-title">主账户（含账户现金）</div><div class="card-value" id="assets-main">--</div><div class="card-sub" id="assets-main-date">--</div></div>
+        <div class="card"><div class="card-title">全天候账户（含账户现金）</div><div class="card-value" id="assets-aw">--</div><div class="card-sub" id="assets-aw-date">--</div></div>
+        <div class="card"><div class="card-title">账户外现金管理类</div><div class="card-value" id="assets-external">--</div><div class="card-sub">单独列示，不等同于可即时使用的现金</div></div>
+        <div class="card"><div class="card-title">稳健投资·独立债基</div><div class="card-value" id="assets-bonds">--</div><div class="card-sub" id="assets-bonds-pnl">--</div><div class="card-sub">不含全天候债基；按截图手工更新</div></div>
+    </div>
+    <div id="assets-detail" style="overflow-wrap:anywhere"></div>
+    <p id="assets-note" style="font-size:12px;color:var(--text-muted)"></p>
+</section>
+
 <!-- Tabs -->
 <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('main')">&#x1F4CA; 主账户</button>
@@ -393,7 +406,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
 <div class="tab-page active" id="page-main">
     <div class="cards">
         <div class="card ct">
-            <div class="card-title">&#x1F4B0; 总资产（含现金）</div>
+            <div class="card-title">&#x1F4B0; 主账户资产（含现金）</div>
             <div class="card-value" id="m-totalValue">--</div>
             <div class="card-sub" id="m-totalPnl">--</div>
         </div>
@@ -405,7 +418,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
         <div class="card ccn"><div class="card-title">&#x1F1E8;&#x1F1F3; A股</div><div class="card-value" id="m-cnTotal">--</div><div class="card-sub" id="m-cnPnl">--</div><div class="card-sub-day" id="m-cnDayChange">--</div></div>
         <div class="card chk"><div class="card-title">&#x1F1ED;&#x1F1F0; 港股</div><div class="card-value" id="m-hkTotal">--</div><div class="card-sub" id="m-hkPnl">--</div><div class="card-sub-day" id="m-hkDayChange">--</div></div>
         <div class="card cus"><div class="card-title">&#x1F1FA;&#x1F1F8; 美股</div><div class="card-value" id="m-usTotal">--</div><div class="card-sub" id="m-usPnl">--</div><div class="card-sub-day" id="m-usDayChange">--</div></div>
-        <div class="card" style="border-left:4px solid #6366f1"><div class="card-title">&#x1F4B5; 现金</div><div class="card-value" id="m-cashTotal">--</div><div class="card-sub" id="m-cashDetail" style="font-size:11px;color:#94a3b8">--</div></div>
+        <div class="card" style="border-left:4px solid #6366f1"><div class="card-title">&#x1F4B5; 券商现金及现金管理</div><div class="card-value" id="m-cashTotal">--</div><div class="card-sub" id="m-cashDetail" style="font-size:11px;color:#94a3b8">--</div></div>
     </div>
 
     <div class="row2">
@@ -657,7 +670,7 @@ function setCompanyResearchView(view){
 }
 
 // ==================== 主账户计算 ====================
-function calcMain(snap){
+function calcMain(snap,useCurrentCash){
     var r=(snap.rates&&snap.rates.USD_CNY!=null)?snap.rates:DR;
     // 使用快照当日的持仓状态；绝不使用今天的 CONFIG 回算历史。
     // 清仓、调仓或删除标的因此不会改变既有日期的累计盈亏。
@@ -686,7 +699,8 @@ function calcMain(snap){
         mk[m].totalValueCNY=mvc;mk[m].totalCostCNY=mcc;mk[m].totalPnlCNY=mvc-mcc;mk[m].totalPnlPctCNY=mcc>0?(mvc-mcc)/mcc*100:0;mk[m].dayPnlCNY=toCNY(mdp,m,r);mk[m].dayPnlPctCNY=mvc>0?toCNY(mdp,m,r)/mvc*100:0;
         tv+=mvc;tc+=mcc;tdp+=toCNY(mdp,m,r);
     });
-    var cash=state.cash||CONFIG.cash||{usd:0,hkd:0,rmb:0};
+    // Only current overview uses reconciled balances; historical performance retains snapshot cash.
+    var cash=(useCurrentCash?CONFIG.cash:state.cash)||CONFIG.cash||{usd:0,hkd:0,rmb:0};
     var cashCNY=cash.rmb+cash.hkd*r.HKD_CNY+cash.usd*r.USD_CNY;
     var total=tv+cashCNY;
     var unrealizedPnLCNY=tv-tc;
@@ -697,7 +711,7 @@ function calcMain(snap){
 }
 
 // ==================== 全天候计算 ====================
-function calcAW(snap){
+function calcAW(snap,useCurrentFunds){
     var r=(snap.rates&&snap.rates.USD_CNY!=null)?snap.rates:DR;
     var awc=CONFIG.allweather||{holdings:[],funds:[],cash:{rmb:0}};
     var stocks=[],tv=0,tc=0,tdp=0;
@@ -710,9 +724,15 @@ function calcAW(snap){
     });
     // 基金
     var fundNAVs=snap.funds||{};
-    (awc.funds||[]).forEach(function(f){
+    var reconciliation=awc.fundReconciliation;
+    var fundHoldings=(!useCurrentFunds&&reconciliation&&snap.date<reconciliation.asOf)?reconciliation.previousFunds:(snap.portfolioState&&snap.portfolioState.funds||awc.funds||[]);
+    if(useCurrentFunds)fundHoldings=awc.funds||[];
+    fundHoldings.forEach(function(f){
         var nav=fundNAVs[f.code]||0;
-        var mv=f.shares*nav, cv=f.shares*f.cost, pnl=mv-cv;
+        var useReported=useCurrentFunds&&f.reportedNAV&&(!nav||snap.date<=f.navAsOf);
+        if(useReported)nav=f.reportedNAV;
+        var mv=useReported?f.reportedValueCNY:f.shares*nav;
+        var cv=f.costBasisCNY!=null?f.costBasisCNY:f.shares*f.cost, pnl=mv-cv;
         tv+=mv;tc+=cv;
         stocks.push({code:f.code,name:f.name,qty:f.shares,cost:f.cost,price:nav,chgPct:0,mv_orig:mv,pnl_orig:pnl,dayPnl_orig:0,pnlPct_orig:cv>0?pnl/cv*100:0,mv_cny:mv,cost_cny:cv,pnl_cny:pnl,pnlPct_cny:cv>0?pnl/cv*100:0});
     });
@@ -1096,7 +1116,7 @@ function renderMain(d){
         {label:'A股',value:d.markets.cn.totalValueCNY,color:MC.cn},
         {label:'港股',value:d.markets.hk.totalValueCNY,color:MC.hk},
         {label:'美股',value:d.markets.us.totalValueCNY,color:MC.us},
-        {label:'现金',value:d.cashCNY,color:MC.cash}
+        {label:'券商现金及现金管理',value:d.cashCNY,color:MC.cash}
     ],total,'总资产');
 
     // TOP5
@@ -1126,7 +1146,7 @@ function renderMain(d){
     document.getElementById('m-usDayChange').innerHTML='&#x1F4C8; 今日涨跌 '+sgn(d.markets.us.dayPnlCNY,2)+' <span style="font-size:13px">('+sgn(d.markets.us.dayPnlPctCNY,2)+'%)</span>';
     document.getElementById('m-usDayChange').className='card-sub-day '+clr(d.markets.us.dayPnlCNY);
     document.getElementById('m-cashTotal').textContent='¥'+fmt(d.cashCNY,2);
-    document.getElementById('m-cashDetail').textContent='USD $'+fmt(d.cash.usd,0)+' · HKD '+fmt(d.cash.hkd,0)+' · RMB ¥'+fmt(d.cash.rmb,0);
+    document.getElementById('m-cashDetail').textContent='美元货基 $'+fmt(d.cash.usd,2)+' · 港元货基 HK$'+fmt(d.cash.hkd,2)+' · 人民币券商备用金 ¥'+fmt(d.cash.rmb,2);
 }
 
 // ==================== 全天候渲染 ====================
@@ -1512,12 +1532,69 @@ function sharedSetup(){
 }
 
 // ==================== 重新渲染全部 ====================
+function calcBondReserve(reserve){
+    var holdings=(reserve&&reserve.holdings||[]).map(function(h){
+        var cost=h.valueCNY-h.holdingPnlCNY;
+        return {name:h.name,value:h.valueCNY,cost:cost,pnl:h.holdingPnlCNY,pct:cost>0?h.holdingPnlCNY/cost*100:null};
+    });
+    var total=holdings.reduce(function(sum,h){sum.value+=h.value;sum.cost+=h.cost;sum.pnl+=h.pnl;return sum;},{value:0,cost:0,pnl:0});
+    total.pct=total.cost>0?total.pnl/total.cost*100:null;
+    total.holdings=holdings;
+    return total;
+}
+
+function calcAssetOverview(main, aw, assets, bondReserve){
+    var external=(assets||[]).reduce(function(sum,asset){return sum+asset.balance;},0);
+    var bonds=calcBondReserve(bondReserve).value;
+    var residual=bondReserve?bondReserve.cashManagementResidualCNY||0:0;
+    return {
+        main:main?main.totalValueCNY:null,
+        aw:aw?aw.totalValueCNY:null,
+        external:external,
+        bonds:bonds,
+        total:main&&aw?main.totalValueCNY+aw.totalValueCNY+external+bonds+residual:null,
+        pending:(assets||[]).some(function(asset){return asset.reconciliation!=='confirmed';})
+    };
+}
+
+function renderAssetOverview(){
+    var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
+    var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
+    var assets=CONFIG.externalAssets||[];
+    var d=calcAssetOverview(mainSnap?calcMain(mainSnap,true):null,awSnap?calcAW(awSnap,true):null,assets,CONFIG.bondReserve);
+    ['total','main','aw','external','bonds'].forEach(function(key){
+        document.getElementById('assets-'+key).textContent=d[key]==null?'数据不完整':'¥'+fmt(d[key],2);
+    });
+    document.getElementById('assets-main-date').textContent='快照日期：'+(mainSnap?mainSnap.date:'缺失')+'；刷新行情不代表余额已核对';
+    document.getElementById('assets-aw-date').textContent='快照日期：'+(awSnap?awSnap.date:'缺失')+'；包含全天候账户现金';
+    document.getElementById('assets-detail').innerHTML=assets.map(function(asset){
+        return '<p><strong>'+escapeHtml(asset.name)+' · ¥'+fmt(asset.balance,2)+'</strong><br><small>'+escapeHtml(asset.liquidity)+'<br>余额确认日：'+escapeHtml(asset.asOf)+' · '+escapeHtml(asset.source)+' · 手工更新，不自动计息</small></p>';
+    }).join('');
+    if(CONFIG.bondReserve){
+        var reserve=CONFIG.bondReserve;
+        var summary=calcBondReserve(reserve);
+        document.getElementById('assets-bonds-pnl').textContent='持有收益 ¥'+sgn(summary.pnl,2)+' · '+(summary.pct==null?'收益率不适用':sgn(summary.pct,2)+'%');
+        document.getElementById('assets-detail').innerHTML+='<p><strong>'+escapeHtml(reserve.name)+'</strong><br>'+summary.holdings.map(function(h){return escapeHtml(h.name)+'：¥'+fmt(h.value,2)+'<br>持仓成本 ¥'+fmt(h.cost,2)+' · 持有收益 ¥'+sgn(h.pnl,2)+' · '+(h.pct==null?'收益率不适用':sgn(h.pct,2)+'%');}).join('<br>')+'<br><small>收益率＝截图持有收益÷（持有金额－持有收益），非年化；持有金额已含收益，总资产不再加一次收益。<br>记录日：'+escapeHtml(reserve.asOf)+' · '+escapeHtml(reserve.source)+'<br>'+escapeHtml(reserve.note)+'<br>理财通活期+余款 ¥'+fmt(reserve.cashManagementResidualCNY,2)+' 单独计入总额。</small></p>';
+    }else{
+        document.getElementById('assets-bonds-pnl').textContent='未登记独立债基';
+    }
+    if(CONFIG.allweather.fundReconciliation){
+        document.getElementById('assets-aw-date').textContent+='；债基份额按2026-10-10截图核对，截图净值日期2026-10-09，ETF未变';
+    }
+    if(CONFIG.cashManagement){
+        var cm=CONFIG.cashManagement;
+        document.getElementById('assets-detail').innerHTML+='<p><strong>券商投资备用金</strong><br><small>'+escapeHtml(cm.usd)+'：US$'+fmt(CONFIG.cash.usd,2)+'；'+escapeHtml(cm.hkd)+'：HK$'+fmt(CONFIG.cash.hkd,2)+'<br>富途未申购现金：0；长桥现金：0。外币货基余额确认日：'+escapeHtml(cm.asOf)+'<br>'+escapeHtml(cm.rmb)+'<br>'+escapeHtml(cm.policy)+'。货基余额已替换旧外币现金，不重复计入，不自动计息。</small></p>';
+    }
+    document.getElementById('assets-note').textContent=(d.pending?'暂按独立资产计入，待确认与原账户现金是否重叠。':'')+'总额汇总各账户最近可用估值及手工余额，数据日期可能不同；不回填历史收益，不表示所有资产均可即时赎回。';
+}
+
 function renderAll(){
+    renderAssetOverview();
     sharedSetup();
     var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
     var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
-    if(mainSnap) renderMain(calcMain(mainSnap));
-    if(awSnap) renderAW(calcAW(awSnap));
+    if(mainSnap) renderMain(calcMain(mainSnap,true));
+    if(awSnap) renderAW(calcAW(awSnap,true));
     renderTrades();
     renderResearch();
     if(activeCompanyCode&&document.getElementById('page-company').classList.contains('active'))renderCompanyDetail(activeCompanyCode);
@@ -1913,10 +1990,11 @@ function manualRefresh(){
 try{
     // 1) 用内嵌数据先渲染
     sharedSetup();
+    renderAssetOverview();
     var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
     var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
-    if(mainSnap) renderMain(calcMain(mainSnap));
-    if(awSnap)  renderAW(calcAW(awSnap));
+    if(mainSnap) renderMain(calcMain(mainSnap,true));
+    if(awSnap)  renderAW(calcAW(awSnap,true));
     renderTrades();
     renderResearch();
     setupYieldFilters();

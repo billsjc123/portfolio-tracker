@@ -163,14 +163,22 @@
       {
         "code": "009803",
         "name": "易方达中债7-10国开债C",
-        "shares": 15609.43,
-        "cost": 1.3063
+        "shares": 19348.95,
+        "cost": 1.3019,
+        "costBasisCNY": 25190.07,
+        "reportedValueCNY": 25668.32,
+        "reportedNAV": 1.3266,
+        "navAsOf": "2026-10-09"
       },
       {
         "code": "001512",
         "name": "易方达中债3-5年国债",
-        "shares": 5203.11,
-        "cost": 1.3838
+        "shares": 6058.71,
+        "cost": 1.3864,
+        "costBasisCNY": 8400,
+        "reportedValueCNY": 8494.31,
+        "reportedNAV": 1.402,
+        "navAsOf": "2026-10-09"
       }
     ],
     "cash": {
@@ -259,11 +267,55 @@
         ]
       }
     ],
-    "awRealizedPnL_CNY": 0
+    "awRealizedPnL_CNY": 0,
+    "fundReconciliation": {
+      "asOf": "2026-10-10",
+      "source": "用户截图，净值日期2026-10-09；当前总份额已包含历次定投及红利再投，不另加127.63份",
+      "previousFunds": [
+        { "code": "009803", "name": "易方达中债7-10国开债C", "shares": 15609.43, "cost": 1.3063 },
+        { "code": "001512", "name": "易方达中债3-5年国债", "shares": 5203.11, "cost": 1.3838 }
+      ],
+      "funding": "银行卡定投，不扣券商现金；未回填未知成交份额或历史交易",
+      "etfStatus": "ETF持仓未改，计划买入不作为已成交"
+    }
+  },
+  "externalAssets": [
+    {
+      "id": "webank-cash-management",
+      "name": "微众现金管理类产品（具体产品待确认）",
+      "category": "cashManagement",
+      "currency": "CNY",
+      "balance": 130680,
+      "asOf": "2026-10-10",
+      "source": "用户手工提供",
+      "liquidity": "灵活备用资金，可较快转回银行卡；非活期，具体赎回规则待确认",
+      "reconciliation": "confirmed"
+    }
+  ],
+  "bondReserve": {
+    "name": "稳健投资·独立债基",
+    "asOf": "2026-10-10",
+    "source": "腾讯理财通截图，按持有金额手工估值；代码、份额及净值日期未提供",
+    "note": "历史上由微众转入，独立于当前微众130680元及全天候债基；不重复扣减微众。债基有净值波动，不是活期现金。",
+    "holdings": [
+      { "name": "易方达中债3-5年国开行债券指数A", "valueCNY": 151253.07, "holdingPnlCNY": 1037.11 },
+      { "name": "广发中债7-10年国开债指数A", "valueCNY": 101108.03, "holdingPnlCNY": 1108.03 }
+    ],
+    "cashManagementResidualCNY": 0.04
+  },
+  "cashManagement": {
+    "asOf": "2026-10-10",
+    "usd": "富途美元货币基金（泰康开泰美元货币基金）",
+    "hkd": "富途港元货币基金",
+    "rmb": "境内券商投资备用金，自动回购；余额沿用旧记录",
+    "futuUninvestedCash": 0,
+    "longbridgeCash": 0,
+    "policy": "新增交易集中于富途；长桥只卖不买；券商资金非紧急一般不出金",
+    "source": "富途基金页面截图及用户确认；余额替换，非收益或新增交易"
   },
   "cash": {
-    "usd": 3077.268,
-    "hkd": 850,
+    "usd": 4978.71,
+    "hkd": 12572.74,
     "rmb": 96161.6
   }
 }

@@ -43,8 +43,36 @@ if (config) {
         else config.holdings[market].forEach((holding, index) => checkHolding(holding, `holdings.${market}[${index}]`));
     }
     (config.allweather?.holdings || []).forEach((holding, index) => checkHolding(holding, `allweather.holdings[${index}]`));
+    for (const fund of config.allweather?.funds || []) {
+        if (!finite(fund.shares) || fund.shares < 0 || !finite(fund.cost)) errors.push(`fund ${fund.code}: 份额或成本无效`);
+        for (const key of ['costBasisCNY', 'reportedValueCNY', 'reportedNAV']) {
+            if (fund[key] !== undefined && (!finite(fund[key]) || fund[key] < 0)) errors.push(`fund ${fund.code}: ${key} 无效`);
+        }
+    }
+    if (config.bondReserve) {
+        if (!Array.isArray(config.bondReserve.holdings)) errors.push('bondReserve.holdings: 必须是数组');
+        for (const holding of config.bondReserve.holdings || []) {
+            if (!holding.name || !finite(holding.valueCNY) || holding.valueCNY < 0 || !finite(holding.holdingPnlCNY)) errors.push('bondReserve: 名称、金额或收益无效');
+        }
+        if (!finite(config.bondReserve.cashManagementResidualCNY) || config.bondReserve.cashManagementResidualCNY < 0) errors.push('bondReserve: 余款无效');
+    }
     for (const [currency, value] of Object.entries(config.cash || {})) {
         if (!finite(value)) errors.push(`cash.${currency}: 必须是有限数值`);
+    }
+    const assetIds = new Set();
+    if (config.externalAssets !== undefined && !Array.isArray(config.externalAssets)) errors.push('externalAssets: 必须是数组');
+    for (const [index, asset] of (Array.isArray(config.externalAssets) ? config.externalAssets : []).entries()) {
+        const location = `externalAssets[${index}]`;
+        for (const key of ['id', 'name', 'source', 'liquidity']) {
+            if (typeof asset?.[key] !== 'string' || !asset[key].trim()) errors.push(`${location}.${key}: 缺失`);
+        }
+        if (assetIds.has(asset?.id)) errors.push(`${location}: 重复资产 id`);
+        assetIds.add(asset?.id);
+        if (!finite(asset?.balance) || asset.balance < 0) errors.push(`${location}.balance: 必须是非负有限数值`);
+        if (asset?.currency !== 'CNY') errors.push(`${location}: 当前账户外资产只支持人民币`);
+        if (asset?.category !== 'cashManagement') errors.push(`${location}: 不支持的资产分类`);
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(asset?.asOf)) errors.push(`${location}.asOf: 日期无效`);
+        if (!['pending', 'confirmed'].includes(asset?.reconciliation)) errors.push(`${location}: 核对状态无效`);
     }
 }
 
