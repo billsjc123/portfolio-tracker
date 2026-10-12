@@ -62,6 +62,29 @@ body {
 .card-sub-day.up { background: #fef2f2; color: #dc2626; }
 .card-sub-day.down { background: #ecfdf5; color: #059669; }
 
+.asset-overview { margin-bottom: 24px; }
+.asset-overview > h3 { margin-bottom: 16px; }
+.asset-total { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border: 1px solid #c7d2fe; border-radius: 14px; background: linear-gradient(120deg,#eef2ff,#f8fafc); }
+.asset-total .card-title { margin-bottom: 4px; }
+.asset-total .card-value { font-size: 28px; line-height: 1.2; }
+.asset-total .card-sub { color: var(--text-muted); font-size: 12px; font-weight: 400; }
+.asset-summary-cards { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; margin: 14px 0 20px; }
+.asset-summary-cards .card { min-width: 0; padding: 16px; border: 1px solid var(--border); box-shadow: none; }
+.asset-summary-cards .card-value { font-size: 20px; overflow-wrap: anywhere; }
+.asset-summary-cards .card-sub { color: var(--text-muted); font-size: 11px; font-weight: 400; line-height: 1.55; }
+.asset-detail-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; align-items: start; }
+.asset-detail-card { min-width: 0; padding: 16px 18px; border: 1px solid var(--border); border-radius: 12px; background: #fff; overflow-wrap: anywhere; }
+.asset-detail-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 10px; }
+.asset-detail-head h4 { font-size: 14px; line-height: 1.45; }
+.asset-detail-head strong { font-size: 15px; white-space: nowrap; }
+.asset-detail-card p { margin: 6px 0; font-size: 12px; line-height: 1.65; }
+.asset-detail-card .asset-detail-meta { color: var(--text-muted); font-size: 11px; }
+.asset-holding { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 12px; }
+.asset-holding-name { font-weight: 600; }
+.asset-holding-value { font-weight: 700; white-space: nowrap; }
+.asset-holding-sub { grid-column: 1 / -1; color: var(--text-muted); font-size: 11px; }
+.asset-overview #assets-note { margin-top: 14px; color: var(--text-muted); font-size: 11px; line-height: 1.6; }
+
 .rate-bar {
     background: linear-gradient(90deg, #dbeafe 0%, #e0e7ff 100%);
     border: 1px solid #c7d2fe; border-radius: 12px;
@@ -261,6 +284,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     .header h1 { font-size: 21px; }
     .row2 { grid-template-columns: 1fr; }
     .cards { grid-template-columns: repeat(2, 1fr); }
+    .asset-summary-cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
     .tab-btn { padding: 10px 12px; font-size: 13px; }
     .box { padding: 18px; }
     .box h3 { font-size: 14px; }
@@ -286,6 +310,13 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     .card-value { font-size: 17px; }
     .card-sub { font-size: 11px; }
     .card-sub-day { font-size: 12px; padding: 3px 6px; }
+    .asset-total { padding: 16px; }
+    .asset-total .card-value { font-size: 24px; }
+    .asset-summary-cards { gap: 8px; }
+    .asset-summary-cards .card { padding: 12px; }
+    .asset-summary-cards .card-value { font-size: 17px; }
+    .asset-detail-grid { grid-template-columns: 1fr; gap: 10px; }
+    .asset-detail-card { padding: 13px 14px; }
 
     .row2 { gap: 12px; margin-bottom: 16px; }
     .box { padding: 14px; border-radius: 12px; }
@@ -304,7 +335,7 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     .heatmap-name { font-size: 10px; margin-top: 2px; }
     .heatmap-pct { font-size: 11px; margin-top: 3px; }
     .heatmap-footer { flex-direction: column; align-items: flex-start; gap: 3px; font-size: 11px; }
-    .top5-item { gap: 8px;
+    .top5-item { gap: 8px; }
     .top5-name { width: 64px; font-size: 12px; }
     .top5-bar-val { display: none; }
     .top5-bar { padding-left: 8px; font-size: 11px; }
@@ -366,17 +397,19 @@ tr.tot { background: #eef2ff !important; font-weight: 600; }
     </div>
 </div>
 
-<section class="box" aria-label="总资产概览">
+<section class="box asset-overview" aria-label="总资产概览">
     <h3>总资产概览（已登记资产，非净资产）</h3>
-    <div class="cards">
-        <div class="card ct"><div class="card-title">总资产估算（含账户外资产）</div><div class="card-value" id="assets-total">--</div><div class="card-sub">不作为投资收益或收益率计算依据</div></div>
+    <div class="asset-total">
+        <div><div class="card-title">总资产估算（含账户外资产）</div><div class="card-value" id="assets-total">--</div><div class="card-sub">不作为投资收益或收益率计算依据</div></div>
+    </div>
+    <div class="asset-summary-cards">
         <div class="card"><div class="card-title">主账户（含账户现金）</div><div class="card-value" id="assets-main">--</div><div class="card-sub" id="assets-main-date">--</div></div>
         <div class="card"><div class="card-title">全天候账户（含账户现金）</div><div class="card-value" id="assets-aw">--</div><div class="card-sub" id="assets-aw-date">--</div></div>
         <div class="card"><div class="card-title">账户外现金管理类</div><div class="card-value" id="assets-external">--</div><div class="card-sub">单独列示，不等同于可即时使用的现金</div></div>
         <div class="card"><div class="card-title">稳健投资·独立债基</div><div class="card-value" id="assets-bonds">--</div><div class="card-sub" id="assets-bonds-pnl">--</div><div class="card-sub">不含全天候债基；按截图手工更新</div></div>
     </div>
-    <div id="assets-detail" style="overflow-wrap:anywhere"></div>
-    <p id="assets-note" style="font-size:12px;color:var(--text-muted)"></p>
+    <div class="asset-detail-grid" id="assets-detail"></div>
+    <p id="assets-note"></p>
 </section>
 
 <!-- Tabs -->
@@ -1567,14 +1600,20 @@ function renderAssetOverview(){
     });
     document.getElementById('assets-main-date').textContent='快照日期：'+(mainSnap?mainSnap.date:'缺失')+'；刷新行情不代表余额已核对';
     document.getElementById('assets-aw-date').textContent='快照日期：'+(awSnap?awSnap.date:'缺失')+'；包含全天候账户现金';
-    document.getElementById('assets-detail').innerHTML=assets.map(function(asset){
-        return '<p><strong>'+escapeHtml(asset.name)+' · ¥'+fmt(asset.balance,2)+'</strong><br><small>'+escapeHtml(asset.liquidity)+'<br>余额确认日：'+escapeHtml(asset.asOf)+' · '+escapeHtml(asset.source)+' · 手工更新，不自动计息</small></p>';
-    }).join('');
+    var details=assets.map(function(asset){
+        return '<article class="asset-detail-card"><div class="asset-detail-head"><h4>'+escapeHtml(asset.name)+'</h4><strong>¥'+fmt(asset.balance,2)+'</strong></div>'
+            +'<p>'+escapeHtml(asset.liquidity)+'</p><p class="asset-detail-meta">余额确认日：'+escapeHtml(asset.asOf)+' · '+escapeHtml(asset.source)+' · 手工更新，不自动计息</p></article>';
+    });
     if(CONFIG.bondReserve){
         var reserve=CONFIG.bondReserve;
         var summary=calcBondReserve(reserve);
         document.getElementById('assets-bonds-pnl').textContent='持有收益 ¥'+sgn(summary.pnl,2)+' · '+(summary.pct==null?'收益率不适用':sgn(summary.pct,2)+'%');
-        document.getElementById('assets-detail').innerHTML+='<p><strong>'+escapeHtml(reserve.name)+'</strong><br>'+summary.holdings.map(function(h){return escapeHtml(h.name)+'：¥'+fmt(h.value,2)+'<br>持仓成本 ¥'+fmt(h.cost,2)+' · 持有收益 ¥'+sgn(h.pnl,2)+' · '+(h.pct==null?'收益率不适用':sgn(h.pct,2)+'%');}).join('<br>')+'<br><small>收益率＝截图持有收益÷（持有金额－持有收益），非年化；持有金额已含收益，总资产不再加一次收益。<br>记录日：'+escapeHtml(reserve.asOf)+' · '+escapeHtml(reserve.source)+'<br>'+escapeHtml(reserve.note)+'<br>理财通活期+余款 ¥'+fmt(reserve.cashManagementResidualCNY,2)+' 单独计入总额。</small></p>';
+        details.push('<article class="asset-detail-card"><div class="asset-detail-head"><h4>'+escapeHtml(reserve.name)+'</h4><strong>¥'+fmt(summary.value,2)+'</strong></div>'
+            +summary.holdings.map(function(h){return '<div class="asset-holding"><span class="asset-holding-name">'+escapeHtml(h.name)+'</span><span class="asset-holding-value">¥'+fmt(h.value,2)+'</span><span class="asset-holding-sub">持仓成本 ¥'+fmt(h.cost,2)+' · 持有收益 ¥'+sgn(h.pnl,2)+' · '+(h.pct==null?'收益率不适用':sgn(h.pct,2)+'%')+'</span></div>';}).join('')
+            +'<p class="asset-detail-meta">收益率＝截图持有收益÷（持有金额－持有收益），非年化；持有金额已含收益，总资产不再加一次收益。</p>'
+            +'<p class="asset-detail-meta">记录日：'+escapeHtml(reserve.asOf)+' · '+escapeHtml(reserve.source)+'</p>'
+            +'<p class="asset-detail-meta">'+escapeHtml(reserve.note)+'</p>'
+            +'<p class="asset-detail-meta">理财通活期+余款 ¥'+fmt(reserve.cashManagementResidualCNY,2)+' 单独计入总额。</p></article>');
     }else{
         document.getElementById('assets-bonds-pnl').textContent='未登记独立债基';
     }
@@ -1583,8 +1622,12 @@ function renderAssetOverview(){
     }
     if(CONFIG.cashManagement){
         var cm=CONFIG.cashManagement;
-        document.getElementById('assets-detail').innerHTML+='<p><strong>券商投资备用金</strong><br><small>'+escapeHtml(cm.usd)+'：US$'+fmt(CONFIG.cash.usd,2)+'；'+escapeHtml(cm.hkd)+'：HK$'+fmt(CONFIG.cash.hkd,2)+'<br>富途未申购现金：0；长桥现金：0。外币货基余额确认日：'+escapeHtml(cm.asOf)+'<br>'+escapeHtml(cm.rmb)+'<br>'+escapeHtml(cm.policy)+'。货基余额已替换旧外币现金，不重复计入，不自动计息。</small></p>';
+        details.push('<article class="asset-detail-card"><div class="asset-detail-head"><h4>券商投资备用金</h4></div>'
+            +'<p>'+escapeHtml(cm.usd)+'：US$'+fmt(CONFIG.cash.usd,2)+'</p><p>'+escapeHtml(cm.hkd)+'：HK$'+fmt(CONFIG.cash.hkd,2)+'</p>'
+            +'<p class="asset-detail-meta">富途未申购现金：0；长桥现金：0。外币货基余额确认日：'+escapeHtml(cm.asOf)+'</p>'
+            +'<p class="asset-detail-meta">'+escapeHtml(cm.rmb)+'</p><p class="asset-detail-meta">'+escapeHtml(cm.policy)+'。货基余额已替换旧外币现金，不重复计入，不自动计息。</p></article>');
     }
+    document.getElementById('assets-detail').innerHTML=details.join('');
     document.getElementById('assets-note').textContent=(d.pending?'暂按独立资产计入，待确认与原账户现金是否重叠。':'')+'总额汇总各账户最近可用估值及手工余额，数据日期可能不同；不回填历史收益，不表示所有资产均可即时赎回。';
 }
 
