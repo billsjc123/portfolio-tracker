@@ -15339,8 +15339,183 @@
         "usSPGI": 1.27,
         "usUBER": -0.11
       }
+    },
+    {
+      "date": "2026-10-19",
+      "dataTime": "2026-10-19T02:38:43.174Z",
+      "rates": {
+        "USD_CNY": 6.69274,
+        "HKD_CNY": 0.858044
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 4000,
+              "cost": 7.767
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 37.152
+            },
+            {
+              "code": "sz002027",
+              "name": "分众传媒",
+              "qty": 5000,
+              "cost": 5.294
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00700",
+              "name": "腾讯控股",
+              "qty": 180,
+              "cost": 474.786,
+              "costCNY": 410.689778
+            },
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 16.694
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            },
+            {
+              "code": "hk00506",
+              "name": "中国食品",
+              "qty": 10000,
+              "cost": 3.24,
+              "costCNY": 2.804
+            },
+            {
+              "code": "hk06049",
+              "name": "保利物业",
+              "qty": 800,
+              "cost": 28.14,
+              "costCNY": 24.349
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 17,
+              "cost": 138.325
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 41,
+              "cost": 153.731
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 359.801
+            },
+            {
+              "code": "usISRG",
+              "name": "直觉外科",
+              "qty": 8,
+              "cost": 354
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 8,
+              "cost": 578.6515
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 4978.71,
+          "hkd": 12572.74,
+          "rmb": 96161.6
+        }
+      },
+      "realizedPnL_CNY": 2559.93,
+      "prices": {
+        "sh518880": 8.543,
+        "sh600036": 42.94,
+        "sz002027": 5.28,
+        "hk00700": 417.8,
+        "hk00883": 23.96,
+        "hk03690": 75.7,
+        "hk00506": 3.79,
+        "hk06049": 27.34,
+        "usGOOG": 336.91,
+        "usMSFT": 529.05,
+        "usNVDA": 214.13,
+        "usINTU": 325.15,
+        "usISRG": 426.7,
+        "usMETA": 709.33,
+        "usSOFI": 14.55,
+        "usNFLX": 70.53,
+        "usRKLB": 50.84,
+        "usAMZN": 250,
+        "usGRAB": 2.94,
+        "usSPGI": 429.64,
+        "usUBER": 70.35
+      },
+      "changePct": {
+        "sh518880": -0.13,
+        "sh600036": 1.15,
+        "sz002027": 2.33,
+        "hk00700": 0,
+        "hk00883": -0.99,
+        "hk03690": 0.33,
+        "hk00506": 1.74,
+        "hk06049": 1.26,
+        "usGOOG": -2.32,
+        "usMSFT": -1.93,
+        "usNVDA": -1.43,
+        "usINTU": -1.52,
+        "usISRG": -0.27,
+        "usMETA": -3.72,
+        "usSOFI": -3.58,
+        "usNFLX": -2.86,
+        "usRKLB": -7.98,
+        "usAMZN": -1.87,
+        "usGRAB": -2,
+        "usSPGI": 1.14,
+        "usUBER": -1.29
+      }
     }
   ],
-  "lastUpdated": "2026-10-16T13:39:27.563Z",
+  "lastUpdated": "2026-10-19T02:38:43.188Z",
   "schemaVersion": 2
 }
