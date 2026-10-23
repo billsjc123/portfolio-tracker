@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-08-03",
+  "lastUpdated": "2026-10-23",
   "trades": [
     {
       "id": 11,
@@ -633,6 +633,40 @@
       "settleCcy": "CNY",
       "settleAmount": 600,
       "reason": "全天候 8-3 加仓中债"
+    },
+    {
+      "id": 49,
+      "date": "2026-10-12",
+      "code": "usAMZN",
+      "name": "亚马逊",
+      "action": "buy",
+      "price": 261,
+      "currency": "USD",
+      "qty": 10,
+      "settleCcy": "USD",
+      "settleAmount": 2610,
+      "account": "futu",
+      "reason": "富途买入；判断当前价格相对低估"
+    },
+    {
+      "id": 50,
+      "date": "2026-10-23",
+      "code": "hk00700",
+      "name": "腾讯控股",
+      "action": "buy",
+      "price": 385,
+      "currency": "HKD",
+      "qty": 100,
+      "executedAt": "2026-10-23T13:17:56+08:00",
+      "settleCcy": "CNY",
+      "settleAmount": 33809.76,
+      "settlementStatus": "estimated",
+      "securityAmountCNY": 33737.55,
+      "estimatedFeesCNY": 72.21,
+      "referenceFxCNYPerHKD": 0.8763,
+      "account": "港股通",
+      "source": "用户提供的腾讯自选股交易详情截图；交易全部成交，交收金额及费用为券商估算，最终数据待 T+2 清算",
+      "reason": "港股通买入一手腾讯，成交价每股 385 港元；暂按券商估算人民币交收金额入账"
     }
   ],
   "cashFlows": [
