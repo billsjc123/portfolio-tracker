@@ -36,10 +36,21 @@ test('asset overview includes external balance once without changing portfolio p
     assert.equal(result.missing, null);
     assert.equal(result.empty, 0);
     assert.equal(result.pending, false);
-    assert.match(elements['assets-external'].textContent, /130,680/);
-    assert.match(elements['assets-detail'].innerHTML, /2026-10-10/);
+    assert.equal(elements['assets-external'].textContent, '¥130,680.04');
+    assert.match(elements['assets-note'].textContent, /余款 ¥0\.04/);
+    const chart = elements['assets-chart'].innerHTML;
+    const widths = [...chart.matchAll(/style="width:([\d.]+)%"/g)].map(match => Number(match[1]));
+    assert.equal(widths.length, 4);
+    assert.ok(Math.abs(widths.reduce((sum, width) => sum + width, 0) - 100) < 1e-8);
+    assert.match(elements['assets-main-share'].textContent, /%$/);
+    assert.doesNotMatch(html, /id="assets-detail"/);
     assert.doesNotMatch(elements['assets-note'].textContent, /待确认与原账户现金/);
-    assert.match(elements['assets-detail'].innerHTML, /长桥现金：0/);
+    const supplemental = vm.runInContext('renderSupplementalAssetTables()', context);
+    const cashNote = vm.runInContext('renderCashManagementNote()', context);
+    assert.match(supplemental, /账户外现金管理/);
+    assert.match(supplemental, /130,680\.00/);
+    assert.match(supplemental, /2026-10-10/);
+    assert.match(cashNote, /长桥现金：0\.00/);
     const balances = vm.runInContext(`(function(){
         var snap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
         var old=calcMain(snap),current=calcMain(snap,true);
@@ -78,10 +89,29 @@ test('asset overview includes external balance once without changing portfolio p
     assert.ok(Math.abs(bonds.pct - 2145.14 / 250215.96 * 100) < 1e-8);
     assert.match(elements['assets-bonds-pnl'].textContent, /2,145.14/);
     assert.match(elements['assets-bonds-pnl'].textContent, /0.86%/);
-    assert.match(elements['assets-detail'].innerHTML, /非年化/);
-    assert.match(elements['assets-detail'].innerHTML, /不再加一次收益/);
+    assert.match(supplemental, /非年化/);
+    assert.match(supplemental, /不再加一次收益/);
+    assert.match(supplemental, /252,361\.10/);
     const negative = vm.runInContext('calcBondReserve({holdings:[{name:"test",valueCNY:90,holdingPnlCNY:-10}]})', context);
     assert.equal(negative.pct, -10);
     assert.equal(vm.runInContext('calcBondReserve().pct', context), null);
     assert.match(elements['assets-aw-date'].textContent, /包含全天候账户现金/);
+});
+
+test('supplemental asset tables render every configured row without truncation', () => {
+    const template = fs.readFileSync(path.join(ROOT, 'data/dashboard.template.html'), 'utf8');
+    const config = JSON.parse(fs.readFileSync(path.join(ROOT, 'data/portfolio-config.json'), 'utf8'));
+    const html = renderDashboard({ template, config, historyMain: { snapshots: [] }, historyAW: { snapshots: [] }, trades: { trades: [], closedPositions: [] }, researchPages: [] });
+    const script = html.match(/<script>([\s\S]*?)<\/script>/)[1].split('// ==================== 启动 ====================')[0];
+    const context = vm.createContext({ window: {}, document: {}, console });
+    vm.runInContext(script, context);
+    const tables = vm.runInContext(`(function(){
+        CONFIG.externalAssets=Array.from({length:120},function(_,i){return {
+            name:'备用资金 '+i,balance:i+1,asOf:'2026-10-10',liquidity:'手工记录',source:'测试数据'
+        };});
+        return renderSupplementalAssetTables();
+    })()`, context);
+    assert.match(tables, /备用资金 0/);
+    assert.match(tables, /备用资金 119/);
+    assert.equal((tables.match(/<tr><td><div class="stock-name">备用资金 /g) || []).length, 120);
 });
