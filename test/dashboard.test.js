@@ -58,3 +58,8 @@ test('template links holdings to company details and turns research into a watch
     assert.match(template, /<table><thead><tr>/);
     assert.match(template, /所有视图共用同一份研报正文/);
 });
+
+test('initial current portfolio table uses configured holdings, not the last historical snapshot holdings', () => {
+    const template = fs.readFileSync(path.join(ROOT, 'data/dashboard.template.html'), 'utf8');
+    assert.match(template, /if\(mainSnap\) renderMain\(calcMain\(mainSnap,true,true\)\);/);
+});

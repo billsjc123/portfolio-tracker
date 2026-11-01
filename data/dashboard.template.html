@@ -2087,7 +2087,7 @@ try{
     renderAssetOverview();
     var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
     var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
-    if(mainSnap) renderMain(calcMain(mainSnap,true));
+    if(mainSnap) renderMain(calcMain(mainSnap,true,true));
     if(awSnap)  renderAW(calcAW(awSnap,true));
     renderTrades();
     renderResearch();
