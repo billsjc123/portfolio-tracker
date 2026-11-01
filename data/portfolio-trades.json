@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-10-23",
+  "lastUpdated": "2026-11-01",
   "trades": [
     {
       "id": 11,
@@ -667,6 +667,22 @@
       "account": "港股通",
       "source": "用户提供的腾讯自选股交易详情截图；交易全部成交，交收金额及费用为券商估算，最终数据待 T+2 清算",
       "reason": "港股通买入一手腾讯，成交价每股 385 港元；暂按券商估算人民币交收金额入账"
+    },
+    {
+      "id": 51,
+      "date": "2026-10-30",
+      "code": "usGOOG",
+      "name": "谷歌-C",
+      "action": "buy",
+      "price": 282.41,
+      "currency": "USD",
+      "qty": 3,
+      "settleCcy": "USD",
+      "settleAmount": 849.23,
+      "cashImpact": true,
+      "account": "main",
+      "source": "用户确认成交：2026-10-30 买入 3 股，手续费 USD 2.00",
+      "reason": "补录已确认买入；成交金额 USD 847.23，含手续费后合计 USD 849.23"
     }
   ],
   "cashFlows": [

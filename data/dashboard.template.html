@@ -715,12 +715,12 @@ function setCompanyResearchView(view){
 }
 
 // ==================== 主账户计算 ====================
-function calcMain(snap,useCurrentCash){
+function calcMain(snap,useCurrentCash,useCurrentHoldings){
     var r=(snap.rates&&snap.rates.USD_CNY!=null)?snap.rates:DR;
     // 使用快照当日的持仓状态；绝不使用今天的 CONFIG 回算历史。
     // 清仓、调仓或删除标的因此不会改变既有日期的累计盈亏。
     var state=snap.portfolioState||{holdings:CONFIG.holdings,cash:CONFIG.cash};
-    var holdings=state.holdings||CONFIG.holdings;
+    var holdings=useCurrentHoldings?CONFIG.holdings:(state.holdings||CONFIG.holdings);
     var mk={cn:[],hk:[],us:[]};
     var tv=0,tc=0,tdp=0;
     ['cn','hk','us'].forEach(function(m){
@@ -1652,7 +1652,7 @@ function renderAssetOverview(){
     var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
     var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
     var assets=CONFIG.externalAssets||[];
-    var d=calcAssetOverview(mainSnap?calcMain(mainSnap,true):null,awSnap?calcAW(awSnap,true):null,assets,CONFIG.bondReserve);
+    var d=calcAssetOverview(mainSnap?calcMain(mainSnap,true,true):null,awSnap?calcAW(awSnap,true):null,assets,CONFIG.bondReserve);
     document.getElementById('assets-total').textContent=d.total==null?'数据不完整':'¥'+fmt(d.total,2);
     var parts=[
         {key:'main',name:'主账户',value:d.main,color:'asset-main-color'},
@@ -1687,7 +1687,7 @@ function renderAll(){
     sharedSetup();
     var mainSnap=HISTORY_MAIN.snapshots[HISTORY_MAIN.snapshots.length-1];
     var awSnap=HISTORY_AW.snapshots[HISTORY_AW.snapshots.length-1];
-    if(mainSnap) renderMain(calcMain(mainSnap,true));
+    if(mainSnap) renderMain(calcMain(mainSnap,true,true));
     if(awSnap) renderAW(calcAW(awSnap,true));
     renderTrades();
     renderResearch();
