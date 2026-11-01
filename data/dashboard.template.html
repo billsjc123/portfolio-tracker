@@ -1134,7 +1134,7 @@ function renderCashManagementNote(){
     var cm=CONFIG.cashManagement;
     if(!cm)return '';
     return '<details class="section-note"><summary>券商备用金与余额口径</summary>'
-        +'<p>外币货基余额确认日：'+escapeHtml(cm.asOf)+'；富途未申购现金：'+fmt(cm.futuUninvestedCash,2)+'；长桥现金：'+fmt(cm.longbridgeCash,2)+'。</p>'
+        +'<p>货基余额确认日：'+escapeHtml(cm.asOf)+(cm.usdAsOf?'；其中美元余额确认日：'+escapeHtml(cm.usdAsOf):'')+'；富途未申购现金：'+fmt(cm.futuUninvestedCash,2)+'；长桥现金：'+fmt(cm.longbridgeCash,2)+'。</p>'
         +'<p>'+escapeHtml(cm.rmb)+'；'+escapeHtml(cm.policy)+'。</p>'
         +'<p>'+escapeHtml(cm.source)+'。货基余额已替换旧外币现金，不重复计入，不自动计息。</p></details>';
 }
@@ -1676,7 +1676,8 @@ function renderAssetOverview(){
         document.getElementById('assets-bonds-pnl').textContent='未登记独立债基';
     }
     if(CONFIG.allweather.fundReconciliation){
-        document.getElementById('assets-aw-date').textContent+='；债基份额按2026-10-10截图核对，截图净值日期2026-10-09，ETF未变';
+        var reconciliation=CONFIG.allweather.fundReconciliation;
+        document.getElementById('assets-aw-date').textContent+='；债基份额核对日：'+reconciliation.asOf+'；'+reconciliation.source;
     }
     document.getElementById('assets-note').textContent=(d.pending?'暂按独立资产计入，待确认与原账户现金是否重叠。':'')+(d.residual?'账户外现金管理图例含理财通活期+余款 ¥'+fmt(d.residual,2)+'。':'')+'总额汇总各账户最近可用估值及手工余额，数据日期可能不同；不回填历史收益，不表示所有资产均可即时赎回。';
 }

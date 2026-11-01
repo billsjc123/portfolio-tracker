@@ -68,14 +68,14 @@ test('看板只读取唯一研报源', () => {
     assert.match(chinaFood.markdown, /\*\*研究处理\*\*/);
 });
 
-test('亚马逊作为未持有观察标的使用同一份一页纸', () => {
+test('亚马逊买入后继续使用同一份一页纸', () => {
     const report = readReports().find(item => item.instrumentId === 'US:AMZN.XNAS');
     const config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'portfolio-config.json'), 'utf8'));
     assert.ok(report);
     assert.equal(report.researchStandard, CURRENT_RESEARCH_STANDARD);
     assert.match(report.markdown, /## 估值与操作/);
     assert.match(report.markdown, /## 观察清单/);
-    assert.equal(config.holdings.us.some(item => item.code === 'usAMZN'), false);
+    assert.equal(config.holdings.us.find(item => item.code === 'usAMZN')?.qty, 10);
 });
 
 test('唯一研报源完整保留表格、观察清单和最近变化供不同视图读取', () => {
