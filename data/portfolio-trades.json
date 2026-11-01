@@ -683,6 +683,39 @@
       "account": "main",
       "source": "用户确认成交：2026-10-30 买入 3 股，手续费 USD 2.00",
       "reason": "补录已确认买入；成交金额 USD 847.23，含手续费后合计 USD 849.23"
+    },
+    {
+      "id": 52,
+      "date": "2026-10-30",
+      "code": "hk06049",
+      "name": "保利物业",
+      "action": "buy",
+      "price": 26.3,
+      "currency": "HKD",
+      "qty": 400,
+      "settleCcy": "HKD",
+      "settleAmount": 10520,
+      "cashImpact": true,
+      "account": "main",
+      "referenceFxCNYPerHKD": 0.856007,
+      "source": "用户确认成交；手续费按用户指示忽略",
+      "reason": "补仓 400 股；成交金额 HKD 10,520，手续费不计入；汇率按 2026-10-30 快照折算成本"
+    },
+    {
+      "id": 53,
+      "date": "2026-10-30",
+      "code": "sz002027",
+      "name": "分众传媒",
+      "action": "sell",
+      "price": 5.27,
+      "currency": "CNY",
+      "qty": 5000,
+      "settleCcy": "CNY",
+      "settleAmount": 26350,
+      "cashImpact": true,
+      "account": "main",
+      "source": "用户确认成交；手续费按用户指示忽略",
+      "reason": "清仓：业绩陷入衰退；成交金额 CNY 26,350，手续费不计入"
     }
   ],
   "cashFlows": [
@@ -831,6 +864,18 @@
       "realizedPnL_USD": -539.55,
       "realizedPnL_CNY": -3658.97,
       "reason": "清仓卖出"
+    },
+    {
+      "code": "sz002027",
+      "name": "分众传媒",
+      "date": "2026-10-30",
+      "qty": 5000,
+      "cost": 5.244,
+      "sellPrice": 5.27,
+      "totalCost": 26220,
+      "totalRevenue": 26350,
+      "realizedPnL_CNY": 130,
+      "reason": "业绩陷入衰退"
     }
   ],
   "realizedPnLSummary": {
