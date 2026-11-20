@@ -747,12 +747,14 @@ function calcMain(snap,useCurrentCash,useCurrentHoldings){
     // Only current overview uses reconciled balances; historical performance retains snapshot cash.
     var cash=(useCurrentCash?CONFIG.cash:state.cash)||CONFIG.cash||{usd:0,hkd:0,rmb:0};
     var cashCNY=cash.rmb+cash.hkd*r.HKD_CNY+cash.usd*r.USD_CNY;
-    var total=tv+cashCNY;
+    var pendingSettlements=(useCurrentCash?CONFIG.pendingSettlements:state.pendingSettlements)||[];
+    var pendingCNY=pendingSettlements.reduce(function(sum,item){return sum+item.amount*(item.currency==='HKD'?r.HKD_CNY:item.currency==='USD'?r.USD_CNY:1);},0);
+    var total=tv+cashCNY+pendingCNY;
     var unrealizedPnLCNY=tv-tc;
     var realizedPnLCNY=snap.realizedPnL_CNY||0;
     var cumulativePnLCNY=unrealizedPnLCNY+realizedPnLCNY;
     // 累计收益率以总资产（证券市值 + 各币种现金）为分母，和总资产表口径一致。
-    return {markets:mk,rates:r,cashCNY:cashCNY,cash:cash,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:unrealizedPnLCNY,totalPnlPctCNY:tc>0?unrealizedPnLCNY/tc*100:0,realizedPnLCNY:realizedPnLCNY,cumulativePnLCNY:cumulativePnLCNY,cumulativePnlPctCNY:total>0?cumulativePnLCNY/total*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0};
+    return {markets:mk,rates:r,cashCNY:cashCNY,cash:cash,pendingSettlements:pendingSettlements,pendingCNY:pendingCNY,stockValueCNY:tv,totalValueCNY:total,totalPnlCNY:unrealizedPnLCNY,totalPnlPctCNY:tc>0?unrealizedPnLCNY/tc*100:0,realizedPnLCNY:realizedPnLCNY,cumulativePnLCNY:cumulativePnLCNY,cumulativePnlPctCNY:total>0?cumulativePnLCNY/total*100:0,totalDayPnlCNY:tdp,totalDayPnlPctCNY:total>0?tdp/total*100:0};
 }
 
 // ==================== 全天候计算 ====================
@@ -1136,7 +1138,8 @@ function renderCashManagementNote(){
     return '<details class="section-note"><summary>券商备用金与余额口径</summary>'
         +'<p>货基余额确认日：'+escapeHtml(cm.asOf)+(cm.usdAsOf?'；其中美元余额确认日：'+escapeHtml(cm.usdAsOf):'')+'；富途未申购现金：'+fmt(cm.futuUninvestedCash,2)+'；长桥现金：'+fmt(cm.longbridgeCash,2)+'。</p>'
         +'<p>'+escapeHtml(cm.rmb)+'；'+escapeHtml(cm.policy)+'。</p>'
-        +'<p>'+escapeHtml(cm.source)+'。货基余额已替换旧外币现金，不重复计入，不自动计息。</p></details>';
+        +'<p>'+escapeHtml(cm.source)+'。货基余额已替换旧外币现金，不重复计入，不自动计息。</p>'
+        +(cm.reconciliationNote?'<p>'+escapeHtml(cm.reconciliationNote)+'</p>':'')+'</details>';
 }
 
 function renderSupplementalAssetTables(){
@@ -1198,11 +1201,17 @@ function renderMain(d){
     html+='<tr><td><span class="mkt-tag thk">HKD</span> 港币'+(CONFIG.cashManagement?'<div class="stock-code">'+escapeHtml(CONFIG.cashManagement.hkd)+'</div>':'')+'</td><td class="mono">HK$'+fmt(d.cash.hkd,2)+'</td><td class="mono">¥'+fmt(d.cash.hkd*d.rates.HKD_CNY,2)+'</td><td class="mono">'+fmt(d.cash.hkd*d.rates.HKD_CNY/total*100,2)+'%</td></tr>';
     html+='<tr><td><span class="mkt-tag tus">USD</span> 美元'+(CONFIG.cashManagement?'<div class="stock-code">'+escapeHtml(CONFIG.cashManagement.usd)+'</div>':'')+'</td><td class="mono">$'+fmt(d.cash.usd,2)+'</td><td class="mono">¥'+fmt(d.cash.usd*d.rates.USD_CNY,2)+'</td><td class="mono">'+fmt(d.cash.usd*d.rates.USD_CNY/total*100,2)+'%</td></tr>';
     html+='<tr class="tot"><td>💵 现金合计</td><td></td><td class="mono">¥'+fmt(d.cashCNY,2)+'</td><td class="mono">'+fmt(d.cashCNY/total*100,2)+'%</td></tr></tbody></table>'+renderCashManagementNote()+'</div>';
+    if(d.pendingSettlements.length){
+        html+='<div class="section"><div class="section-header"><div class="section-title">卖出回款 · 待核对</div></div><p class="section-note">计入资产估值，不计入已确认现金；交收净额和暂估清仓损益待补。港股通人民币金额按成交日汇率暂估。</p><table><thead><tr><th>日期 / 账户</th><th>暂估回款</th><th>说明</th></tr></thead><tbody>';
+        d.pendingSettlements.forEach(function(item){html+='<tr><td>'+escapeHtml(item.date)+' / '+escapeHtml(item.account)+'</td><td class="mono">'+escapeHtml(item.currency)+' '+fmt(item.amount,2)+'</td><td>'+escapeHtml(item.note)+'</td></tr>';});
+        html+='</tbody></table></div>';
+    }
     html+=renderSupplementalAssetTables();
     tc.innerHTML=html;
 
     // 饼图
     drawPie('m-pieSvg','m-pieLegend',[
+        {label:'待核对回款',value:d.pendingCNY,color:'#94a3b8'},
         {label:'A股',value:d.markets.cn.totalValueCNY,color:MC.cn},
         {label:'港股',value:d.markets.hk.totalValueCNY,color:MC.hk},
         {label:'美股',value:d.markets.us.totalValueCNY,color:MC.us},
@@ -1236,7 +1245,7 @@ function renderMain(d){
     document.getElementById('m-usDayChange').innerHTML='&#x1F4C8; 今日涨跌 '+sgn(d.markets.us.dayPnlCNY,2)+' <span style="font-size:13px">('+sgn(d.markets.us.dayPnlPctCNY,2)+'%)</span>';
     document.getElementById('m-usDayChange').className='card-sub-day '+clr(d.markets.us.dayPnlCNY);
     document.getElementById('m-cashTotal').textContent='¥'+fmt(d.cashCNY,2);
-    document.getElementById('m-cashDetail').textContent='美元货基 $'+fmt(d.cash.usd,2)+' · 港元货基 HK$'+fmt(d.cash.hkd,2)+' · 人民币券商备用金 ¥'+fmt(d.cash.rmb,2);
+    document.getElementById('m-cashDetail').textContent='美元货基 $'+fmt(d.cash.usd,2)+' · 港元货基 HK$'+fmt(d.cash.hkd,2)+' · 人民币券商备用金 ¥'+fmt(d.cash.rmb,2)+(d.pendingCNY?'；另有待核对回款约 ¥'+fmt(d.pendingCNY,2)+'，已计入总资产':'');
 }
 
 // ==================== 全天候渲染 ====================
@@ -1481,7 +1490,7 @@ function renderTrades(){
         var html2='';
         closed.forEach(function(cp){
             var pnlClr=clr(cp.realizedPnL_CNY);
-            html2+='<tr><td><div class="stock-name">'+cp.name+'</div><div class="stock-code">'+cp.code.toUpperCase()+'</div></td><td class="mono">'+fmt(cp.totalCost,2)+'</td><td class="mono">'+fmt(cp.totalRevenue,2)+'</td><td class="pnl-'+pnlClr+'">'+sgn(cp.realizedPnL_CNY,2)+'</td><td class="mono">'+(cp.date||cp.closeDate||'')+'</td></tr>';
+            html2+='<tr><td><div class="stock-name">'+cp.name+'</div><div class="stock-code">'+cp.code.toUpperCase()+'</div>'+(cp.settlementStatus==='estimated'?'<div class="stock-code">人民币损益暂估 · 交收待核对</div>':'')+'</td><td class="mono">'+fmt(cp.totalCost,2)+'</td><td class="mono">'+fmt(cp.totalRevenue,2)+'</td><td class="pnl-'+pnlClr+'">'+sgn(cp.realizedPnL_CNY,2)+'</td><td class="mono">'+(cp.date||cp.closeDate||'')+'</td></tr>';
         });
         ctbody.innerHTML=html2;
     }

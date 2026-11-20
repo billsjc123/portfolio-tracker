@@ -59,6 +59,11 @@ if (config) {
     for (const [currency, value] of Object.entries(config.cash || {})) {
         if (!finite(value)) errors.push(`cash.${currency}: 必须是有限数值`);
     }
+    const pendingIds = new Set();
+    for (const item of config.pendingSettlements || []) {
+        if (!item.id || pendingIds.has(item.id) || !['CNY', 'HKD', 'USD'].includes(item.currency) || !finite(item.amount) || item.amount < 0 || item.status !== 'pending') errors.push('pendingSettlements: 回款标识、币种、金额或状态无效');
+        pendingIds.add(item.id);
+    }
     const assetIds = new Set();
     if (config.externalAssets !== undefined && !Array.isArray(config.externalAssets)) errors.push('externalAssets: 必须是数组');
     for (const [index, asset] of (Array.isArray(config.externalAssets) ? config.externalAssets : []).entries()) {

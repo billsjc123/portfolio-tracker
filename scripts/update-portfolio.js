@@ -75,7 +75,8 @@ function sumRealizedPnL_UsdOnly(closedPositions, usdCny, asOfDate) {
 function buildPortfolioState(cfg) {
     return {
         holdings: structuredClone(cfg.holdings),
-        cash: structuredClone(cfg.cash || { usd: 0, hkd: 0, rmb: 0 })
+        cash: structuredClone(cfg.cash || { usd: 0, hkd: 0, rmb: 0 }),
+        pendingSettlements: structuredClone(cfg.pendingSettlements || [])
     };
 }
 

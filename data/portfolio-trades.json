@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-11-01",
+  "lastUpdated": "2026-11-20",
   "trades": [
     {
       "id": 11,
@@ -716,6 +716,75 @@
       "account": "main",
       "source": "用户确认成交；手续费按用户指示忽略",
       "reason": "清仓：业绩陷入衰退；成交金额 CNY 26,350，手续费不计入"
+    },
+    {
+      "id": 54,
+      "date": "2026-11-12",
+      "code": "hk00700",
+      "name": "腾讯控股",
+      "action": "sell",
+      "price": 400.4,
+      "currency": "HKD",
+      "qty": 100,
+      "settleCcy": "CNY",
+      "settleAmount": 34320.41,
+      "settlementStatus": "estimated",
+      "cashImpact": false,
+      "account": "港股通",
+      "referenceFxCNYPerHKD": 0.857153,
+      "source": "用户成交截图；港股通按成交日快照汇率暂估，费用及人民币交收净额待核对",
+      "reason": "退出腾讯：对AI资本支出回报及基本面判断改变；待AI收入及利润贡献得到明显验证后再考虑买回。"
+    },
+    {
+      "id": 55,
+      "date": "2026-11-19",
+      "code": "hk00700",
+      "name": "腾讯控股",
+      "action": "sell",
+      "price": 352.8,
+      "currency": "HKD",
+      "qty": 100,
+      "settleCcy": "CNY",
+      "settleAmount": 30217.67,
+      "settlementStatus": "estimated",
+      "cashImpact": false,
+      "account": "港股通",
+      "referenceFxCNYPerHKD": 0.85651,
+      "source": "用户成交截图；港股通按成交日快照汇率暂估，费用及人民币交收净额待核对",
+      "reason": "退出腾讯：对AI资本支出回报及基本面判断改变；待AI收入及利润贡献得到明显验证后再考虑买回。"
+    },
+    {
+      "id": 56,
+      "date": "2026-11-19",
+      "code": "hk00700",
+      "name": "腾讯控股",
+      "action": "sell",
+      "price": 352.8,
+      "currency": "HKD",
+      "qty": 80,
+      "settleCcy": "HKD",
+      "settleAmount": 28215.53,
+      "settlementStatus": "estimated",
+      "cashImpact": false,
+      "account": "长桥",
+      "referenceFxCNYPerHKD": 0.85651,
+      "source": "用户成交截图；仅扣截图佣金HKD8.47，其他费用待核对；未假设转入富途货基",
+      "reason": "退出腾讯：对AI资本支出回报及基本面判断改变；待AI收入及利润贡献得到明显验证后再考虑买回。"
+    },
+    {
+      "id": 57,
+      "date": "2026-11-05",
+      "code": "sh518880",
+      "name": "黄金ETF华安",
+      "action": "buy",
+      "price": 8.414,
+      "currency": "CNY",
+      "qty": 1000,
+      "settleCcy": "CNY",
+      "settleAmount": 8414,
+      "cashImpact": true,
+      "account": "main",
+      "reason": "按用户成交截图补录；成交额8414元，未知手续费待补"
     }
   ],
   "cashFlows": [
@@ -876,11 +945,25 @@
       "totalRevenue": 26350,
       "realizedPnL_CNY": 130,
       "reason": "业绩陷入衰退"
+    },
+    {
+      "code": "hk00700",
+      "name": "腾讯控股",
+      "date": "2026-11-19",
+      "qty": 280,
+      "cost": 442.719571,
+      "sellPrice": 369.8,
+      "totalCost": 107733.92,
+      "totalRevenue": 88704.96,
+      "realizedPnL_CNY": -19028.96,
+      "settlementStatus": "estimated",
+      "note": "总成本及回款为人民币；按成交日快照汇率暂估，交收净额与其余费用待核对。",
+      "reason": "退出腾讯：对AI资本支出回报及基本面判断改变；待AI收入及利润贡献得到明显验证后再考虑买回。"
     }
   ],
   "realizedPnLSummary": {
-    "mainCNY": 0,
+    "mainCNY": -16339.03,
     "allweatherCNY": 0,
-    "note": "已实现盈亏(人民币)，按账户分别统计"
+    "note": "含腾讯待核对交收净额的暂估损益"
   }
 }

@@ -7,6 +7,27 @@ const { renderDashboard } = require('../scripts/render-dashboard');
 
 const ROOT = path.resolve(__dirname, '..');
 
+test('pending sale proceeds count once in assets, separately from cash, without changing old snapshots', () => {
+    const template = fs.readFileSync(path.join(ROOT, 'data/dashboard.template.html'), 'utf8');
+    const calc = template.slice(template.indexOf('function calcMain('), template.indexOf('// ==================== 全天候计算'));
+    const config = { holdings: { cn: [], hk: [], us: [] }, cash: { rmb: 100, hkd: 0, usd: 0 }, pendingSettlements: [{ currency: 'CNY', amount: 200 }, { currency: 'HKD', amount: 50 }] };
+    const context = vm.createContext({ CONFIG: config, DR: { HKD_CNY: 0.8, USD_CNY: 7 }, toCNY: (amount, market, rates) => amount * (market === 'hk' ? rates.HKD_CNY : market === 'us' ? rates.USD_CNY : 1) });
+    vm.runInContext(calc, context);
+    const old = { prices: {}, changePct: {}, portfolioState: { holdings: config.holdings, cash: config.cash } };
+    context.snap = old;
+    const historical = vm.runInContext('calcMain(snap)', context);
+    const current = vm.runInContext('calcMain(snap,true,true)', context);
+    assert.equal(historical.totalValueCNY, 100);
+    assert.equal(historical.pendingCNY, 0);
+    assert.equal(current.cashCNY, 100);
+    assert.equal(current.pendingCNY, 240);
+    assert.equal(current.totalValueCNY, 340);
+    old.portfolioState.pendingSettlements = structuredClone(config.pendingSettlements);
+    config.pendingSettlements = [];
+    assert.equal(vm.runInContext('calcMain(snap).totalValueCNY', context), 340);
+    assert.equal(vm.runInContext('calcMain(snap,true,true).totalValueCNY', context), 100);
+});
+
 test('asset overview includes external balance once without changing portfolio performance', () => {
     const template = fs.readFileSync(path.join(ROOT, 'data/dashboard.template.html'), 'utf8');
     // Fixtures are independent of the daily updater's mutable config and latest snapshots.

@@ -19598,7 +19598,7 @@
     },
     {
       "date": "2026-11-20",
-      "dataTime": "2026-11-20T07:52:33.584Z",
+      "dataTime": "2026-11-20T14:55:36.917Z",
       "rates": {
         "USD_CNY": 6.69198,
         "HKD_CNY": 0.857946
@@ -19609,8 +19609,8 @@
             {
               "code": "sh518880",
               "name": "黄金ETF华安",
-              "qty": 4000,
-              "cost": 7.767
+              "qty": 5000,
+              "cost": 7.8964
             },
             {
               "code": "sh600036",
@@ -19620,14 +19620,6 @@
             }
           ],
           "hk": [
-            {
-              "code": "hk00700",
-              "name": "腾讯控股",
-              "qty": 280,
-              "cost": 442.719571,
-              "costCNY": 384.764,
-              "costCNYNote": "新买入 100 股部分按券商截图所示人民币成交额及估算费用计入；T+2 清算后待核对最终费用"
-            },
             {
               "code": "hk00883",
               "name": "中国海洋石油",
@@ -19721,58 +19713,87 @@
         "cash": {
           "usd": 1519.48,
           "hkd": 2052.74,
-          "rmb": 88701.84
-        }
+          "rmb": 80287.84
+        },
+        "pendingSettlements": [
+          {
+            "id": "tencent-sale-1",
+            "date": "2026-11-12",
+            "account": "港股通",
+            "currency": "CNY",
+            "amount": 34320.41,
+            "status": "pending",
+            "note": "港股通按成交日快照汇率暂估，费用及人民币交收净额待核对"
+          },
+          {
+            "id": "tencent-sale-2",
+            "date": "2026-11-19",
+            "account": "港股通",
+            "currency": "CNY",
+            "amount": 30217.67,
+            "status": "pending",
+            "note": "港股通按成交日快照汇率暂估，费用及人民币交收净额待核对"
+          },
+          {
+            "id": "tencent-sale-3",
+            "date": "2026-11-19",
+            "account": "长桥",
+            "currency": "HKD",
+            "amount": 28215.53,
+            "status": "pending",
+            "note": "仅扣截图佣金HKD8.47，其他费用待核对；未假设转入富途货基"
+          }
+        ]
       },
-      "realizedPnL_CNY": 2689.93,
+      "realizedPnL_CNY": -32678.06,
       "prices": {
         "sh518880": 7.282,
         "sh600036": 44,
-        "hk00700": 342.6,
-        "hk00883": 21.62,
-        "hk03690": 66.35,
-        "hk00506": 3.94,
-        "hk06049": 25.64,
-        "usGOOG": 271.02,
-        "usAMZN": 257.37,
-        "usMSFT": 498.3,
-        "usNVDA": 145.98,
-        "usINTU": 310.02,
-        "usISRG": 407.24,
-        "usMETA": 596.22,
-        "usSOFI": 13.53,
-        "usNFLX": 58.46,
-        "usRKLB": 50.99,
+        "hk00883": 21.7,
+        "hk03690": 66.5,
+        "hk00506": 3.955,
+        "hk06049": 25.72,
+        "usGOOG": 277.98,
+        "usAMZN": 257.87,
+        "usMSFT": 501.78,
+        "usNVDA": 140.65,
+        "usINTU": 299.33,
+        "usISRG": 406.87,
+        "usMETA": 583.73,
+        "usSOFI": 13.41,
+        "usNFLX": 58.91,
+        "usRKLB": 49.99,
         "sz002027": 5.53,
-        "usGRAB": 2.93,
-        "usSPGI": 442.66,
-        "usUBER": 65.6
+        "hk00700": 344,
+        "usGRAB": 2.87,
+        "usSPGI": 450.63,
+        "usUBER": 67.6
       },
       "changePct": {
         "sh518880": -4.34,
         "sh600036": 1.57,
-        "hk00700": -1.66,
-        "hk00883": -2.26,
-        "hk03690": -1.78,
-        "hk00506": -1.38,
-        "hk06049": -1.08,
-        "usGOOG": -2.93,
-        "usAMZN": -3.87,
-        "usMSFT": -1.78,
-        "usNVDA": -3.3,
-        "usINTU": -1.03,
-        "usISRG": -3.26,
-        "usMETA": -3.27,
-        "usSOFI": -4.11,
-        "usNFLX": -2.27,
-        "usRKLB": -3.92,
+        "hk00883": -1.9,
+        "hk03690": -1.55,
+        "hk00506": -1,
+        "hk06049": -0.77,
+        "usGOOG": 2.57,
+        "usAMZN": 0.19,
+        "usMSFT": 0.7,
+        "usNVDA": -3.65,
+        "usINTU": -3.45,
+        "usISRG": -0.09,
+        "usMETA": -2.09,
+        "usSOFI": -0.92,
+        "usNFLX": 0.77,
+        "usRKLB": -1.96,
         "sz002027": -1.6,
-        "usGRAB": -6.69,
-        "usSPGI": -0.83,
-        "usUBER": -4.6
+        "hk00700": -1.26,
+        "usGRAB": -2.22,
+        "usSPGI": 1.8,
+        "usUBER": 3.04
       }
     }
   ],
-  "lastUpdated": "2026-11-20T07:52:33.592Z",
+  "lastUpdated": "2026-11-20T14:55:36.931Z",
   "schemaVersion": 2
 }
