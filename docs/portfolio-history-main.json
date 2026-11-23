@@ -19792,8 +19792,205 @@
         "usSPGI": 1.09,
         "usUBER": -0.4
       }
+    },
+    {
+      "date": "2026-11-23",
+      "dataTime": "2026-11-23T08:24:09.143Z",
+      "rates": {
+        "USD_CNY": 6.681345,
+        "HKD_CNY": 0.856583
+      },
+      "portfolioState": {
+        "holdings": {
+          "cn": [
+            {
+              "code": "sh518880",
+              "name": "黄金ETF华安",
+              "qty": 5000,
+              "cost": 7.8964
+            },
+            {
+              "code": "sh600036",
+              "name": "招商银行",
+              "qty": 900,
+              "cost": 37.152
+            }
+          ],
+          "hk": [
+            {
+              "code": "hk00883",
+              "name": "中国海洋石油",
+              "qty": 1000,
+              "cost": 15.848
+            },
+            {
+              "code": "hk03690",
+              "name": "美团-W",
+              "qty": 300,
+              "cost": 95.467
+            },
+            {
+              "code": "hk00506",
+              "name": "中国食品",
+              "qty": 10000,
+              "cost": 3.303,
+              "costCNY": 2.827391121
+            },
+            {
+              "code": "hk06049",
+              "name": "保利物业",
+              "qty": 1200,
+              "cost": 27.911,
+              "costCNY": 23.892011377
+            }
+          ],
+          "us": [
+            {
+              "code": "usGOOG",
+              "name": "谷歌-C",
+              "qty": 20,
+              "cost": 160.03775
+            },
+            {
+              "code": "usAMZN",
+              "name": "亚马逊",
+              "qty": 10,
+              "cost": 261
+            },
+            {
+              "code": "usMSFT",
+              "name": "微软",
+              "qty": 18,
+              "cost": 396.809
+            },
+            {
+              "code": "usNVDA",
+              "name": "英伟达",
+              "qty": 41,
+              "cost": 153.731
+            },
+            {
+              "code": "usINTU",
+              "name": "财捷",
+              "qty": 17,
+              "cost": 359.801
+            },
+            {
+              "code": "usISRG",
+              "name": "直觉外科",
+              "qty": 8,
+              "cost": 354
+            },
+            {
+              "code": "usMETA",
+              "name": "Meta",
+              "qty": 8,
+              "cost": 578.6515
+            },
+            {
+              "code": "usSOFI",
+              "name": "SoFi Tech",
+              "qty": 120,
+              "cost": 17.263
+            },
+            {
+              "code": "usNFLX",
+              "name": "奈飞",
+              "qty": 15,
+              "cost": 77.53
+            },
+            {
+              "code": "usRKLB",
+              "name": "Rocket Lab",
+              "qty": 25,
+              "cost": 83.919
+            }
+          ]
+        },
+        "cash": {
+          "usd": 1519.48,
+          "hkd": 2052.74,
+          "rmb": 80287.84
+        },
+        "pendingSettlements": [
+          {
+            "id": "tencent-sale-1",
+            "date": "2026-11-12",
+            "account": "港股通",
+            "currency": "CNY",
+            "amount": 34320.41,
+            "status": "pending",
+            "note": "港股通按成交日快照汇率暂估，费用及人民币交收净额待核对"
+          },
+          {
+            "id": "tencent-sale-2",
+            "date": "2026-11-19",
+            "account": "港股通",
+            "currency": "CNY",
+            "amount": 30217.67,
+            "status": "pending",
+            "note": "港股通按成交日快照汇率暂估，费用及人民币交收净额待核对"
+          },
+          {
+            "id": "tencent-sale-3",
+            "date": "2026-11-19",
+            "account": "长桥",
+            "currency": "HKD",
+            "amount": 28215.53,
+            "status": "pending",
+            "note": "仅扣截图佣金HKD8.47，其他费用待核对；未假设转入富途货基"
+          }
+        ]
+      },
+      "realizedPnL_CNY": -32678.06,
+      "prices": {
+        "sh518880": 7.396,
+        "sh600036": 43.26,
+        "hk00883": 21.28,
+        "hk03690": 66.4,
+        "hk00506": 3.93,
+        "hk06049": 25.76,
+        "usGOOG": 264,
+        "usAMZN": 246.82,
+        "usMSFT": 484.52,
+        "usNVDA": 125.53,
+        "usINTU": 270.44,
+        "usISRG": 399.05,
+        "usMETA": 560.84,
+        "usSOFI": 12.48,
+        "usNFLX": 56.73,
+        "usRKLB": 45.42,
+        "sz002027": 5.44,
+        "hk00700": 344,
+        "usGRAB": 2.75,
+        "usSPGI": 439.57,
+        "usUBER": 63.47
+      },
+      "changePct": {
+        "sh518880": 1.57,
+        "sh600036": -1.68,
+        "hk00883": -1.94,
+        "hk03690": -0.15,
+        "hk00506": -0.63,
+        "hk06049": 0.16,
+        "usGOOG": -2.59,
+        "usAMZN": -4.1,
+        "usMSFT": -2.77,
+        "usNVDA": -14.01,
+        "usINTU": -12.77,
+        "usISRG": -2.01,
+        "usMETA": -5.93,
+        "usSOFI": -7.76,
+        "usNFLX": -2.96,
+        "usRKLB": -10.92,
+        "sz002027": -1.63,
+        "hk00700": 0,
+        "usGRAB": -6.14,
+        "usSPGI": -0.7,
+        "usUBER": -3.25
+      }
     }
   ],
-  "lastUpdated": "2026-11-20T17:26:36.115Z",
+  "lastUpdated": "2026-11-23T08:24:09.151Z",
   "schemaVersion": 2
 }
