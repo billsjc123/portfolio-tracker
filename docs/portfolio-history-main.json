@@ -20386,10 +20386,10 @@
     },
     {
       "date": "2026-11-26",
-      "dataTime": "2026-11-26T08:59:55.656Z",
+      "dataTime": "2026-11-26T18:44:39.662Z",
       "rates": {
-        "USD_CNY": 6.678179,
-        "HKD_CNY": 0.856177
+        "USD_CNY": 6.683199,
+        "HKD_CNY": 0.85682
       },
       "portfolioState": {
         "holdings": {
@@ -20582,6 +20582,6 @@
       }
     }
   ],
-  "lastUpdated": "2026-11-26T08:59:55.664Z",
+  "lastUpdated": "2026-11-26T18:44:39.670Z",
   "schemaVersion": 2
 }
