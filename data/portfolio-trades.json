@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "lastUpdated": "2026-11-20",
+  "lastUpdated": "2026-11-27",
   "trades": [
     {
       "id": 11,
@@ -785,6 +785,23 @@
       "cashImpact": true,
       "account": "main",
       "reason": "按用户成交截图补录；成交额8414元，未知手续费待补"
+    },
+    {
+      "id": 58,
+      "date": "2026-11-27",
+      "code": "hk03690",
+      "name": "美团-W",
+      "action": "buy",
+      "price": 66.65,
+      "currency": "HKD",
+      "qty": 300,
+      "settleCcy": "HKD",
+      "settleAmount": 19995,
+      "settlementStatus": "estimated",
+      "cashImpact": true,
+      "account": "futu",
+      "source": "用户确认富途买入股数及港元成交均价；成交额已从富途港元余额扣减，费用及实际交收净额待核对",
+      "reason": "左侧买入"
     }
   ],
   "cashFlows": [
@@ -795,6 +812,14 @@
       "amount": 665.1,
       "account": "main",
       "note": "入金 665.1 美元"
+    },
+    {
+      "date": "2026-11-27",
+      "type": "deposit",
+      "currency": "HKD",
+      "amount": 23439,
+      "account": "futu",
+      "note": "用户确认今日入金富途 23,439 港元；来源账户及相关兑换费用未提供"
     }
   ],
   "dividends": [
