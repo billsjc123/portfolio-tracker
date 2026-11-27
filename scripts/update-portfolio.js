@@ -65,11 +65,18 @@ function sumRealizedPnL_UsdOnly(closedPositions, usdCny, asOfDate) {
     let total = 0;
     for (const cp of closedPositions) {
         if (cp.date && cp.date > asOfDate) continue;
-        if (cp.realizedPnL_USD && !cp.realizedPnL_CNY) {
+        if (cp.realizedPnL_USD && !Number.isFinite(cp.realizedPnL_CNY)) {
             total += cp.realizedPnL_USD * usdCny;
         }
     }
     return total;
+}
+
+function calculateRealizedPnLCNY(trades, asOfDate, usdCny) {
+    const positions = trades.closedPositions || [];
+    // realizedPnLSummary 是 closedPositions 的汇总展示，不能再次计入。
+    return sumRealizedPnL(positions, asOfDate)
+        + sumRealizedPnL_UsdOnly(positions, usdCny, asOfDate);
 }
 
 function buildPortfolioState(cfg) {
@@ -134,12 +141,7 @@ async function updateMainAccount(cfg, trades, researchPages) {
     };
 
     // 已实现盈亏仅计入截至本快照日期已经完成的清仓。
-    let realized = 0;
-    if (Array.isArray(trades.closedPositions)) {
-        realized += sumRealizedPnL(trades.closedPositions, today);
-        realized += sumRealizedPnL_UsdOnly(trades.closedPositions, rates.USD_CNY, today);
-    }
-    if (trades.realizedPnLSummary) realized += (trades.realizedPnLSummary.mainCNY || 0);
+    const realized = calculateRealizedPnLCNY(trades, today, rates.USD_CNY);
 
     const snap = {
         date: today,
@@ -332,7 +334,11 @@ async function main() {
     console.log('==== Done ====');
 }
 
-main().catch(e => {
-    console.error('❌ 失败:', e);
-    process.exit(1);
-});
+module.exports = { calculateRealizedPnLCNY };
+
+if (require.main === module) {
+    main().catch(e => {
+        console.error('❌ 失败:', e);
+        process.exit(1);
+    });
+}

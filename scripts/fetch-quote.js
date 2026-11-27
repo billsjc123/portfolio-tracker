@@ -126,8 +126,8 @@ async function fetchFundNav(fundCode) {
 }
 
 /**
- * 抓 USD/CNY 汇率（open.er-api.com）
- * 输出：{ USD_CNY: 6.801054, ... }
+ * 从同一份 USD 基准汇率计算 USD/CNY 和 HKD/CNY。
+ * HKD/CNY = (每美元对应人民币) / (每美元对应港元)。
  */
 async function fetchUsdCny() {
   try {
@@ -138,9 +138,12 @@ async function fetchUsdCny() {
     if (!res.ok) return null;
     const j = await res.json();
     if (j.result !== 'success') return null;
+    const usdCny = Number(j.rates?.CNY);
+    const usdHkd = Number(j.rates?.HKD);
+    if (!(usdCny > 0)) return null;
     return {
-      USD_CNY: j.rates?.CNY || 0,
-      HKD_CNY: 0, // er-api 不直接给 HKD，下面单独兜底
+      USD_CNY: usdCny,
+      HKD_CNY: usdHkd > 0 ? +(usdCny / usdHkd).toFixed(6) : 0,
       base: 'USD',
       asOf: j.time_last_update_unix ? new Date(j.time_last_update_unix * 1000).toISOString() : ''
     };
@@ -150,9 +153,7 @@ async function fetchUsdCny() {
 }
 
 /**
- * 兜底 HKD/CNY 汇率
- * 用 USD/CNY * (USD/HKD) 换算
- * USD/HKD ≈ 7.80 区间，可以写死近似值（误差 < 0.1%）
+ * 仅在汇率接口缺少 HKD 时使用的近似兜底值；不用于正常估值。
  */
 function deriveHkdCny(usdCny) {
   if (!usdCny) return 0;

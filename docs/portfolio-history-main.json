@@ -19745,7 +19745,7 @@
           }
         ]
       },
-      "realizedPnL_CNY": -32678.06,
+      "realizedPnL_CNY": -16339.03,
       "prices": {
         "sh518880": 7.282,
         "sh600036": 44,
@@ -19942,7 +19942,7 @@
           }
         ]
       },
-      "realizedPnL_CNY": -32678.06,
+      "realizedPnL_CNY": -16339.03,
       "prices": {
         "sh518880": 7.396,
         "sh600036": 43.26,
@@ -20139,7 +20139,7 @@
           }
         ]
       },
-      "realizedPnL_CNY": -32678.06,
+      "realizedPnL_CNY": -16339.03,
       "prices": {
         "sh518880": 7.391,
         "sh600036": 43.52,
@@ -20336,7 +20336,7 @@
           }
         ]
       },
-      "realizedPnL_CNY": -32678.06,
+      "realizedPnL_CNY": -16339.03,
       "prices": {
         "sh518880": 7.169,
         "sh600036": 43.2,
@@ -20533,7 +20533,7 @@
           }
         ]
       },
-      "realizedPnL_CNY": -32678.06,
+      "realizedPnL_CNY": -16339.03,
       "prices": {
         "sh518880": 7.27,
         "sh600036": 43.38,
@@ -20583,10 +20583,10 @@
     },
     {
       "date": "2026-11-27",
-      "dataTime": "2026-11-27T09:27:17.030Z",
+      "dataTime": "2026-11-27T09:36:31.200Z",
       "rates": {
         "USD_CNY": 6.674963,
-        "HKD_CNY": 0.855764
+        "HKD_CNY": 0.851692
       },
       "portfolioState": {
         "holdings": {
@@ -20730,7 +20730,7 @@
           }
         ]
       },
-      "realizedPnL_CNY": -32678.06,
+      "realizedPnL_CNY": -16339.03,
       "prices": {
         "sh518880": 7.441,
         "sh600036": 42.58,
@@ -20779,6 +20779,6 @@
       }
     }
   ],
-  "lastUpdated": "2026-11-27T09:27:17.042Z",
+  "lastUpdated": "2026-11-27T09:36:31.209Z",
   "schemaVersion": 2
 }

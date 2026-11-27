@@ -4419,10 +4419,10 @@
     },
     {
       "date": "2026-11-27",
-      "dataTime": "2026-11-27T09:27:17.791Z",
+      "dataTime": "2026-11-27T09:36:31.993Z",
       "rates": {
         "USD_CNY": 6.674963,
-        "HKD_CNY": 0.855764
+        "HKD_CNY": 0.851692
       },
       "awRealizedPnL_CNY": 0,
       "portfolioState": {
@@ -4473,5 +4473,5 @@
       }
     }
   ],
-  "lastUpdated": "2026-11-27T09:27:17.794Z"
+  "lastUpdated": "2026-11-27T09:36:31.996Z"
 }
